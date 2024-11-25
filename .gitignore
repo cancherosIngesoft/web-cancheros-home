@@ -12,7 +12,7 @@
 
 # production
 /build
-#prueba
+
 # misc
 .DS_Store
 *.pem
