@@ -1,4 +1,4 @@
-export function testFunction(input: any) {
+export function testFunction(input: any): string {
     if (input === null) {
         throw new Error('Invalid input');
     }
