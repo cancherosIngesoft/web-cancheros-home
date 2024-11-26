@@ -29,11 +29,11 @@
 name: SonarCloud analysis
 
 on:
-  push:
-    branches: [ "main","develop" ]
-  pull_request:
-    branches: [ "main","develop"]
-  workflow_dispatch:
+  workflow_run:
+    workflows: ["Run UnitTests"]
+    types:
+      - completed
+    branches: ["main", "develop"]
 
 permissions:
   pull-requests: read # allows SonarCloud to decorate PRs with analysis results
