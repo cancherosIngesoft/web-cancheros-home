@@ -1,0 +1,40 @@
+{
+  "faq_data": [
+    {
+      "id": 1,
+      "question": "¿Qué es Cancheros y cómo funciona?",
+      "answer": "Cancheros es una plataforma diseñada para conectar jugadores de fútbol amateur con propietarios de canchas en Bogotá. Facilitamos la organización de partidos permitiéndote reservar canchas de forma rápida, realizar pagos electrónicos, ver disponibilidad en tiempo real y gestionar los resultados de tus encuentros deportivos.",
+      "isOpen": false
+    },
+    {
+      "id": 2,
+      "question": "¿Cómo puedo reservar una cancha?",
+      "answer": "El proceso de reserva es simple y rápido: explora las canchas disponibles, selecciona fecha y hora, realiza el pago de forma segura a través de nuestra plataforma y ¡listo! Recibirás una confirmación inmediata de tu reserva con todos los detalles necesarios.",
+      "isOpen": false
+    },
+    {
+      "id": 3,
+      "question": "¿Qué métodos de pago aceptan?",
+      "answer": "Aceptamos diversos métodos de pago electrónico para hacer el proceso lo más conveniente posible. Puedes pagar con tarjeta de crédito, débito, PSE y otros medios de pago digital disponibles en Colombia.",
+      "isOpen": false
+    },
+    {
+      "id": 4,
+      "question": "¿Qué pasa si necesito cancelar mi reserva?",
+      "answer": "Entendemos que los planes pueden cambiar. Contamos con una política de cancelación flexible que te permite cancelar o reprogramar tu reserva con un tiempo de anticipación razonable. Consulta nuestros términos y condiciones para más detalles sobre los plazos y condiciones de cancelación.",
+      "isOpen": false
+    },
+    {
+      "id": 5,
+      "question": "¿Cómo puedo encontrar otros jugadores o equipos para organizar partidos?",
+      "answer": "Cancheros fomenta la comunidad futbolística. A través de nuestra plataforma, puedes conectar con otros jugadores y equipos, unirte a partidos existentes o crear los tuyos propios. Promovemos un ambiente de respeto y fraternidad entre todos los usuarios.",
+      "isOpen": false
+    },
+    {
+      "id": 6,
+      "question": "¿Ofrecen información sobre el estado y características de las canchas?",
+      "answer": "Sí, proporcionamos información detallada sobre cada cancha, incluyendo su ubicación, tipo de superficie, servicios disponibles, fotos y valoraciones de otros usuarios. Además, mantenemos la información actualizada sobre su disponibilidad en tiempo real.",
+      "isOpen": false
+    }
+  ]
+}
