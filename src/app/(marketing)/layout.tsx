@@ -1,3 +1,4 @@
+import Footer from "@/components/layout/footer";
 import Navbar from "@/components/layout/navbar";
 import type { Metadata } from "next";
 
@@ -10,13 +11,8 @@ export default function MarketingLayout({
   return (
     <>
       <Navbar />
-      <div className="marketing-layout">
-        <nav className="bg-green-500">
-          Este nav solo aparece en páginas de marketing
-        </nav>
-
-        {children}
-      </div>
+      <div className="marketing-layout">{children}</div>
+      <Footer />
     </>
   );
 }

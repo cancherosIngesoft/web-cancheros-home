@@ -1,0 +1,209 @@
+{
+    "title": "Política de Protección de Datos CANCHEROS",
+    "description": "Política de protección de datos personales y privacidad",
+    "sections": [
+      {
+        "id": 1,
+        "title": "Definiciones",
+        "content": "Los siguientes son términos definidos que serán utilizados en esta Política de acuerdo con lo establecido en la Ley 1581 de 2012, así como las referidas a la clasificación de los datos de acuerdo con la Ley 1266 de 2008 y demás normativa aplicable:",
+        "definitions": [
+          {
+            "term": "Autorización",
+            "description": "Consentimiento previo, expreso e informado del Titular para llevar a cabo el Tratamiento de Datos Personales."
+          },
+          {
+            "term": "Base de Datos",
+            "description": "Conjunto organizado de Datos Personales que sea objeto de tratamiento."
+          },
+          {
+            "term": "Datos Personales",
+            "description": "Cualquier información vinculada o que pueda asociarse a una o varias personas naturales determinadas o determinables."
+          },
+          {
+            "term": "Datos Públicos",
+            "description": "Datos relativos al estado civil de las personas, a su profesión y oficio y a su calidad de comerciante o de servidor público. Por su naturaleza, los Datos Públicos pueden estar contenidos, entre otros, en registros públicos, documentos públicos, gacetas y boletines oficiales y sentencias judiciales debidamente ejecutoriadas que no estén sometidas a reserva."
+          },
+          {
+            "term": "Datos Sensibles",
+            "description": "Toda información que pueda afectar la intimidad del Titular o cuyo uso pueda generar su discriminación, tales como aquellos que revelen el origen racial o étnico, la orientación política, las convicciones religiosas o filosóficas, la pertenencia a sindicatos, organizaciones sociales de derechos humanos o que promuevan intereses de cualquier partido político o que garanticen los derechos y garantías de partidos políticos de oposición así como los datos relativos a la salud, la vida sexual y los datos biométricos."
+          },
+          {
+            "term": "Encargado del Tratamiento",
+            "description": "Persona natural o jurídica, pública o privada, que por sí misma o en asocio con otros, realice el Tratamiento de Datos Personales por cuenta del Responsable del Tratamiento."
+          },
+          {
+            "term": "Responsable del Tratamiento",
+            "description": "Persona natural o jurídica, pública o privada, que por sí misma o en asocio con otros, decida sobre la base de datos y/o el Tratamiento de los datos."
+          },
+          {
+            "term": "Titular",
+            "description": "Persona natural cuyos datos personales sean objeto de Tratamiento."
+          },
+          {
+            "term": "Tratamiento",
+            "description": "Cualquier operación o conjunto de operaciones sobre Datos Personales, tales como pero no limitados a la recolección, almacenamiento, uso, circulación o supresión."
+          },
+          {
+            "term": "Transferencia",
+            "description": "La Transferencia de datos tiene lugar cuando el responsable y/o encargado del Tratamiento de Datos Personales, ubicado en Colombia, envía la información o los Datos Personales a un receptor, que a su vez es Responsable del Tratamiento y se encuentra dentro o fuera del país."
+          },
+          {
+            "term": "Transmisión",
+            "description": "Tratamiento de Datos Personales que implica la comunicación de los mismos dentro o fuera del territorio de la República de Colombia cuando tenga por objeto la realización de un Tratamiento por el Encargado por cuenta del responsable."
+          }
+        ]
+      },
+      {
+        "id": 2,
+        "title": "Tratamiento al Cual Serán Sometidos los Datos Personales",
+        "content": "Los Datos Personales son recolectados, almacenados, organizados, usados, circulados, transmitidos, transferidos, actualizados, rectificados, suprimidos, eliminados y gestionados por CANCHEROS, según las finalidades para las cuales fueron recolectados y las cuales se encuentran establecidas en el punto 6 de la presente Política. El Tratamiento realizado por CANCHEROS se realizará por el tiempo que sea razonable y necesario conforme con el tipo de Tratamiento. No obstante, CANCHEROS conservará por un término indefinido, aquellos datos que se requieran con el fin de dar cumplimiento a obligaciones legales."
+      },
+      {
+        "id": 3,
+        "title": "Tratamiento de Datos Sensibles",
+        "content": "En el Tratamiento de Datos Sensibles, CANCHEROS observará estrictamente las limitaciones y obligaciones.",
+        "requirements": [
+          "Obtener consentimiento expreso del Titular.",
+          "Informar al Titular que por tratarse de Datos Sensibles no está obligado a autorizar su Tratamiento.",
+          "Informar al Titular de forma explícita y previa, cuáles de los datos que serán objeto de Tratamiento son sensibles y la finalidad del Tratamiento."
+        ]
+      },
+      {
+        "id": 4,
+        "title": "Derechos de los Titulares",
+        "content": "De conformidad con lo establecido en el artículo 8 de la Ley 1581 de 2012 y el Decreto 1377 de 2013, en lo que resulte aplicable en concordancia con la Ley 1266 del 2008 y demás normativa aplicable, el Titular de los Datos Personales tiene los siguientes derechos:",
+        "rights": [
+          "Acceder en forma gratuita a los Datos Personales que hayan sido objeto de Tratamiento por CANCHEROS.",
+          "Conocer, actualizar y rectificar sus Datos Personales frente a CANCHEROS, en su calidad de Responsable del Tratamiento.",
+          "Presentar ante la Superintendencia de Industria y Comercio quejas por infracciones.",
+          "Revocar la autorización y/o solicitar la supresión del dato.",
+          "Ser informado por CANCHEROS, previa solicitud, respecto del uso que le ha dado a sus datos personales."
+        ],
+        "authorized_persons": [
+          "Por el Titular, quien deberá acreditar su identidad en forma suficiente",
+          "Por sus causahabientes, quienes deberán acreditar tal calidad",
+          "Por el representante y/o apoderado del Titular, previa acreditación",
+          "Por estipulación a favor de otro o para otro"
+        ]
+      },
+      {
+        "id": 5,
+        "title": "Obligaciones de CANCHEROS",
+        "subsections": [
+          {
+            "subtitle": "Como Responsable del Tratamiento",
+            "obligations": [
+              "Actualizar la información comunicando de forma oportuna al Encargado del Tratamiento",
+              "Adoptar un manual interno de políticas y procedimientos",
+              "Conservar la información bajo condiciones de seguridad necesarias",
+              "Garantizar al Titular el pleno ejercicio del derecho de hábeas data",
+              "Informar debidamente al Titular sobre la finalidad de la recolección",
+              "Tramitar las consultas y reclamos formulados"
+            ]
+          },
+          {
+            "subtitle": "Como Encargado del Tratamiento",
+            "obligations": [
+              "Abstenerse de circular información controvertida por el Titular",
+              "Actualizar la información reportada por los Responsables",
+              "Adoptar un manual interno de políticas y procedimientos",
+              "Permitir el acceso a la información únicamente a las personas autorizadas"
+            ]
+          }
+        ]
+      },
+      {
+        "id": 6,
+        "title": "Finalidades del Tratamiento",
+        "purposes": {
+          "clients": [
+            "Analizar, procesar, evaluar y tratar la información para mejoramiento de servicios",
+            "Desarrollo de propuestas comerciales",
+            "Prestación de servicios para la gestión de reservas de canchas",
+            "Facilitar la búsqueda, reserva y pago de canchas",
+            "Gestión de contratos de reserva",
+            "Realización de trámites de facturación",
+            "Soporte al cliente y estrategias de mercadeo"
+          ],
+          "employees": [
+            "Realizar proceso de selección y vinculación",
+            "Dar cumplimiento a obligaciones laborales",
+            "Contratación de seguros y prestaciones",
+            "Realizar pagos de nómina"
+          ]
+        }
+      },
+      {
+        "id": 7,
+        "title": "Transferencia y Transmisión de Datos Personales",
+        "transfer_conditions": [
+          "El Titular haya otorgado autorización expresa",
+          "Se realice intercambio de datos médicos",
+          "Se realicen transferencias bancarias o bursátiles",
+          "Se realicen transferencias en marco de tratados internacionales",
+          "Sean necesarias para la ejecución de un contrato",
+          "Sean legalmente exigidas para el interés público"
+        ]
+      },
+      {
+        "id": 8,
+        "title": "Área Responsable de la Atención de Peticiones",
+        "content": "El área responsable de la atención de peticiones, consultas y reclamos será el área de Atención al Cliente",
+        "contact_emails": [
+          "mparradog@unal.edu.co",
+          "jupalaciosf@unal.edu.co",
+          "joramos@unal.edu.co",
+          "jcortesj@unal.edu.co"
+        ]
+      },
+      {
+        "id": 9,
+        "title": "Procedimiento para Ejercer los Derechos",
+        "procedures": {
+          "consulta": {
+            "term": "10 días hábiles",
+            "extension": "5 días hábiles adicionales"
+          },
+          "reclamo": {
+            "term": "15 días hábiles",
+            "extension": "8 días hábiles adicionales",
+            "requirements": [
+              "Identificación del Titular",
+              "Descripción de los hechos",
+              "Documentos de soporte",
+              "Datos de contacto"
+            ]
+          }
+        }
+      },
+      {
+        "id": 10,
+        "title": "Supresión de Datos",
+        "conditions": [
+          "Tratamiento no conforme a la ley",
+          "Datos no necesarios para la finalidad original",
+          "Superación del período necesario"
+        ],
+        "exceptions": [
+          "Deber legal o contractual de permanecer en la base",
+          "Obstaculización de actuaciones judiciales",
+          "Datos necesarios para proteger intereses jurídicos"
+        ]
+      },
+      {
+        "id": 11,
+        "title": "Revocatoria de la Autorización",
+        "content": "El Titular de los datos personales puede revocar el consentimiento al Tratamiento de sus datos personales en cualquier momento, siempre y cuando no lo impida una disposición legal."
+      },
+      {
+        "id": 12,
+        "title": "Seguridad de la Información",
+        "content": "En desarrollo del principio de seguridad, CANCHEROS ha adoptado medidas técnicas, administrativas y humanas razonables para proteger la información de los Titulares e impedir adulteración, pérdida, consulta, uso o acceso no autorizado o fraudulento."
+      },
+      {
+        "id": 13,
+        "title": "Vigencia de la Política",
+        "content": "La Política rige a partir del 04 de Noviembre de 2024. Por regla general el término de las autorizaciones sobre el uso de los datos personales se entiende válido por el término de la relación comercial o de la vinculación al servicio y durante el ejercicio del objeto social de la compañía."
+      }
+    ]
+  }
