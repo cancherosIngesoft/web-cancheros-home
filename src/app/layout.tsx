@@ -14,8 +14,8 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "Cancheros web",
-  description: "Conoce la forma de reservar canchas de forma fácil y rápida",
+  title: "Cancheros",
+  description: "Encuentra tu cancha de futbol más cercana en Bogotá",
 };
 
 export default function RootLayout({
@@ -26,7 +26,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-surface text-onSurface w-dvw h-dvh`}
       >
         {children}
       </body>
