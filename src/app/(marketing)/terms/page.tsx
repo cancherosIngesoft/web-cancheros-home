@@ -1,4 +1,5 @@
 import { Metadata } from "next";
+import terms from "../../../utils/data/terms.json";
 
 export const metadata: Metadata = {
   title: "Términos y Condiciones Cancheros",
@@ -6,33 +7,20 @@ export const metadata: Metadata = {
 };
 
 export default function TermsPage() {
+  const termsContent = terms;
   return (
     <main className="container mx-auto px-4 py-8 prose prose-slate max-w-3xl">
-      <h1 className="text-3xl font-bold mb-6">Términos y Condiciones</h1>
-
-      <section className="mb-8">
-        <h2 className="text-2xl font-semibold mb-4">1. Introducción</h2>
-        <p>
-          Al acceder y utilizar este sitio web, usted acepta estar sujeto a los
-          siguientes términos y condiciones de uso...
-        </p>
-      </section>
-
-      <section className="mb-8">
-        <h2 className="text-2xl font-semibold mb-4">2. Uso del Servicio</h2>
-        <p>
-          Nuestros servicios están disponibles solo para personas que puedan
-          celebrar contratos legalmente vinculantes...
-        </p>
-      </section>
-
-      <section className="mb-8">
-        <h2 className="text-2xl font-semibold mb-4">3. Privacidad</h2>
-        <p>
-          Por favor, revise nuestra Política de Privacidad, que también rige su
-          visita a nuestro sitio web...
-        </p>
-      </section>
+      <h1 className="text-3xl font-bold mb-6 text-[#1A6B51]">
+        Términos y Condiciones
+      </h1>
+      {termsContent.terms.map((term) => (
+        <section className="mb-8">
+          <h2 className="text-2xl font-semibold mb-4  text-[#1A6B51]">
+            {term.title}
+          </h2>
+          <p>{term.description}</p>
+        </section>
+      ))}
     </main>
   );
 }

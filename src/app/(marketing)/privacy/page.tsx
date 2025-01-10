@@ -1,5 +1,5 @@
 import { Metadata } from "next";
-import privacyContent from "./privacy_policy.json";
+import privacyContent from "../../../utils/data/privacy_policy.json";
 
 export const metadata: Metadata = {
   title: privacyContent.title,
