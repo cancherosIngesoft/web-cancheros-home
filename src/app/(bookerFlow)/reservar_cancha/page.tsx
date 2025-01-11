@@ -13,7 +13,7 @@ export default function reservar_cancha() {
   
 
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center p-24">
+    <div className="flex  flex-col items-center justify-center p-24">
       <h1 className="text-4xl font-bold mb-4">Reservar Cancha</h1>
       {session && (
         <p>Bienvenido, {session.user?.name || session.user?.email}</p>
