@@ -88,7 +88,15 @@ jobs:
       - name: Install Vercel CLI
         run: npm install --global vercel@latest
 
-      # Primero sincronizamos las variables
+      # Primero obtenemos la URL de preview
+      - name: Get Preview URL
+        id: get_preview_url
+        run: |
+          PREVIEW_URL=$(vercel --token=${{ secrets.VERCEL_TOKEN }} --confirm)
+          echo "PREVIEW_URL=$PREVIEW_URL" >> $GITHUB_ENV
+          echo "preview_url=$PREVIEW_URL" >> $GITHUB_OUTPUT
+
+      # Luego sincronizamos las variables usando la URL de preview
       - name: Sync Environment Variables
         run: |
           vercel env rm AUTH_SECRET development --token=${{ secrets.VERCEL_TOKEN }} -y || true
@@ -103,18 +111,23 @@ jobs:
           echo "${{ secrets.AUTH0_ISSUER }}" | vercel env add AUTH0_ISSUER development --token=${{ secrets.VERCEL_TOKEN }}
           echo "${{ secrets.AUTH0_CLIENT_ID }}" | vercel env add AUTH0_CLIENT_ID development --token=${{ secrets.VERCEL_TOKEN }}
           echo "${{ secrets.AUTH0_CLIENT_SECRET }}" | vercel env add AUTH0_CLIENT_SECRET development --token=${{ secrets.VERCEL_TOKEN }}
-          echo "${{ secrets.AUTH0_BASE_URL_DEVELOPMENT }}" | vercel env add AUTH0_BASE_URL_DEVELOPMENT development --token=${{ secrets.VERCEL_TOKEN }}
+          echo "${{ env.PREVIEW_URL }}" | vercel env add AUTH0_BASE_URL_DEVELOPMENT development --token=${{ secrets.VERCEL_TOKEN }}
           echo "${{ secrets.NEXT_PUBLIC_API_URL }}" | vercel env add NEXT_PUBLIC_API_URL development --token=${{ secrets.VERCEL_TOKEN }}
-          echo "${{ secrets.NEXTAUTH_URL_DEVELOPMENT }}" | vercel env add NEXTAUTH_URL_DEVELOPMENT development --token=${{ secrets.VERCEL_TOKEN }}
+          echo "${{ env.PREVIEW_URL }}" | vercel env add NEXTAUTH_URL_DEVELOPMENT development --token=${{ secrets.VERCEL_TOKEN }}
 
-      # Luego hacemos pull de la información
+      # Luego hacemos pull de la información actualizada
       - name: Pull Vercel Environment Information
         run: vercel pull --yes --environment=preview --token=${{ secrets.VERCEL_TOKEN }}
 
       # Después construimos
       - name: Build Project Artifacts
         run: vercel build --token=${{ secrets.VERCEL_TOKEN }}
+        env:
+          NEXTAUTH_URL: ${{ env.PREVIEW_URL }}
+          AUTH0_BASE_URL: ${{ env.PREVIEW_URL }}
 
       # Finalmente desplegamos
       - name: Deploy Project Artifacts to Vercel
-        run: vercel deploy --prebuilt --token=${{ secrets.VERCEL_TOKEN }}
+        run: |
+          DEPLOYMENT_URL=$(vercel deploy --prebuilt --token=${{ secrets.VERCEL_TOKEN }})
+          echo "Deployed to $DEPLOYMENT_URL"
