@@ -26,7 +26,7 @@ export const LateralNavBar = () => {
   };
 
   return (
-    <div className="flex flex-col h-full w-full bg-gradient-to-b from-surface from-60% to-primary-80 to-80% py-4">
+    <div className="flex flex-col h-full w-full bg-gradient-to-b from-surface from-60% to-primary-80 to-80% py-4 border-r border-neutral-300">
       <div className="flex-grow flex flex-col items-center gap-4">
         {navItems.map((item, index) => (
           <Link key={index} href={item.route}>
