@@ -49,7 +49,16 @@ jobs:
 
       # Primero sincronizamos las variables
       - name: Sync Environment Variables
+        # Removemos las variables existentes
         run: |
+          vercel env rm AUTH_SECRET production --token=${{ secrets.VERCEL_TOKEN }} -y || true
+          vercel env rm AUTH0_ISSUER production --token=${{ secrets.VERCEL_TOKEN }} -y || true
+          vercel env rm AUTH0_CLIENT_ID production --token=${{ secrets.VERCEL_TOKEN }} -y || true
+          vercel env rm AUTH0_CLIENT_SECRET production --token=${{ secrets.VERCEL_TOKEN }} -y || true
+          vercel env rm AUTH0_BASE_URL production --token=${{ secrets.VERCEL_TOKEN }} -y || true
+          vercel env rm API_URL production --token=${{ secrets.VERCEL_TOKEN }} -y || true
+          vercel env rm NEXTAUTH_URL production --token=${{ secrets.VERCEL_TOKEN }} -y || true
+
           echo "${{ secrets.AUTH_SECRET }}" | vercel env add AUTH_SECRET production --token=${{ secrets.VERCEL_TOKEN }}
           echo "${{ secrets.AUTH0_ISSUER }}" | vercel env add AUTH0_ISSUER production --token=${{ secrets.VERCEL_TOKEN }}
           echo "${{ secrets.AUTH0_CLIENT_ID }}" | vercel env add AUTH0_CLIENT_ID production --token=${{ secrets.VERCEL_TOKEN }}
