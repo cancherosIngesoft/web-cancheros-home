@@ -1,4 +1,4 @@
-import { LateralNavBar } from "@/features/sessionManagement/LateralNavBar";
+import { LateralNavBar } from "@/components/layout/LateralNavBar";
 
 export default function Layout({
     children,
