@@ -47,7 +47,7 @@ jobs:
       - name: Install Vercel CLI
         run: npm install --global vercel@latest
 
-      # Primero sincronizamos las variables
+      # Primero sincronizamos las variables otra vez
       - name: Sync Environment Variables
         run: |
           vercel env add NEXT_PUBLIC_AUTH_SECRET production "${{ secrets.NEXT_PUBLIC_AUTH_SECRET }}" --token=${{ secrets.VERCEL_TOKEN }}
