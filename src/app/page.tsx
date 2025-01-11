@@ -1,102 +1,226 @@
+
+
+"use client";
+import { signIn, signOut, useSession } from "next-auth/react";
+
+import { useEffect } from "react";
+import Footer from "@/components/layout/footer";
+import Navbar from "@/components/layout/navbar";
+import { Button } from "@/components/ui/button";
+
 import Image from "next/image";
+import { motion } from "framer-motion";
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <h1>Esta es una prueba de que esto fue desplegado correctamente</h1>
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
+  const { data: session } = useSession()
+
+  const handleSingIn=()=>{
+    signIn('auth0', { callbackUrl: '/reservar_cancha' ,
+      authorizationParams: {
+        prompt: 'login'
+      }
+    })
+  }
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrolled = window.scrollY;
+      const heroSection = document.querySelector(
+        ".hero-section"
+      ) as HTMLElement;
+      if (heroSection) {
+        heroSection.style.backgroundPositionY = `${scrolled * 0.5}px`;
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  return (
+    <div className="overflow-x-hidden">
+      <Navbar />
+      <motion.section
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 1 }}
+        className="hero-section relative h-screen w-full flex items-center justify-center"
+        style={{
+          backgroundImage:
+            "linear-gradient(rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.3)), url('/hero-soccer.jpg')",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          backgroundRepeat: "no-repeat",
+          backgroundAttachment: "fixed",
+        }}
+      >
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent to-[#1A6B51]/20" />
+
+        <motion.div
+          initial={{ y: 50, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ duration: 1, delay: 0.5 }}
+          className="relative z-10 text-center px-4 max-w-5xl"
+        >
+          <h1 className="text-7xl font-bold text-[#1A6B51] mb-6">
+            Reserva canchas de fútbol en Bogotá
+          </h1>
+          <p className="text-xl text-gray-800 mb-8 max-w-3xl mx-auto font-medium">
+            Encuentra canchas de futbol sintetico en Bogotá, de acuerdo lo que
+            necesites, y realiza tu reserva de forma directa, sin esperas. Unete
+            y crea tu equipo y disfruta de esta pasion que nos une
+          </p>
+          <div className="flex gap-6 justify-center">
+            <Button variant="default" className="text-lg px-8" onClick={handleSingIn}>
+              Iniciar sesión
+            </Button>
+            <Button variant="outline" className="text-lg px-8">
+              Trabaja con nosotros
+            </Button>
+          </div>
+        </motion.div>
+      </motion.section>
+
+      <main className="flex flex-col items-center justify-center max-w-7xl mx-auto px-4">
+        <motion.section
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+          viewport={{ once: true }}
+          className="flex flex-row items-center justify-center min-h-[600px] w-full py-16"
+        >
+          <p className="text-lg w-1/2">
+            Sabemos lo dificil que es encontrar y reservar canchas para
+            disfrutar de nuestra mayor pasion, por eso en CANCHEROS queremos que
+            este proceso sea mucho mas rapido para jugadores y los dueños de las
+            canchas. Crea tus clubes, e incluye a tus amigos aficionados del
+            futbol en un solo lugar
+          </p>
+          <Image
+            src="/soccer_photo.png"
+            alt="Cancheros"
+            width={800}
+            height={800}
+          />
+        </motion.section>
+
+        <motion.section
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+          viewport={{ once: true }}
+          className="flex flex-col items-center justify-center min-h-[400px] py-16"
+        >
+          <div className="relative text-center">
+            <p className="text-lg font-bold text-black">
+              Por que solo nosotros entendemos lo que significa este deporte,
+              <br />
+              somos más que jugadores, somos
+            </p>
+            <p className="text-3xl font-bold text-green-500 relative z-10">
+              CANCHEROS
+            </p>
+            <div className="absolute top-1/2 left-1/2 w-3/4 h-24 bg-green-200 rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2 opacity-50"></div>
+          </div>
+        </motion.section>
+
+        <motion.section
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+          viewport={{ once: true }}
+          className="flex flex-col items-center justify-center min-h-[600px] py-16"
+        >
+          <h1 className="text-5xl font-bold bg-gradient-to-t from-green-900 to-green-500 text-transparent bg-clip-text mb-16">
+            Nuestros valores
+          </h1>
+          <div className="grid grid-cols-3 gap-x-24 gap-y-16 place-items-center max-w-6xl mx-auto">
+            <div className="flex flex-col items-center justify-center">
+              <Image
+                src="/icons/soccer_ball.svg"
+                alt="Soccer ball"
+                width={150}
+                height={150}
+              />
+              <p className="text-lg font-bold text-black mt-4">Empatía</p>
+            </div>
+            <div className="flex flex-col items-center justify-center">
+              <Image
+                src="/icons/soccer_stadium.svg"
+                alt="Soccer stadium"
+                width={150}
+                height={150}
+              />
+              <p className="text-lg font-bold text-black mt-4">Comunidad</p>
+            </div>
+            <div className="flex flex-col items-center justify-center">
+              <Image
+                src="/icons/football_team.svg"
+                alt="Valor 1"
+                width={150}
+                height={150}
+              />
+              <p className="text-lg font-bold text-black mt-4">Fraternidad</p>
+            </div>
+            <div className="col-span-3 flex justify-center w-full">
+              <div className="flex flex-col items-center justify-center">
+                <Image
+                  src="/icons/liberty.svg"
+                  alt="Liberty"
+                  width={150}
+                  height={150}
+                />
+                <p className="text-lg font-bold text-black mt-4">Libertad</p>
+              </div>
+            </div>
+          </div>
+        </motion.section>
+
+        <motion.section
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+          viewport={{ once: true }}
+          className="flex w-full gap-8 min-h-[400px] px-8 mb-16"
+        >
+          <div className="flex-1 bg-[#31B642] p-16 flex flex-col items-center justify-center text-white transition-all duration-300 hover:shadow-xl rounded-2xl">
+            <div className="max-w-2xl mx-auto text-center space-y-8">
+              <h2 className="text-3xl font-bold mb-8">Misión</h2>
+              <p className="text-lg leading-relaxed">
+                Ofrecemos una plataforma confiable y eficiente para la reserva y
+                gestión de canchas de fútbol amateur en Bogotá. Diseñada para
+                amantes del fútbol, nuestra solución fomenta la organización de
+                partidos de manera flexible y sencilla, promoviendo valores como
+                libertad, respeto y fraternidad. Brindamos servicios como
+                reservas rápidas con pagos electrónicos, información en tiempo
+                real sobre disponibilidad, y herramientas para registrar y
+                gestionar resultados, conectando a la comunidad futbolística y
+                mejorando cada experiencia en la cancha
+              </p>
+            </div>
+          </div>
+          <div className="flex-1 bg-[#1A6B51] p-16 flex flex-col items-center justify-center text-white transition-all duration-300 hover:shadow-xl rounded-2xl">
+            <div className="max-w-2xl mx-auto text-center space-y-8">
+              <h2 className="text-3xl font-bold mb-8">Visión</h2>
+              <p className="text-lg leading-relaxed">
+                En cinco años, seremos la plataforma líder en la gestión de
+                reservas de canchas de fútbol en Bogotá, con el 70% de las
+                reservas realizadas a través de nuestra aplicación. Nos
+                comprometemos a transformar la manera en que los aficionados del
+                fútbol amateur organizan sus partidos, reduciendo
+                significativamente los tiempos de reserva y eliminando barreras
+                logísticas. Nuestro objetivo es consolidarnos como el puente que
+                conecta jugadores y propietarios, fortaleciendo la comunidad
+                deportiva de la ciudad y llevando el fútbol amateur a un nuevo
+                nivel de accesibilidad, confianza y unión.
+              </p>
+            </div>
+          </div>
+        </motion.section>
       </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+      <Footer />
     </div>
   );
+
 }

@@ -1,0 +1,46 @@
+{
+    "title": "Términos y Condiciones",
+    "description": "Términos y condiciones de uso de nuestros servicios",
+    "terms": [
+        {
+            "id": 1,
+            "title": "1. Introducción",
+            "description": "Al acceder y utilizar este sitio web, usted acepta estar sujeto a los siguientes términos y condiciones de uso. Si no está de acuerdo con estos términos, por favor absténgase de usar nuestros servicios."
+        },
+        {
+            "id": 2,
+            "title": "2. Uso del Servicio",
+            "description": "Nuestros servicios están disponibles solo para personas que puedan celebrar contratos legalmente vinculantes. Los usuarios deben proporcionar información precisa y actualizada durante el registro. Nos reservamos el derecho de suspender o terminar cuentas que violen estos términos."
+        },
+        {
+            "id": 3,
+            "title": "3. Reservas y Pagos",
+            "description": "Al realizar una reserva, usted se compromete a pagar el monto total especificado. Los pagos se procesarán de manera segura a través de nuestras plataformas autorizadas. Las cancelaciones están sujetas a nuestra política de reembolso vigente."
+        },
+        {
+            "id": 4,
+            "title": "4. Privacidad y Datos",
+            "description": "Protegemos su información personal según nuestra Política de Privacidad. Al usar nuestros servicios, usted acepta la recolección y uso de sus datos de acuerdo con esta política."
+        },
+        {
+            "id": 5,
+            "title": "5. Responsabilidades",
+            "description": "Los usuarios son responsables de mantener la confidencialidad de sus cuentas y de todas las actividades realizadas bajo las mismas. No nos hacemos responsables por pérdidas o daños derivados del mal uso de la plataforma."
+        },
+        {
+            "id": 6,
+            "title": "6. Modificaciones",
+            "description": "Nos reservamos el derecho de modificar estos términos en cualquier momento. Los cambios entrarán en vigor inmediatamente después de su publicación en el sitio web. El uso continuado de nuestros servicios implica la aceptación de dichos cambios."
+        },
+        {
+            "id": 7,
+            "title": "7. Propiedad Intelectual",
+            "description": "Todo el contenido presente en la plataforma está protegido por derechos de autor y otras leyes de propiedad intelectual. No está permitida la reproducción o distribución sin autorización expresa."
+        },
+        {
+            "id": 8,
+            "title": "8. Ley Aplicable",
+            "description": "Estos términos se rigen por las leyes de Colombia. Cualquier disputa será resuelta en los tribunales competentes de Bogotá, Colombia."
+        }
+    ]
+}
