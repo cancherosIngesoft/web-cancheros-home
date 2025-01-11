@@ -87,9 +87,34 @@ jobs:
       - uses: actions/checkout@v3
       - name: Install Vercel CLI
         run: npm install --global vercel@latest
+
+      # Primero sincronizamos las variables
+      - name: Sync Environment Variables
+        run: |
+          vercel env rm AUTH_SECRET development --token=${{ secrets.VERCEL_TOKEN }} -y || true
+          vercel env rm AUTH0_ISSUER development --token=${{ secrets.VERCEL_TOKEN }} -y || true
+          vercel env rm AUTH0_CLIENT_ID development --token=${{ secrets.VERCEL_TOKEN }} -y || true
+          vercel env rm AUTH0_CLIENT_SECRET development --token=${{ secrets.VERCEL_TOKEN }} -y || true
+          vercel env rm AUTH0_BASE_URL_DEVELOPMENT development --token=${{ secrets.VERCEL_TOKEN }} -y || true
+          vercel env rm API_URL development --token=${{ secrets.VERCEL_TOKEN }} -y || true
+          vercel env rm NEXTAUTH_URL_DEVELOPMENT development --token=${{ secrets.VERCEL_TOKEN }} -y || true
+
+          echo "${{ secrets.AUTH_SECRET }}" | vercel env add AUTH_SECRET development --token=${{ secrets.VERCEL_TOKEN }}
+          echo "${{ secrets.AUTH0_ISSUER }}" | vercel env add AUTH0_ISSUER development --token=${{ secrets.VERCEL_TOKEN }}
+          echo "${{ secrets.AUTH0_CLIENT_ID }}" | vercel env add AUTH0_CLIENT_ID development --token=${{ secrets.VERCEL_TOKEN }}
+          echo "${{ secrets.AUTH0_CLIENT_SECRET }}" | vercel env add AUTH0_CLIENT_SECRET development --token=${{ secrets.VERCEL_TOKEN }}
+          echo "${{ secrets.AUTH0_BASE_URL_DEVELOPMENT }}" | vercel env add AUTH0_BASE_URL_DEVELOPMENT development --token=${{ secrets.VERCEL_TOKEN }}
+          echo "${{ secrets.NEXT_PUBLIC_API_URL }}" | vercel env add NEXT_PUBLIC_API_URL development --token=${{ secrets.VERCEL_TOKEN }}
+          echo "${{ secrets.NEXTAUTH_URL_DEVELOPMENT }}" | vercel env add NEXTAUTH_URL_DEVELOPMENT development --token=${{ secrets.VERCEL_TOKEN }}
+
+      # Luego hacemos pull de la información
       - name: Pull Vercel Environment Information
         run: vercel pull --yes --environment=preview --token=${{ secrets.VERCEL_TOKEN }}
+
+      # Después construimos
       - name: Build Project Artifacts
         run: vercel build --token=${{ secrets.VERCEL_TOKEN }}
+
+      # Finalmente desplegamos
       - name: Deploy Project Artifacts to Vercel
         run: vercel deploy --prebuilt --token=${{ secrets.VERCEL_TOKEN }}
