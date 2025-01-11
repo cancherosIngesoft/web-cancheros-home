@@ -55,7 +55,7 @@ jobs:
           echo "${{ secrets.AUTH0_CLIENT_ID }}" | vercel env add AUTH0_CLIENT_ID production --token=${{ secrets.VERCEL_TOKEN }}
           echo "${{ secrets.AUTH0_CLIENT_SECRET }}" | vercel env add AUTH0_CLIENT_SECRET production --token=${{ secrets.VERCEL_TOKEN }}
           echo "${{ secrets.AUTH0_BASE_URL }}" | vercel env add AUTH0_BASE_URL production --token=${{ secrets.VERCEL_TOKEN }}
-          echo "${{ secrets.NEXT_PUBLIC_API_URL }}" | vercel env add API_URL production --token=${{ secrets.VERCEL_TOKEN }}
+          echo "${{ secrets.NEXT_PUBLIC_API_URL }}" | vercel env add NEXT_PUBLIC_API_URL production --token=${{ secrets.VERCEL_TOKEN }}
           echo "${{ secrets.NEXTAUTH_URL }}" | vercel env add NEXTAUTH_URL production --token=${{ secrets.VERCEL_TOKEN }}
 
       # Luego hacemos pull de la información
