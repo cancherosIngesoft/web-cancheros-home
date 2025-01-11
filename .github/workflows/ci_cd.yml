@@ -50,13 +50,13 @@ jobs:
       # Primero sincronizamos las variables otra vez
       - name: Sync Environment Variables
         run: |
-          vercel env add NEXT_PUBLIC_AUTH_SECRET production "${{ secrets.NEXT_PUBLIC_AUTH_SECRET }}" --token=${{ secrets.VERCEL_TOKEN }} --yes
-          vercel env add NEXT_PUBLIC_AUTH0_ISSUER production "${{ secrets.NEXT_PUBLIC_AUTH0_ISSUER }}" --token=${{ secrets.VERCEL_TOKEN }} --yes
-          vercel env add NEXT_PUBLIC_AUTH0_CLIENT_ID production "${{ secrets.NEXT_PUBLIC_AUTH0_CLIENT_ID }}" --token=${{ secrets.VERCEL_TOKEN }} --yes
-          vercel env add NEXT_PUBLIC_AUTH0_CLIENT_SECRET production "${{ secrets.NEXT_PUBLIC_AUTH0_CLIENT_SECRET }}" --token=${{ secrets.VERCEL_TOKEN }} --yes
-          vercel env add NEXT_PUBLIC_AUTH0_BASE_URL production "${{ secrets.NEXT_PUBLIC_AUTH0_BASE_URL }}" --token=${{ secrets.VERCEL_TOKEN }} --yes
-          vercel env add NEXT_PUBLIC_API_URL production "${{ secrets.NEXT_PUBLIC_API_URL }}" --token=${{ secrets.VERCEL_TOKEN }} --yes
-          vercel env add NEXT_PUBLIC_NEXTAUTH_URL production "${{ secrets.NEXT_PUBLIC_NEXTAUTH_URL }}" --token=${{ secrets.VERCEL_TOKEN }} --yes
+          vercel env add NEXT_PUBLIC_AUTH_SECRET production "${{ secrets.NEXT_PUBLIC_AUTH_SECRET }}" --token=${{ secrets.VERCEL_TOKEN }} -y
+          vercel env add NEXT_PUBLIC_AUTH0_ISSUER production "${{ secrets.NEXT_PUBLIC_AUTH0_ISSUER }}" --token=${{ secrets.VERCEL_TOKEN }} -y
+          vercel env add NEXT_PUBLIC_AUTH0_CLIENT_ID production "${{ secrets.NEXT_PUBLIC_AUTH0_CLIENT_ID }}" --token=${{ secrets.VERCEL_TOKEN }} -y
+          vercel env add NEXT_PUBLIC_AUTH0_CLIENT_SECRET production "${{ secrets.NEXT_PUBLIC_AUTH0_CLIENT_SECRET }}" --token=${{ secrets.VERCEL_TOKEN }} -y
+          vercel env add NEXT_PUBLIC_AUTH0_BASE_URL production "${{ secrets.NEXT_PUBLIC_AUTH0_BASE_URL }}" --token=${{ secrets.VERCEL_TOKEN }} -y
+          vercel env add NEXT_PUBLIC_API_URL production "${{ secrets.NEXT_PUBLIC_API_URL }}" --token=${{ secrets.VERCEL_TOKEN }} -y
+          vercel env add NEXT_PUBLIC_NEXTAUTH_URL production "${{ secrets.NEXT_PUBLIC_NEXTAUTH_URL }}" --token=${{ secrets.VERCEL_TOKEN }} -y
 
       # Luego hacemos pull de la información
       - name: Pull Vercel Environment Information
