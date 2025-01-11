@@ -1,12 +1,28 @@
+
+
 "use client";
+import { signIn, signOut, useSession } from "next-auth/react";
+
 import { useEffect } from "react";
 import Footer from "@/components/layout/footer";
 import Navbar from "@/components/layout/navbar";
 import { Button } from "@/components/ui/button";
+
 import Image from "next/image";
 import { motion } from "framer-motion";
 
 export default function Home() {
+
+  const { data: session } = useSession()
+
+  const handleSingIn=()=>{
+    signIn('auth0', { callbackUrl: '/reservar_cancha' ,
+      authorizationParams: {
+        prompt: 'login'
+      }
+    })
+  }
+
   useEffect(() => {
     const handleScroll = () => {
       const scrolled = window.scrollY;
@@ -56,7 +72,7 @@ export default function Home() {
             y crea tu equipo y disfruta de esta pasion que nos une
           </p>
           <div className="flex gap-6 justify-center">
-            <Button variant="default" className="text-lg px-8">
+            <Button variant="default" className="text-lg px-8" onClick={handleSingIn}>
               Iniciar sesión
             </Button>
             <Button variant="outline" className="text-lg px-8">
@@ -206,4 +222,5 @@ export default function Home() {
       <Footer />
     </div>
   );
+
 }

@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
+import { SessionProvider } from "next-auth/react";
+import Providers from "./Providers";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -12,6 +14,7 @@ const geistMono = localFont({
   variable: "--font-geist-mono",
   weight: "100 900",
 });
+
 
 export const metadata: Metadata = {
   title: "Cancheros",
@@ -26,9 +29,14 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-[var(--background)] text-[var(--foreground)] w-dvw h-dvh`}
+
+        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-surface text-onSurface w-screen h-screen`}
+
       >
-        {children}
+        <Providers>
+          {children}
+        </Providers>
+        
       </body>
     </html>
   );
