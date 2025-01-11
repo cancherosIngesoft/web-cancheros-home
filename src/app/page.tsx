@@ -56,13 +56,14 @@ export default function Home() {
         className="hero-section relative h-screen w-full flex items-center justify-center"
         style={{
           backgroundImage:
-            "linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('/hero-soccer.jpg')",
+            "linear-gradient(rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.3)), url('/hero-soccer.jpg')",
           backgroundSize: "cover",
           backgroundPosition: "center",
+          backgroundRepeat: "no-repeat",
           backgroundAttachment: "fixed",
         }}
       >
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black opacity-50" />
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent to-[#1A6B51]/20" />
 
         <motion.div
           initial={{ y: 50, opacity: 0 }}
@@ -70,10 +71,10 @@ export default function Home() {
           transition={{ duration: 1, delay: 0.5 }}
           className="relative z-10 text-center px-4 max-w-5xl"
         >
-          <h1 className="text-7xl font-bold bg-gradient-to-t from-green-900 to-green-500 text-transparent bg-clip-text mb-6">
+          <h1 className="text-7xl font-bold text-[#1A6B51] mb-6">
             Reserva canchas de fútbol en Bogotá
           </h1>
-          <p className="text-xl text-white mb-8 max-w-3xl mx-auto">
+          <p className="text-xl text-gray-800 mb-8 max-w-3xl mx-auto font-medium">
             Encuentra canchas de futbol sintetico en Bogotá, de acuerdo lo que
             necesites, y realiza tu reserva de forma directa, sin esperas. Unete
             y crea tu equipo y disfruta de esta pasion que nos une
