@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Menu } from "lucide-react";
+import { signIn } from "next-auth/react";
 
 const Navbar = () => {
   const navLinks = [
@@ -11,6 +12,22 @@ const Navbar = () => {
     { href: "/contact", label: "Contacto" },
     { href: "/terms", label: "Términos" },
   ];
+    const handleSingUp=()=>{
+      signIn('auth0', {
+        callbackUrl: '/reservar_cancha',
+        authorizationParams: {
+          screen_hint: 'signup',
+          prompt: 'login'
+        }
+      })
+    }
+    const handleSingIn=()=>{
+      signIn('auth0', { callbackUrl: '/reservar_cancha' ,
+        authorizationParams: {
+          prompt: 'login'
+        }
+      })
+    }
 
   return (
     <nav className="bg-[#F0FFFA] border-b border-gray-200">
@@ -42,7 +59,7 @@ const Navbar = () => {
               variant="default"
               size="lg"
               className="text-base font-medium"
-              onClick={() => console.log("Iniciar sesión")}
+              onClick={handleSingIn}
             >
               Entrar
             </Button>
@@ -50,7 +67,7 @@ const Navbar = () => {
               variant="outline"
               size="lg"
               className="text-base font-medium"
-              onClick={() => console.log("Registrarse")}
+              onClick={handleSingUp}
             >
               Registrarse
             </Button>

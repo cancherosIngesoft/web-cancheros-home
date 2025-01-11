@@ -14,15 +14,7 @@ import { motion } from "framer-motion";
 export default function Home() {
 
   const { data: session } = useSession()
-  const handleSingUp=()=>{
-    signIn('auth0', {
-      callbackUrl: '/reservar_cancha',
-      authorizationParams: {
-        screen_hint: 'signup',
-        prompt: 'login'
-      }
-    })
-  }
+
   const handleSingIn=()=>{
     signIn('auth0', { callbackUrl: '/reservar_cancha' ,
       authorizationParams: {
@@ -80,7 +72,7 @@ export default function Home() {
             y crea tu equipo y disfruta de esta pasion que nos une
           </p>
           <div className="flex gap-6 justify-center">
-            <Button variant="default" className="text-lg px-8">
+            <Button variant="default" className="text-lg px-8" onClick={handleSingIn}>
               Iniciar sesión
             </Button>
             <Button variant="outline" className="text-lg px-8">
