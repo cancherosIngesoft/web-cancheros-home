@@ -29,9 +29,9 @@ interface ExtendedProfile extends Profile {
 export const authOptions: NextAuthOptions = {
   providers: [
     Auth0Provider({
-      clientId: process.env.NEXT_PUBLIC_AUTH0_CLIENT_ID!,
-      clientSecret: process.env.NEXT_PUBLIC_AUTH0_CLIENT_SECRET!,
-      issuer: process.env.NEXT_PUBLIC_AUTH0_ISSUER,
+      clientId: process.env.AUTH0_CLIENT_ID!,
+      clientSecret: process.env.AUTH0_CLIENT_SECRET!,
+      issuer: process.env.AUTH0_ISSUER,
       authorization: { params: { scope: "openid email profile" } },
     }),
   ],
