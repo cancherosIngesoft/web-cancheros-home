@@ -59,13 +59,13 @@ jobs:
           vercel env rm NEXT_PUBLIC_API_URL production --token=${{ secrets.VERCEL_TOKEN }} -y || true
           vercel env rm NEXTAUTH_URL production --token=${{ secrets.VERCEL_TOKEN }} -y || true
 
-          echo "${{ secrets.AUTH_SECRET }}" | vercel env add AUTH_SECRET production --token=${{ secrets.VERCEL_TOKEN }}
-          echo "${{ secrets.AUTH0_ISSUER }}" | vercel env add AUTH0_ISSUER production --token=${{ secrets.VERCEL_TOKEN }}
-          echo "${{ secrets.AUTH0_CLIENT_ID }}" | vercel env add AUTH0_CLIENT_ID production --token=${{ secrets.VERCEL_TOKEN }}
-          echo "${{ secrets.AUTH0_CLIENT_SECRET }}" | vercel env add AUTH0_CLIENT_SECRET production --token=${{ secrets.VERCEL_TOKEN }}
-          echo "${{ secrets.AUTH0_BASE_URL }}" | vercel env add AUTH0_BASE_URL production --token=${{ secrets.VERCEL_TOKEN }}
-          echo "${{ secrets.NEXT_PUBLIC_API_URL }}" | vercel env add NEXT_PUBLIC_API_URL production --token=${{ secrets.VERCEL_TOKEN }}
-          echo "${{ secrets.NEXTAUTH_URL }}" | vercel env add NEXTAUTH_URL production --token=${{ secrets.VERCEL_TOKEN }}
+          echo -n "${{ secrets.AUTH_SECRET }}" | vercel env add AUTH_SECRET production --token=${{ secrets.VERCEL_TOKEN }}
+          echo -n "${{ secrets.AUTH0_ISSUER }}" | vercel env add AUTH0_ISSUER production --token=${{ secrets.VERCEL_TOKEN }}
+          echo -n "${{ secrets.AUTH0_CLIENT_ID }}" | vercel env add AUTH0_CLIENT_ID production --token=${{ secrets.VERCEL_TOKEN }}
+          echo -n "${{ secrets.AUTH0_CLIENT_SECRET }}" | vercel env add AUTH0_CLIENT_SECRET production --token=${{ secrets.VERCEL_TOKEN }}
+          echo -n "${{ secrets.AUTH0_BASE_URL }}" | vercel env add AUTH0_BASE_URL production --token=${{ secrets.VERCEL_TOKEN }}
+          echo -n "${{ secrets.NEXT_PUBLIC_API_URL }}" | vercel env add NEXT_PUBLIC_API_URL production --token=${{ secrets.VERCEL_TOKEN }}
+          echo -n "${{ secrets.NEXTAUTH_URL }}" | vercel env add NEXTAUTH_URL production --token=${{ secrets.VERCEL_TOKEN }}
 
       # Luego hacemos pull de la información
       - name: Pull Vercel Environment Information
@@ -78,6 +78,7 @@ jobs:
       # Finalmente desplegamos
       - name: Deploy Project Artifacts to Vercel
         run: vercel deploy --prebuilt --prod --token=${{ secrets.VERCEL_TOKEN }}
+
 
   deploy-preview:
     needs: test
