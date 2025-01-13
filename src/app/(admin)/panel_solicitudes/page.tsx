@@ -2,9 +2,12 @@
 
 import { Store } from 'lucide-react'
 
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { PendingRequests } from '@/components/panelSolicitudes/PendingRequest'
-import { RejectedRequests } from '@/components/panelSolicitudes/RejectedRequest'
+
+import { Suspense } from 'react'
+import Loading from './loading'
+import { fetchRequestsOwnersPending } from '@/actions/dashboardRequest'
+import RequestPanel from '@/components/panelSolicitudes/RequestPanel'
+
 
 interface Request {
     id: string
@@ -41,35 +44,13 @@ const mockRequests: Request[] = [
         address: "Calle 12 #13-A"
     }
 ]
-const panel_solicitudes = () => {   
+export default async function panel_solicitudes() {
+
+    const initialPendingRequests = await fetchRequestsOwnersPending()
     return (
-        <div className="w-full">
-            <div className="flex items-center gap-2 mb-6">
-                <Store className="w-8 h-8 text-primary-35" />
-                <h1 className="text-2xl font-semibold text-primary-35">SOLICITUDES</h1>
-            </div>
+        <Suspense fallback={<Loading />}>
+            <RequestPanel initialPendingRequests={initialPendingRequests}/>
+        </Suspense>
 
-            <Tabs defaultValue="pending" className="w-full flex-col justify-center align-center">
-                <TabsList className="w-full mb-6 h-10 bg-white">
-                    <TabsTrigger value="pending" className="flex-1 font-semibold">
-                        Solicitudes pendientes
-                    </TabsTrigger>
-                    <TabsTrigger value="rejected" className="flex-1 font-semibold">
-                        Solicitudes rechazadas
-                    </TabsTrigger>
-                </TabsList>
-                <div >
-                    <TabsContent value="pending">
-                        <PendingRequests />
-                    </TabsContent>
-
-                    <TabsContent value="rejected">
-                        <RejectedRequests />
-                    </TabsContent>
-                </div>
-
-            </Tabs>
-        </div>
     )
 }
-export default panel_solicitudes

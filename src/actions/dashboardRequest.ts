@@ -1,4 +1,4 @@
-export const mockRequests: Request[] = [
+export const mockRequests: RequestsOwners[] = [
     {
       id: "1",
       name: "Juan Alberto espitia",
@@ -26,7 +26,7 @@ export const mockRequests: Request[] = [
   ]
   
   
-export interface Request {
+export interface RequestsOwners {
     id: string
     name: string
     email: string
@@ -36,27 +36,24 @@ export interface Request {
   }
   
 
-export async function fetchRequestsOwnersPending(): Promise<{ pending: Request[], rejected: Request[] }> {
+export async function fetchRequestsOwnersPending(): Promise<RequestsOwners[]> {
   // Simulando una llamada a la API
   await new Promise(resolve => setTimeout(resolve, 1000))
   
   // Por ahora retornamos datos mock
   // En producción, aquí iría el fetch real a tu API
-  return {
-    pending: mockRequests,
-    rejected: []
-  }
+  return mockRequests
+  
+  
 }
-export async function fetchRequestsOwnersPast(): Promise<{ pending: Request[], rejected: Request[] }> {
+export async function fetchRequestsOwnersRejected(): Promise<RequestsOwners[] > {
     // Simulando una llamada a la API
     await new Promise(resolve => setTimeout(resolve, 1000))
     
     // Por ahora retornamos datos mock
     // En producción, aquí iría el fetch real a tu API
-    return {
-      pending: mockRequests,
-      rejected: []
-    }
+    return []
+    
   }
   
 

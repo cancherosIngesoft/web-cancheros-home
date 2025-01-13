@@ -1,22 +1,15 @@
-'use client'
+import { RequestsOwners } from "@/actions/dashboardRequest"
+import { RequestCard } from "./RequestCard"
 
-import { useQuery } from '@tanstack/react-query'
-import { RequestCard } from './RequestCard'
-import { fetchRequestsOwnersPending } from '@/actions/dashboardRequest'
 
-export function PendingRequests() {
-  const { data, isLoading } = useQuery({
-    queryKey: ['requests'],
-    queryFn: fetchRequestsOwnersPending
-  })
+interface PendingRequestsProps {
+  requests: RequestsOwners[]
+}
 
-  if (isLoading) {
-    return <div className="text-center py-8">Cargando solicitudes...</div>
-  }
-
+export function PendingRequests({ requests }: PendingRequestsProps) {
   return (
     <div className="space-y-4">
-      {data?.pending.map((request) => (
+      {requests.map((request) => (
         <RequestCard key={request.id} request={request} isPending={true} />
       ))}
     </div>

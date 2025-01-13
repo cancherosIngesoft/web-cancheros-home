@@ -1,10 +1,11 @@
 import { Mail, MapPin, Phone, Store, User } from 'lucide-react'
 import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { Request } from '@/actions/dashboardRequest'
+import { RequestsOwners } from '@/actions/dashboardRequest'
+
 
 interface RequestCardProps {    
-  request: Request
+  request: RequestsOwners
   isPending?: boolean
 }
 
