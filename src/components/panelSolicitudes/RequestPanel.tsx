@@ -19,14 +19,7 @@ export default function RequestPanel({ initialPendingRequests }:{initialPendingR
         initialData: initialPendingRequests,
     })
 
-    const {
-        data: rejectedRequests,
-        isLoading: isLoadingRejected
-    } = useQuery({
-        queryKey: ['rejectedRequests'],
-        queryFn: fetchRequestsOwnersRejected,
-        enabled: activeTab === 'rejected',
-    })
+
 
     const handleTabChange = (value: string) => {
         setActiveTab(value)
@@ -54,11 +47,9 @@ export default function RequestPanel({ initialPendingRequests }:{initialPendingR
                     </TabsContent>
 
                     <TabsContent value="rejected">
-                        {isLoadingRejected ? (
-                            <div className="text-center py-8">Cargando solicitudes rechazadas...</div>
-                        ) : (
-                            <RejectedRequests requests={rejectedRequests || []} />
-                        )}
+                        
+                            <RejectedRequests  />
+                       
                     </TabsContent>
                 </div>
 
