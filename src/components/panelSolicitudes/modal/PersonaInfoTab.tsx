@@ -9,42 +9,42 @@ interface PersonalInfoTabProps {
 
 export function PersonalInfoTab({ data }: PersonalInfoTabProps) {
   return (
-    <Card>
+    <Card className="shadow-none border-none">
       <CardContent className="pt-6">
         <div className="grid gap-6">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="space-y-2">
-              <Label>Tipo de Documento</Label>
+              <Label className="font-semibold">Tipo de Documento</Label>
               <Input value={data.documentType} readOnly />
             </div>
             <div className="space-y-2">
-              <Label>Numero de documento</Label>
+              <Label className="font-semibold">Numero de documento</Label>
               <Input value={data.documentNumber} readOnly />
             </div>
             <div className="space-y-2">
-              <Label>Fecha de Nacimiento</Label>
+              <Label className="font-semibold">Fecha de Nacimiento</Label>
               <Input value={data.birthDate} readOnly />
             </div>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label>Nombre</Label>
+              <Label className="font-semibold">Nombre</Label>
               <Input value={data.name} readOnly />
             </div>
             <div className="space-y-2">
-              <Label>Apellido</Label>
+              <Label className="font-semibold">Apellido</Label>
               <Input value={data.lastName} readOnly />
             </div>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label>Email de contacto</Label>
+              <Label className="font-semibold">Email de contacto</Label>
               <Input value={data.email} readOnly />
             </div>
             <div className="space-y-2">
-              <Label>Teléfono</Label>
+              <Label className="font-semibold">Teléfono</Label>
               <Input value={data.phone} readOnly />
             </div>
           </div>

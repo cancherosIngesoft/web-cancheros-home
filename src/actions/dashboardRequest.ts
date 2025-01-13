@@ -50,7 +50,7 @@ export interface RequestsOwners {
 export async function fetchRequestsOwnersPending(): Promise<RequestsOwners[]> {
   // Simulando una llamada a la API
   await new Promise(resolve => setTimeout(resolve, 1000))
-  
+  console.log(" las solicitudes pendientes")
   // Por ahora retornamos datos mock
   // En producción, aquí iría el fetch real a tu API
   return mockRequests
@@ -60,7 +60,7 @@ export async function fetchRequestsOwnersPending(): Promise<RequestsOwners[]> {
 export async function fetchRequestsOwnersRejected(): Promise<RequestsOwners[] > {
     // Simulando una llamada a la API
     await new Promise(resolve => setTimeout(resolve, 1000))
-    
+    console.log(" las solicitudes rechazadas")
     // Por ahora retornamos datos mock
     // En producción, aquí iría el fetch real a tu API
     return mockRequestsRejected
@@ -73,7 +73,7 @@ export async function fetchRequestsOwnersRejected(): Promise<RequestsOwners[] > 
   // Simulated API calls
   export async function fetchRequestDetails(id: string): Promise<RequestDetail> {
     await new Promise(resolve => setTimeout(resolve, 1000))
-    
+    console.log("se pidio la informacion de la solicitud detalles",id) 
     return {
       id,
       personalInfo: {

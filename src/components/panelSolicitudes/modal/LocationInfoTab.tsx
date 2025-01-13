@@ -10,22 +10,22 @@ interface LocationInfoTabProps {
 
 export function LocationInfoTab({ data }: LocationInfoTabProps) {
   return (
-    <Card>
+    <Card className="shadow-none border-none">
       <CardHeader>
         <CardTitle>UBICACIÓN DEL NEGOCIO</CardTitle>
       </CardHeader>
-      <CardContent className="space-y-6">
-        <div className="aspect-video relative rounded-lg overflow-hidden">
+      <CardContent className="space-y-6 flex flex-row align-top">
+        <div className="aspect-video w-2/3 relative rounded-lg overflow-hidden">
           Google maps
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="flex flex-col gap-4">
           <div className="space-y-2">
-            <Label>Localidad</Label>
+            <Label className="font-semibold">Localidad</Label>
             <Input value={data.locality} readOnly />
           </div>
           <div className="space-y-2">
-            <Label>Dirección</Label>
+            <Label className="font-semibold">Dirección</Label>
             <Input value={data.address} readOnly />
           </div>
         </div>

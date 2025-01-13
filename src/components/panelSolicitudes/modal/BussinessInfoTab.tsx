@@ -11,24 +11,24 @@ interface BusinessInfoTabProps {
 
 export function BusinessInfoTab({ data }: BusinessInfoTabProps) {
   return (
-    <Card>
+    <Card className="shadow-none border-none">
       <CardContent className="pt-6">
         <div className="grid gap-6">
           <div className="space-y-2">
-            <Label>Nombre del negocio</Label>
+            <Label className="font-semibold" >Nombre del negocio</Label>
             <Input value={data.name} readOnly />
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label>Numero de canchas</Label>
+              <Label className="font-semibold">Numero de canchas</Label>
               <Input value={data.courtCount} readOnly />
             </div>
             <div className="space-y-4">
-              <Label>Tipo de canchas</Label>
+              <Label className="font-semibold">Tipo de canchas</Label>
               <div className="flex gap-2">
                 {data.courtTypes.map((type) => (
-                  <Badge key={type} variant="secondary">
+                  <Badge key={type} >
                     {type}
                   </Badge>
                 ))}
@@ -37,14 +37,14 @@ export function BusinessInfoTab({ data }: BusinessInfoTabProps) {
           </div>
 
           <div className="space-y-2">
-            <Label>Teléfono</Label>
+            <Label className="font-semibold">Teléfono</Label>
             <Input value={data.phone} readOnly />
           </div>
 
           <div className="space-y-2">
-            <Label>Legalización</Label>
+            <Label className="font-semibold">Legalización</Label>
             <div className="space-y-2">
-              <Label className="text-sm text-muted-foreground">RUT</Label>
+              <Label className="text-sm text-muted-foreground font-semibold">RUT</Label>
               {data.legalDocuments.map((doc) => (
                 <a
                   key={doc.name}
