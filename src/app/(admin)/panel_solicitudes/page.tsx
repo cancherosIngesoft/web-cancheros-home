@@ -1,8 +1,3 @@
-'use client'
-
-import { Store } from 'lucide-react'
-
-
 import { Suspense } from 'react'
 import Loading from './loading'
 import { fetchRequestsOwnersPending } from '@/actions/dashboardRequest'
