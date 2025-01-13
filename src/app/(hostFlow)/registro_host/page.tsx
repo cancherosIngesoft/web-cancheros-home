@@ -6,18 +6,21 @@ import { BusinessInfoStep } from "@/components/forms/host-register/BusinessInfoS
 import { LocationStep } from "@/components/forms/host-register/LocationStep";
 import { useRegistroHost } from "@/hooks/useRegistroHost";
 import { Button } from "@/components/ui/button";
+import { CongratulationsStep } from "@/components/forms/host-register/CongratulationsStep";
+import { WelcomeStep } from "@/components/forms/host-register/WelcomeStep";
 
 export default function RegisterBusinessPage() {
   const { currentStep, form, nextStep, prevStep, onSubmit } = useRegistroHost();
 
   return (
-    <div className="container mx-auto py-10">
+    <div className="container mx-auto py-10 border border-gray-200 rounded-lg">
       <StepIndicator currentStep={currentStep} />
 
       <form
         onSubmit={form.handleSubmit(onSubmit)}
         className="max-w-2xl mx-auto"
       >
+        {currentStep === 0 && <WelcomeStep />}
         {/* Step 1 : Información personal */}
         {currentStep === 1 && (
           <PersonalInfoStep
@@ -27,10 +30,12 @@ export default function RegisterBusinessPage() {
         )}
 
         {/* Step 2 : Información del negocio */}
+        {/*Hay que usar setValue porque el tipo de canchas es un array y no se puede usar el register */}
         {currentStep === 2 && (
           <BusinessInfoStep
             register={form.register}
             errors={form.formState.errors}
+            setValue={form.setValue}
           />
         )}
 
@@ -43,7 +48,7 @@ export default function RegisterBusinessPage() {
         )}
 
         <div className="flex justify-between mt-8">
-          {currentStep > 1 && (
+          {currentStep > 1 && currentStep < 4 && (
             <Button type="button" variant="outline" onClick={prevStep}>
               Anterior
             </Button>
@@ -53,9 +58,19 @@ export default function RegisterBusinessPage() {
             <Button type="button" onClick={nextStep}>
               Siguiente
             </Button>
-          ) : (
-            <Button type="submit">Enviar solicitud</Button>
+          ) : null}
+          {currentStep === 3 && (
+            <Button
+              type="submit"
+              disabled={!form.formState.isValid}
+              onClick={() => {
+                form.handleSubmit(onSubmit);
+              }}
+            >
+              Enviar solicitud
+            </Button>
           )}
+          {currentStep === 4 && <CongratulationsStep />}
         </div>
       </form>
     </div>

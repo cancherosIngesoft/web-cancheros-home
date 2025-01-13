@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import { FormData } from "@/components/forms/host-register/types";
 
 export function useRegistroHost() {
-  const [currentStep, setCurrentStep] = useState(1);
+  const [currentStep, setCurrentStep] = useState(0);
   const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
 
   const form = useForm<FormData>();
@@ -13,6 +13,8 @@ export function useRegistroHost() {
     const isStepValid = await form.trigger(fieldsToValidate as any[]);
 
     if (isStepValid) {
+      console.log("isStepValid", isStepValid);
+      console.log("current data", form.getValues());
       setCurrentStep((prev) => Math.min(prev + 1, 3));
     }
   };
@@ -20,10 +22,8 @@ export function useRegistroHost() {
   const prevStep = () => setCurrentStep((prev) => Math.max(prev - 1, 1));
 
   const onSubmit = (data: FormData) => {
-    console.log(data);
-    alert(
-      "Tu información ha sido enviada, por favor revisa tu correo para más actualizaciones."
-    );
+    console.log(JSON.stringify(data, null, 2));
+    setCurrentStep(4);
   };
 
   return {
@@ -40,11 +40,23 @@ export function useRegistroHost() {
 function getFieldsToValidate(step: number): string[] {
   switch (step) {
     case 1:
-      return ["nombre", "apellidos", "cedula", "email"];
+      return ["nombre", "apellidos", "tipoDocumento", "cedula", "email"];
     case 2:
-      return ["nombreNegocio", "numeroCanchas", "telefono", "rut"];
+      return [
+        "nombreNegocio",
+        "numeroCanchas",
+        "telefono",
+        "rut",
+        "tipoCanchas",
+      ];
     case 3:
-      return ["direccion", "localidad"];
+      return [
+        "direccion",
+        "localidad",
+        "ciudad",
+        "aceptoTerminos",
+        "aceptoPrivacidad",
+      ];
     default:
       return [];
   }

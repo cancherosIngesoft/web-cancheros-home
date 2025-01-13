@@ -8,10 +8,11 @@ import { Button } from "@/components/ui/button";
 
 import Image from "next/image";
 import { motion } from "framer-motion";
+import { useRouter } from "next/navigation";
 
 export default function Home() {
   const { data: session } = useSession();
-
+  const router = useRouter();
   const handleSingIn = () => {
     signIn("auth0", {
       callbackUrl: "/reservar_cancha",
@@ -77,7 +78,11 @@ export default function Home() {
             >
               Iniciar sesión
             </Button>
-            <Button variant="outline" className="text-lg px-8">
+            <Button
+              variant="outline"
+              className="text-lg px-8"
+              onClick={() => router.push("/registro_host")}
+            >
               Trabaja con nosotros
             </Button>
           </div>

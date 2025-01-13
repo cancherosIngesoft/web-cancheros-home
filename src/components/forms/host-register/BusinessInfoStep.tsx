@@ -1,4 +1,4 @@
-import { UseFormRegister, FieldErrors } from "react-hook-form";
+import { UseFormRegister, UseFormSetValue, FieldErrors } from "react-hook-form";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
@@ -7,16 +7,27 @@ import { useState } from "react";
 
 interface BusinessInfoStepProps {
   register: UseFormRegister<FormData>;
+  setValue: UseFormSetValue<FormData>;
   errors: FieldErrors<FormData>;
 }
 
-export function BusinessInfoStep({ register, errors }: BusinessInfoStepProps) {
+export function BusinessInfoStep({
+  register,
+  setValue,
+  errors,
+}: BusinessInfoStepProps) {
   const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
 
   const toggleTipoCanchas = (tipo: string) => {
-    setSelectedTypes((prev) =>
-      prev.includes(tipo) ? prev.filter((t) => t !== tipo) : [...prev, tipo]
-    );
+    const newSelectedTypes = selectedTypes.includes(tipo)
+      ? selectedTypes.filter((t) => t !== tipo)
+      : [...selectedTypes, tipo];
+
+    setSelectedTypes(newSelectedTypes);
+    setValue("tipoCanchas", newSelectedTypes, {
+      shouldValidate: true,
+      shouldDirty: true,
+    });
   };
 
   return (
@@ -76,7 +87,7 @@ export function BusinessInfoStep({ register, errors }: BusinessInfoStepProps) {
             required: "El teléfono es requerido",
             pattern: {
               value: /^\+?[0-9]{10,13}$/,
-              message: "Ingrese un teléfono válido",
+              message: "Ingrese un teléfono válido (10 dígitos)",
             },
           })}
         />

@@ -9,6 +9,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Checkbox } from "@/components/ui/checkbox";
+import Link from "next/link";
+import { useRegistroHost } from "@/hooks/useRegistroHost";
 
 interface LocationStepProps {
   register: UseFormRegister<FormData>;
@@ -16,6 +19,8 @@ interface LocationStepProps {
 }
 
 export function LocationStep({ register, errors }: LocationStepProps) {
+  const { form } = useRegistroHost();
+  console.log("actual state", form.getValues());
   return (
     <div className="space-y-4">
       <h2 className="text-2xl font-bold mb-6">Ubicación</h2>
@@ -39,7 +44,7 @@ export function LocationStep({ register, errors }: LocationStepProps) {
           <SelectTrigger>
             <SelectValue placeholder="Selecciona una localidad" />
           </SelectTrigger>
-          <SelectContent>
+          <SelectContent className="max-h-[300px] bg-white">
             <SelectItem value="usaquen">Usaquén</SelectItem>
             <SelectItem value="chapinero">Chapinero</SelectItem>
             <SelectItem value="santafe">Santa Fe</SelectItem>
@@ -67,14 +72,56 @@ export function LocationStep({ register, errors }: LocationStepProps) {
         )}
       </div>
 
-      <div className="space-y-2">
+      <div className="flex flex-col space-y-2">
         <Label htmlFor="ciudad">Ciudad</Label>
+
         <Input
           id="ciudad"
           defaultValue="Bogotá"
           disabled
           {...register("ciudad")}
         />
+        <Label className="text-xs text-gray-500">
+          *Por el momento solo se aceptan canchas en <b>Bogotá</b>
+        </Label>
+      </div>
+      <div className="flex justify-end">
+        <Checkbox
+          id="acepto-terminos"
+          {...register("aceptoTerminos", {
+            required: "Debes aceptar los términos y condiciones para continuar",
+          })}
+        />
+        <Label htmlFor="acepto-terminos">
+          Acepto los{" "}
+          <Link href="/terms" target="_blank" className="underline">
+            términos y condiciones
+          </Link>
+        </Label>
+        {errors.aceptoTerminos && (
+          <p className="text-sm text-red-500">
+            Debes aceptar los términos y condiciones para continuar.
+          </p>
+        )}
+      </div>
+      <div className="flex justify-end">
+        <Checkbox
+          id="acepto-privacidad"
+          {...register("aceptoPrivacidad", {
+            required: "Debes aceptar la política de privacidad para continuar",
+          })}
+        />
+        <Label htmlFor="acepto-privacidad">
+          Acepto la{" "}
+          <Link href="/privacy" target="_blank" className="underline">
+            política de privacidad
+          </Link>
+        </Label>
+        {errors.aceptoPrivacidad && (
+          <p className="text-sm text-red-500">
+            Debes aceptar la política de privacidad para continuar.
+          </p>
+        )}
       </div>
     </div>
   );

@@ -1,6 +1,7 @@
 export type FormData = {
   nombre: string;
   apellidos: string;
+  tipoDocumento: string;
   cedula: string;
   email: string;
   nombreNegocio: string;
@@ -11,6 +12,10 @@ export type FormData = {
   direccion: string;
   localidad: string;
   ciudad: string;
+  latitud: number;
+  longitud: number;
+  aceptoTerminos: boolean;
+  aceptoPrivacidad: boolean;
 };
 
 export const STEPS = [
