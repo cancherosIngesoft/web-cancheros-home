@@ -2,6 +2,8 @@ import { Mail, MapPin, Phone, Store, User } from 'lucide-react'
 import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { RequestsOwners } from '@/actions/dashboardRequest'
+import { useState } from 'react'
+import { RequestModalDetail } from './modal/RequestModalDetail'
 
 
 interface RequestCardProps {    
@@ -10,8 +12,11 @@ interface RequestCardProps {
 }
 
 export function RequestCard({ request, isPending = true }: RequestCardProps) {
+  const [isModalOpen, setIsModalOpen] = useState(false)
   return (
-    <Card className="overflow-hidden">
+  <>
+  
+  <Card className="overflow-hidden">
       <CardContent className="p-6 flex items-center gap-6 bg-white shadow-lg">
         <div className="w-12 h-12 bg-emerald-100 rounded-lg flex items-center justify-center">
           <Store className="w-6 h-6 text-primary-40" />
@@ -48,12 +53,20 @@ export function RequestCard({ request, isPending = true }: RequestCardProps) {
         <Button 
           hidden={!isPending}
           className={`w-32 ${isPending ? 'flex' : 'hidden'}`}
+          onClick={() => setIsModalOpen(true)}
 
         >
           Ver solicitud
         </Button>
       </CardContent>
     </Card>
+     <RequestModalDetail
+     requestId={request.id}
+     isOpen={isModalOpen}
+     onClose={() => setIsModalOpen(false)}
+   />
+  </>
+    
   )
 }
 
