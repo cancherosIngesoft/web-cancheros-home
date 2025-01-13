@@ -47,7 +47,7 @@ export function RequestCard({ request, isPending = true }: RequestCardProps) {
 
         <Button 
           hidden={!isPending}
-          className='w-32'
+          className={`w-32 ${isPending ? 'flex' : 'hidden'}`}
 
         >
           Ver solicitud

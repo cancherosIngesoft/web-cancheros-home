@@ -25,6 +25,17 @@ export const mockRequests: RequestsOwners[] = [
     }
   ]
   
+  export const mockRequestsRejected: RequestsOwners[] = [
+    {
+      id: "1",
+      name: "Juan Alberto espitia",
+      email: "juan@gmail.com",
+      phone: "300 721 1345",
+      businessName: "La futbolera",
+      address: "Calle 77b #123-A"
+    },
+  
+  ]
   
 export interface RequestsOwners {
     id: string
@@ -52,7 +63,7 @@ export async function fetchRequestsOwnersRejected(): Promise<RequestsOwners[] > 
     
     // Por ahora retornamos datos mock
     // En producción, aquí iría el fetch real a tu API
-    return []
+    return mockRequestsRejected
     
   }
   

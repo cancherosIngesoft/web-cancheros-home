@@ -5,7 +5,7 @@ import { SkeletonRequest } from '@/components/panelSolicitudes/SkeletonRequest'
 
 export default function Loading() {
   return (
-    <div className="w-full max-w-4xl mx-auto p-4">
+    <div className="w-full p-4">
       <div className="flex items-center gap-2 mb-6">
         <Store className="w-8 h-8 text-emerald-600" />
         <h1 className="text-2xl font-semibold text-emerald-600">SOLICITUDES</h1>
