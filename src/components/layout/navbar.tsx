@@ -4,6 +4,8 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Menu } from "lucide-react";
 import { signIn } from "next-auth/react";
+import Image from 'next/image'
+
 
 const Navbar = () => {
   const navLinks = [
@@ -37,7 +39,7 @@ const Navbar = () => {
           {/* Logo */}
           <div className="flex-shrink-0">
             <Link href="/" className="text-2xl font-bold text-[#1A6B51]">
-              <img src="/favicon.ico" alt="Logo" width={60} height={60} />
+              <Image src="/LogoWithOutTitle.png" alt="Logo" width={60} height={60} />
             </Link>
           </div>
 

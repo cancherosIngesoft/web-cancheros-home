@@ -19,7 +19,7 @@ export default function reservar_cancha() {
         <p>Bienvenido, {session.user?.name || session.user?.email}</p>
       )}
       {/* Aquí puedes agregar el formulario de reserva de cancha */}
-      <Button onClick={() => signOut()}>cerrar sesion</Button>
+      
     </div>
   )
 }
