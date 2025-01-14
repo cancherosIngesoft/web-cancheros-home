@@ -18,15 +18,19 @@ import { Checkbox } from "@/components/ui/checkbox";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { toast } from "sonner";
+import CustomMap from "@/components/georeference/map";
 
 interface LocationStepProps {
   register: UseFormRegister<FormData>;
   setValue: UseFormSetValue<FormData>;
   errors: FieldErrors<FormData>;
   form: UseFormReturn<FormData>;
-  getGeolocation: () => Promise<any>;
+  getGeolocation: (address: string) => Promise<any>;
 }
+
+const BOGOTA_COORDS = { lat: 4.60971, lng: -74.08175 };
 
 export function LocationStep({
   register,
@@ -36,6 +40,17 @@ export function LocationStep({
   getGeolocation,
 }: LocationStepProps) {
   const [isLoading, setIsLoading] = useState(false);
+  const [mapCenter, setMapCenter] = useState(BOGOTA_COORDS);
+
+  useEffect(() => {
+    const lat = form.watch("latitud");
+    const lng = form.watch("longitud");
+
+    if (lat && lng) {
+      setMapCenter({ lat, lng });
+    }
+  }, [form.watch("latitud"), form.watch("longitud")]);
+
   const handleCheckboxChange = (
     field: "aceptoTerminos" | "aceptoPrivacidad"
   ) => {
@@ -44,28 +59,13 @@ export function LocationStep({
       shouldDirty: true,
     });
   };
-  console.log("actual state", form.getValues());
   return (
-    <div className="space-y-4">
+    <form className="space-y-4">
       <h2 className="text-2xl font-bold mb-6">Ubicación</h2>
       <Label>
-        Finalizamos con la información de la ubicación. Permítenos usar tu
-        ubicación actual para encontrar tu negocio.
+        Finalizamos con la información de la ubicación. Completa la información
+        para continuar.
       </Label>
-      <div className="flex flex-row gap-2">
-        <Button
-          type="button"
-          onClick={async () => {
-            setIsLoading(true);
-            await getGeolocation();
-            setIsLoading(false);
-          }}
-          variant="outline"
-        >
-          {isLoading ? <Spinner className="mr-2" /> : null}
-          Obtener ubicación actual
-        </Button>
-      </div>
       <div className="space-y-2">
         <Label htmlFor="direccion">Dirección</Label>
         <Input
@@ -133,8 +133,38 @@ export function LocationStep({
         <Label className="text-xs text-gray-500">
           *Por el momento solo se aceptan canchas en <b>Bogotá</b>
         </Label>
+        <div className="flex flex-row gap-2">
+          <Button
+            className="mb-10"
+            type="button"
+            onClick={async () => {
+              const direccion_completa = `${form.watch("direccion")} ${
+                form.watch("localidad") ?? ""
+              } ${form.watch("ciudad")}`;
+              if (!direccion_completa) {
+                toast.error("Por favor ingresa una dirección primero");
+                return;
+              }
+              setIsLoading(true);
+              try {
+                await getGeolocation(direccion_completa);
+              } finally {
+                setIsLoading(false);
+              }
+            }}
+            variant="outline"
+          >
+            {isLoading ? <Spinner className="mr-2" /> : null}
+            Obtener ubicación
+          </Button>
+        </div>
       </div>
-      <div className="flex flex-col gap-2">
+      <Label className="text-sm text-gray-500 pt-10">
+        Utiliza el mapa para confirmar la ubicación de tu establecimiento.
+      </Label>
+      <CustomMap center={mapCenter} zoom={15}></CustomMap>
+
+      <div className="flex flex-col gap-2 mt-15">
         <div className="flex flex-row gap-2 mb-2">
           <Checkbox
             id="acepto-terminos"
@@ -180,6 +210,6 @@ export function LocationStep({
           )}
         </div>
       </div>
-    </div>
+    </form>
   );
 }
