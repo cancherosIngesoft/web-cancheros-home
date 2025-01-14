@@ -6,6 +6,8 @@ import { JWT } from "next-auth/jwt";
 import { Session, User } from "next-auth";
 import { userManagement } from "@/actions/sessionManagement";
 import { clsx, type ClassValue } from "clsx";
+import { getToken } from "next-auth/jwt";
+import { NextRequest } from "next/server";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -52,22 +54,21 @@ export const authOptions: NextAuthOptions = {
       user,
     }: {
       token: ExtendedToken;
-      account?: any; // Según NextAuth, el tipo puede variar (string | undefined)
+      account?: any;
       user?: User;
     }): Promise<ExtendedToken> {
-      if (user) {
+      if (user && !token.role) {
         try {
-          // Llamar a la API para obtener el rol
-          const response = await userManagement(user.email!);
-          if (response && response.rol) {
-            token.role = response.rol; // Añadir el rol al token
+          const response = await userManagement(user.email!, user.name!);
+          if (response && response.role) {
+            token.role = response.role;
           }
         } catch (error) {
           console.error("Error obteniendo el rol:", error);
         }
       }
       if (account) {
-        token.accessToken = account.access_token; // Guardar el accessToken si está disponible
+        token.accessToken = account.access_token;
       }
       return token;
     },

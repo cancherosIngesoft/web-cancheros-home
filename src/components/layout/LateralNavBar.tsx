@@ -44,7 +44,7 @@ export const LateralNavBar = () => {
             <AvatarFallback className='bg-surface'>{session?.user?.name?.charAt(0)?.toUpperCase() ?? 'U'}</AvatarFallback>
           )}
         </Avatar>
-        <Button variant="ghost" size="icon" onClick={() => signOut()}>
+        <Button variant="ghost" size="icon" onClick={() => signOut({ callbackUrl: '/' })}>
           <LogOut className="h-6 w-6" />
         </Button>
       </div>
