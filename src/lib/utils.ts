@@ -1,10 +1,11 @@
-import { clsx, type ClassValue } from "clsx";
 import { AuthOptions } from "next-auth";
 import { twMerge } from "tailwind-merge";
 import Auth0Provider from "next-auth/providers/auth0";
 import { DefaultSession, NextAuthOptions } from "next-auth";
 import { JWT } from "next-auth/jwt";
-import { Profile } from "next-auth";
+import { Session, User } from "next-auth";
+import { userManagement } from "@/actions/sessionManagement";
+import { clsx, type ClassValue } from "clsx";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -14,16 +15,21 @@ interface ExtendedToken extends JWT {
   isNewUser?: boolean;
 }
 
-interface ExtendedSession extends DefaultSession {
+// Extender el token JWT para incluir el rol y el accessToken
+interface ExtendedToken extends JWT {
   accessToken?: string;
-  user: {
-    id: string;
-    isNewUser?: boolean;
-  } & DefaultSession["user"];
+  role?: string;
 }
 
-interface ExtendedProfile extends Profile {
-  isNewUser?: boolean;
+// Extender la sesión para incluir el rol y el accessToken
+interface ExtendedSession extends Session {
+  user: {
+    role?: string;
+    name?: string | null;
+    email?: string | null;
+    image?: string | null;
+  } & NonNullable<Session["user"]>;
+  accessToken?: string;
 }
 
 export const authOptions: NextAuthOptions = {
@@ -36,60 +42,62 @@ export const authOptions: NextAuthOptions = {
     }),
   ],
   callbacks: {
-    async jwt({ token, account }) {
+    async signIn({ user }: { user: User }) {
+      return true
+    },
+
+    async jwt({
+      token,
+      account,
+      user,
+    }: {
+      token: ExtendedToken;
+      account?: any; // Según NextAuth, el tipo puede variar (string | undefined)
+      user?: User;
+    }): Promise<ExtendedToken> {
+      if (user) {
+        try {
+          // Llamar a la API para obtener el rol
+          const response = await userManagement(user.email!);
+          if (response && response.rol) {
+            token.role = response.rol; // Añadir el rol al token
+          }
+        } catch (error) {
+          console.error("Error obteniendo el rol:", error);
+        }
+      }
       if (account) {
-        token.accessToken = account.access_token;
+        token.accessToken = account.access_token; // Guardar el accessToken si está disponible
       }
       return token;
     },
-    async session({ session, token }) {
-      const newSession: typeof session & { accessToken?: string | null } =
-        Object.assign({}, session);
-      newSession.accessToken = token.accessToken as string;
-      return newSession;
-    },
-    //   async session({ session, token }) {
-    //     return {
-    //       ...session,
-    //       accessToken: token.accessToken as string,
-    //       user: {
-    //         ...session.user,
-    //         id: token.id as string,
-    //         isNewUser: token.isNewUser as boolean | undefined
-    //       }
-    //     }
-    //   },
-    async signIn({ user, account, profile }) {
-      try {
-        const isNewUser = (profile as ExtendedProfile)?.isNewUser;
 
-        if (isNewUser) {
-          console.log("Nuevo usuario:", user.id, user.email);
-          // Lógica para nuevo registro
-          // const response = await fetch('https://tu-api-backend.com/signup', {
-          //   method: 'POST',
-          //   headers: { 'Content-Type': 'application/json' },
-          //   body: JSON.stringify({ userId: user.id, email: user.email }),
-          // })
-          // Manejar la respuesta del registro
-        } else {
-          console.log("Inicio de sesión:", user.id);
-          // Lógica para inicio de sesión
-          // const response = await fetch('https://tu-api-backend.com/signin', {
-          //   method: 'POST',
-          //   headers: { 'Content-Type': 'application/json' },
-          //   body: JSON.stringify({ userId: user.id }),
-          // })
-          // Manejar la respuesta del inicio de sesión
-        }
-
-        return true;
-      } catch (error) {
-        console.error("Error en el proceso de autenticación:", error);
-        return false;
-      }
+    async session({
+      session,
+      token,
+      user,
+      newSession,
+      trigger,
+    }: {
+      session: Session;
+      token: JWT;
+      user: User;
+      newSession: any;
+      trigger: "update";
+    }): Promise<Session> {
+      
+      (session.user as ExtendedSession['user']).role = token.role as string | undefined;
+      (session as ExtendedSession).accessToken = token.accessToken as string | undefined;
+      return session;
     },
-    async redirect({ url, baseUrl }) {
+
+    async redirect({
+      url,
+      baseUrl,
+    }: {
+      url: string;
+      baseUrl: string;
+    }): Promise<string> {
       if (url.startsWith("/api/auth/callback")) {
         return `${baseUrl}/reservar_cancha`;
       } else if (url.startsWith("/")) {
@@ -97,7 +105,7 @@ export const authOptions: NextAuthOptions = {
       } else if (new URL(url).origin === baseUrl) {
         return url;
       }
-      return baseUrl;
+      return url.startsWith("/") ? `${baseUrl}${url}` : baseUrl;
     },
   },
   secret: process.env.AUTH_SECRET,
