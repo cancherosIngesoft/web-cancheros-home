@@ -60,8 +60,8 @@ export const authOptions: NextAuthOptions = {
       if (user && !token.role) {
         try {
           const response = await userManagement(user.email!, user.name!);
-          if (response && response.role) {
-            token.role = response.role;
+          if (response && response.rol) {
+            token.role = response.rol;
           }
         } catch (error) {
           console.error("Error obteniendo el rol:", error);
@@ -86,6 +86,7 @@ export const authOptions: NextAuthOptions = {
       newSession: any;
       trigger: "update";
     }): Promise<Session> {
+      console.log("session callback", session);
       
       (session.user as ExtendedSession['user']).role = token.role as string | undefined;
       (session as ExtendedSession).accessToken = token.accessToken as string | undefined;
