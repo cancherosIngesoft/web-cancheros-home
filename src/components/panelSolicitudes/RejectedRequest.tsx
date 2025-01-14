@@ -4,18 +4,37 @@ import { fetchRequestsOwnersRejected, RequestsOwners } from "@/actions/dashboard
 import { RequestCard } from "./RequestCard"
 import { useQuery } from "@tanstack/react-query"
 import { Loader2 } from 'lucide-react'
+import { useToast } from "@/hooks/use-toast"
+import { useEffect } from "react"
 
 export function RejectedRequests() {
+  const {toast} = useToast()
   const {
     data: rejectedRequests,
     isLoading: isLoadingRejected,
-    isFetching
+    isFetching,
+    isError
   } = useQuery({
     queryKey: ['rejectedRequests'],
     queryFn: fetchRequestsOwnersRejected,
     staleTime: Infinity, // This will prevent automatic refetching
     refetchOnWindowFocus: false, // This will prevent refetching when the window gains focus
+    
+  
   })
+  useEffect(() => {
+    console.log(isError)
+    if(isError===true){
+      toast({
+        title: "Error",
+        description: "Hubo un problema al cargar las solicitudes rechazadas. Por favor, intente nuevamente.",
+        variant: "destructive",
+      })
+    }
+
+  }, [isError])
+
+  
 
   if (isLoadingRejected) {
     return (

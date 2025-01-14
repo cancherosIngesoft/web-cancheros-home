@@ -32,11 +32,12 @@ export function RequestModalDetail({
     const { toast } = useToast()
     const queryClient = useQueryClient()
 
-    const { data, isLoading } = useQuery({
+    const { data, isLoading,isError } = useQuery({
         queryKey: ['requestDetail', requestId],
         queryFn: () => fetchRequestDetails(requestId),
         enabled: isOpen
     })
+
 
     const approveMutation = useMutation({
         mutationFn: approveRequest,
@@ -168,7 +169,11 @@ export function RequestModalDetail({
                                 </Button>
                             </div>
                         </Tabs>
-                    ) : null}
+                    ) : isError?(
+                        <div className="py-8 text-center text-gray-500">
+                            No se pudo cargar la información de la solicitud
+                        </div>
+                    ): null}
                 </DialogContent>
             </Dialog>
             <ApproveConfirmation

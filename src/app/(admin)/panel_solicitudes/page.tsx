@@ -1,16 +1,27 @@
-import { Suspense } from 'react'
-import Loading from './loading'
-import { fetchRequestsOwnersPending } from '@/actions/dashboardRequest'
-import RequestPanel from '@/components/panelSolicitudes/RequestPanel'
-
+import { Suspense } from "react";
+import Loading from "./loading";
+import { fetchRequestsOwnersPending } from "@/actions/dashboardRequest";
+import RequestPanel from "@/components/panelSolicitudes/RequestPanel";
 
 export default async function panel_solicitudes() {
+  let initialPendingRequests;
 
-    const initialPendingRequests = await fetchRequestsOwnersPending()
+  try {
+    initialPendingRequests = await fetchRequestsOwnersPending();
+  } catch (error) {
+    console.error("Error fetching pending requests:", error);
+    // Opcionalmente, puedes retornar contenido alternativo aquí
     return (
-        <Suspense fallback={<Loading />}>
-            <RequestPanel initialPendingRequests={initialPendingRequests}/>
-        </Suspense>
+      <div>
+        <h1>Error</h1>
+        <p>Hubo un problema al cargar las solicitudes pendientes.</p>
+      </div>
+    );
+  }
 
-    )
+  return (
+    <Suspense fallback={<Loading />}>
+      <RequestPanel initialPendingRequests={initialPendingRequests} />
+    </Suspense>
+  );
 }
