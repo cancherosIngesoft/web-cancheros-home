@@ -5,16 +5,6 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { Dialog, DialogContent, DialogHeader } from "@/components/ui/dialog"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Button } from "@/components/ui/button"
-import {
-    AlertDialog,
-    AlertDialogAction,
-    AlertDialogCancel,
-    AlertDialogContent,
-    AlertDialogDescription,
-    AlertDialogFooter,
-    AlertDialogHeader,
-    AlertDialogTitle,
-} from "@/components/ui/alert-dialog"
 import { fetchRequestDetails, approveRequest, rejectRequest } from '@/actions/dashboardRequest'
 import { Loader2 } from 'lucide-react'
 import { PersonalInfoTab } from './PersonaInfoTab'
@@ -22,6 +12,8 @@ import { BusinessInfoTab } from './BussinessInfoTab'
 import { LocationInfoTab } from './LocationInfoTab'
 import { DialogDescription, DialogTitle } from '@radix-ui/react-dialog'
 import { useToast } from '@/hooks/use-toast'
+import { ApproveConfirmation } from './ApproveConfirmation'
+import { RejectConfirmation } from './RejectConfirmation'
 
 interface RequestDetailModalProps {
     requestId: string
@@ -34,87 +26,78 @@ export function RequestModalDetail({
     isOpen,
     onClose
 }: RequestDetailModalProps) {
-    const [confirmationDialog, setConfirmationDialog] = useState<{
-        isOpen: boolean
-        action: 'approve' | 'reject'
-    }>({
-        isOpen: false,
-        action: 'approve'
-    })
+    const [approveDialogOpen, setApproveDialogOpen] = useState(false)
+    const [rejectDialogOpen, setRejectDialogOpen] = useState(false)
 
     const { toast } = useToast()
-  const queryClient = useQueryClient()
+    const queryClient = useQueryClient()
 
-  const { data, isLoading } = useQuery({
-    queryKey: ['requestDetail', requestId],
-    queryFn: () => fetchRequestDetails(requestId),
-    enabled: isOpen
-  })
+    const { data, isLoading } = useQuery({
+        queryKey: ['requestDetail', requestId],
+        queryFn: () => fetchRequestDetails(requestId),
+        enabled: isOpen
+    })
 
-  const approveMutation = useMutation({
-    mutationFn: approveRequest,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['pendingRequests'] })
-      toast({
-        title: "Solicitud aprobada",
-        description: "La solicitud ha sido aprobada exitosamente.",
-        variant: "default",
-      })
-      onClose()
-    },
-    onError: () => {
-      toast({
-        title: "Error",
-        description: "Hubo un problema al aprobar la solicitud. Por favor, intente nuevamente.",
-        variant: "destructive",
-      })
+    const approveMutation = useMutation({
+        mutationFn: approveRequest,
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['pendingRequests'] })
+            toast({
+                title: "Solicitud aprobada",
+                description: "La solicitud ha sido aprobada exitosamente.",
+                variant: "default",
+            })
+            onClose()
+        },
+        onError: () => {
+            toast({
+                title: "Error",
+                description: "Hubo un problema al aprobar la solicitud. Por favor, intente nuevamente.",
+                variant: "destructive",
+            })
+        }
+    })
+
+    const rejectMutation = useMutation({
+        mutationFn: ({ requestId, reason }: { requestId: string, reason: string }) =>
+            rejectRequest(requestId, reason),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['pendingRequests'] })
+            queryClient.invalidateQueries({ queryKey: ['rejectedRequests'] })
+            toast({
+                title: "Solicitud rechazada",
+                description: "La solicitud ha sido rechazada exitosamente.",
+                variant: "default",
+            })
+            onClose()
+        },
+        onError: () => {
+            toast({
+                title: "Error",
+                description: "Hubo un problema al rechazar la solicitud. Por favor, intente nuevamente.",
+                variant: "destructive",
+            })
+        }
+    })
+
+    const handleApprove = () => {
+        approveMutation.mutate(requestId)
+        setApproveDialogOpen(false)
     }
-  })
 
-  const rejectMutation = useMutation({
-    mutationFn: rejectRequest,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['pendingRequests'] })
-      queryClient.invalidateQueries({ queryKey: ['rejectedRequests'] })
-      toast({
-        title: "Solicitud rechazada",
-        description: "La solicitud ha sido rechazada exitosamente.",
-        variant: "default",
-      })
-      onClose()
-    },
-    onError: () => {
-      toast({
-        title: "Error",
-        description: "Hubo un problema al rechazar la solicitud. Por favor, intente nuevamente.",
-        variant: "destructive",
-      })
+    const handleReject = (reason: string) => {
+        rejectMutation.mutate({ requestId, reason })
+        setRejectDialogOpen(false)
     }
-  })
-
-  const handleAction = (action: 'approve' | 'reject') => {
-    setConfirmationDialog({ isOpen: true, action })
-  }
-
-  const handleConfirmAction = () => {
-    if (confirmationDialog.action === 'approve') {
-      approveMutation.mutate(requestId)
-    } else {
-      rejectMutation.mutate(requestId)
-    }
-    setConfirmationDialog({ isOpen: false, action: 'approve' })
-  }
 
     return (
         <>
             <Dialog open={isOpen} onOpenChange={onClose}>
-
-
                 <DialogContent className="max-w-3xl pt-12">
-                <DialogHeader>
-                                <DialogTitle className='font-bold text-2xl' >Detalles de la solicitud</DialogTitle>
-                                <DialogDescription className='hidden'>informacion registrada en la solicitud</DialogDescription>
-                            </DialogHeader>
+                    <DialogHeader>
+                        <DialogTitle className='font-bold text-2xl'>Detalles de la solicitud</DialogTitle>
+                        <DialogDescription className='hidden'>información registrada en la solicitud</DialogDescription>
+                    </DialogHeader>
 
                     {isLoading ? (
                         <div className="py-8 flex items-center justify-center">
@@ -147,7 +130,7 @@ export function RequestModalDetail({
                                     </TabsTrigger>
                                 ))}
                             </TabsList>
-                            
+
                             <TabsContent value="personal">
                                 <PersonalInfoTab data={data.personalInfo} />
                             </TabsContent>
@@ -163,7 +146,7 @@ export function RequestModalDetail({
                             <div className="flex justify-end gap-4 mt-6">
                                 <Button
                                     variant="destructive"
-                                    onClick={() => handleAction('reject')}
+                                    onClick={() => setRejectDialogOpen(true)}
                                     disabled={approveMutation.isPending || rejectMutation.isPending}
                                 >
                                     {rejectMutation.isPending ? (
@@ -174,7 +157,7 @@ export function RequestModalDetail({
                                 </Button>
                                 <Button
                                     className="bg-primary hover:bg-primary-600"
-                                    onClick={() => handleAction('approve')}
+                                    onClick={() => setApproveDialogOpen(true)}
                                     disabled={approveMutation.isPending || rejectMutation.isPending}
                                 >
                                     {approveMutation.isPending ? (
@@ -188,39 +171,16 @@ export function RequestModalDetail({
                     ) : null}
                 </DialogContent>
             </Dialog>
-
-            <AlertDialog
-                open={confirmationDialog.isOpen}
-                onOpenChange={(isOpen) =>
-                    setConfirmationDialog({ ...confirmationDialog, isOpen })
-                }
-            >
-                <AlertDialogContent>
-                    <AlertDialogHeader>
-                        <AlertDialogTitle>¿Estás seguro?</AlertDialogTitle>
-                        <AlertDialogDescription>
-                            {confirmationDialog.action === 'approve'
-                                ? 'Esta acción aprobará la solicitud y notificará al usuario.'
-                                : 'Esta acción rechazará la solicitud y notificará al usuario.'}
-                        </AlertDialogDescription>
-                    </AlertDialogHeader>
-                    <AlertDialogFooter>
-                        <AlertDialogCancel>Cancelar</AlertDialogCancel>
-                        <AlertDialogAction
-                            className={
-                                confirmationDialog.action === 'approve'
-                                    ? 'bg-primary hover:bg-primary-40'
-                                    : 'bg-danger hover:bg-danger/90'
-                            }
-                            onClick={handleConfirmAction}
-                        >
-                            {confirmationDialog.action === 'approve'
-                                ? 'Aprobar'
-                                : 'Rechazar'}
-                        </AlertDialogAction>
-                    </AlertDialogFooter>
-                </AlertDialogContent>
-            </AlertDialog>
+            <ApproveConfirmation
+                isOpen={approveDialogOpen}
+                onClose={() => setApproveDialogOpen(false)}
+                onConfirm={handleApprove}
+            />
+            <RejectConfirmation
+                isOpen={rejectDialogOpen}
+                onClose={() => setRejectDialogOpen(false)}
+                onConfirm={handleReject}
+            />
         </>
     )
 }

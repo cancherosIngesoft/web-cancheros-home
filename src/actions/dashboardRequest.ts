@@ -110,10 +110,12 @@ export async function fetchRequestsOwnersRejected(): Promise<RequestsOwners[] > 
   
   export async function approveRequest(id: string): Promise<{ success: boolean }> {
     await new Promise(resolve => setTimeout(resolve, 1000))
+    console.log("se aprobo la solicitud",id)
     return { success: true }
   }
   
-  export async function rejectRequest(id: string): Promise<{ success: boolean }> {
+  export async function rejectRequest(id: string, reason:string): Promise<{ success: boolean }> {
+    console.log("se rechazo la solicitud",id,reason)
     await new Promise(resolve => setTimeout(resolve, 1000))
     return { success: true }
   }
