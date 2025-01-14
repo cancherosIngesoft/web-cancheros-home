@@ -4,15 +4,13 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import * as z from "zod"
 import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from "@/components/ui/alert-dialog"
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
 import {
   Form,
@@ -30,14 +28,13 @@ interface RejectConfirmationProps {
   onConfirm: (reason: string) => void
 }
 
+const formSchema = z.object({
+  reason: z.string().min(1, {
+    message: "La razón es obligatoria para rechazar la solicitud.",
+  }),
+})
 
 export function RejectConfirmation({ isOpen, onClose, onConfirm }: RejectConfirmationProps) {
-  const formSchema = z.object({
-    reason: z.string().min(1, {
-      message: "La razón es obligatoria para rechazar la solicitud.",
-    }),
-  })
-  
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -47,17 +44,18 @@ export function RejectConfirmation({ isOpen, onClose, onConfirm }: RejectConfirm
 
   function onSubmit(values: z.infer<typeof formSchema>) {
     onConfirm(values.reason)
+    form.reset()
   }
 
   return (
-    <AlertDialog open={isOpen} onOpenChange={onClose}>
-      <AlertDialogContent>
-        <AlertDialogHeader>
-          <AlertDialogTitle>¿Estás seguro?</AlertDialogTitle>
-          <AlertDialogDescription>
+    <Dialog open={isOpen} onOpenChange={onClose}>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>¿Estás seguro?</DialogTitle>
+          <DialogDescription>
             Esta acción rechazará la solicitud y notificará al usuario.
-          </AlertDialogDescription>
-        </AlertDialogHeader>
+          </DialogDescription>
+        </DialogHeader>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
             <FormField
@@ -73,20 +71,18 @@ export function RejectConfirmation({ isOpen, onClose, onConfirm }: RejectConfirm
                 </FormItem>
               )}
             />
-            <AlertDialogFooter>
-              <AlertDialogCancel asChild>
-                <Button type="button" variant="outline" onClick={onClose}>
-                  Cancelar
-                </Button>
-              </AlertDialogCancel>
-              <AlertDialogAction asChild>
-                <Button type="submit" variant="destructive">Rechazar</Button>
-              </AlertDialogAction>
-            </AlertDialogFooter>
+            <DialogFooter>
+              <Button type="button" variant="outline" onClick={onClose}>
+                Cancelar
+              </Button>
+              <Button type="submit" variant="destructive">
+                Rechazar
+              </Button>
+            </DialogFooter>
           </form>
         </Form>
-      </AlertDialogContent>
-    </AlertDialog>
+      </DialogContent>
+    </Dialog>
   )
 }
 
