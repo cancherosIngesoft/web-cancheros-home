@@ -2,13 +2,12 @@ export type FormData = {
   nombre: string;
   apellidos: string;
   tipoDocumento: string;
-  cedula: string;
   email: string;
   nombreNegocio: string;
   numeroCanchas: number;
   telefono: string;
   tipoCanchas: string[];
-  rut: string;
+  rut: FileList | null;
   direccion: string;
   localidad: string;
   ciudad: string;
@@ -16,6 +15,8 @@ export type FormData = {
   longitud: number;
   aceptoTerminos: boolean;
   aceptoPrivacidad: boolean;
+  documento: string;
+  fechaNacimiento: Date;
 };
 
 export const STEPS = [

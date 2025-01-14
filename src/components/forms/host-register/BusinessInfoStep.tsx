@@ -33,6 +33,7 @@ export function BusinessInfoStep({
   return (
     <div className="space-y-4">
       <h2 className="text-2xl font-bold mb-6">Información del Negocio</h2>
+      <Label>Continuamos con la información del negocio</Label>
 
       <div className="space-y-2">
         <Label htmlFor="nombreNegocio">Nombre del negocio</Label>
@@ -97,14 +98,29 @@ export function BusinessInfoStep({
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="rut">RUT</Label>
+        <Label htmlFor="rut">RUT en formato PDF</Label>
         <Input
+          type="file"
           id="rut"
+          accept=".pdf"
           {...register("rut", {
             required: "El RUT es requerido",
-            pattern: {
-              value: /^[0-9]{9}$/,
-              message: "Ingrese un RUT válido",
+            validate: {
+              isPDF: (value: any) => {
+                const file = value?.[0];
+                if (!file) return "El archivo es requerido";
+                return (
+                  file.type === "application/pdf" ||
+                  "El archivo debe ser un PDF"
+                );
+              },
+              maxSize: (value: any) => {
+                const file = value?.[0];
+                return (
+                  file.size <= 5 * 1024 * 1024 ||
+                  "El archivo no debe superar 5MB"
+                );
+              },
             },
           })}
         />

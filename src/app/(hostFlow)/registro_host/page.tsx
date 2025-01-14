@@ -13,12 +13,12 @@ export default function RegisterBusinessPage() {
   const { currentStep, form, nextStep, prevStep, onSubmit } = useRegistroHost();
 
   return (
-    <div className="container mx-auto py-10 border border-gray-200 rounded-lg">
+    <div className="container mx-auto py-10 border border-gray-200 rounded-lg  self-center">
       <StepIndicator currentStep={currentStep} />
 
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="max-w-2xl mx-auto"
+        className="max-w-2xl mx-auto h-90vh"
       >
         {currentStep === 0 && <WelcomeStep />}
         {/* Step 1 : Información personal */}
@@ -26,6 +26,7 @@ export default function RegisterBusinessPage() {
           <PersonalInfoStep
             register={form.register}
             errors={form.formState.errors}
+            setValue={form.setValue}
           />
         )}
 
@@ -42,8 +43,10 @@ export default function RegisterBusinessPage() {
         {/* Step 3 : Ubicación */}
         {currentStep === 3 && (
           <LocationStep
+            setValue={form.setValue}
             register={form.register}
             errors={form.formState.errors}
+            form={form}
           />
         )}
 

@@ -1,9 +1,4 @@
-import { Button } from "@/components/ui/button";
-import { useRegistroHost } from "@/hooks/useRegistroHost";
-
 export function WelcomeStep() {
-  const { nextStep } = useRegistroHost();
-
   return (
     <div className="flex flex-col items-center justify-center text-center gap-10">
       <h1 className="text-2xl font-bold mt-10">
