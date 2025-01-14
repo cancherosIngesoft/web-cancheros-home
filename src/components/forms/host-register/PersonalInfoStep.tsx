@@ -9,7 +9,6 @@ import {
   SelectContent,
   SelectItem,
 } from "@/components/ui/select";
-import { DatePicker } from "@/components/ui/datepicker";
 
 interface PersonalInfoStepProps {
   register: UseFormRegister<FormData>;

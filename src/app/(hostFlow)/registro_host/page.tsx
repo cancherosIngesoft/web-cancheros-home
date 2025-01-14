@@ -10,7 +10,8 @@ import { CongratulationsStep } from "@/components/forms/host-register/Congratula
 import { WelcomeStep } from "@/components/forms/host-register/WelcomeStep";
 
 export default function RegisterBusinessPage() {
-  const { currentStep, form, nextStep, prevStep, onSubmit } = useRegistroHost();
+  const { currentStep, form, nextStep, prevStep, onSubmit, getGeolocation } =
+    useRegistroHost();
 
   return (
     <div className="container mx-auto py-10 border border-gray-200 rounded-lg  self-center">
@@ -43,6 +44,7 @@ export default function RegisterBusinessPage() {
         {/* Step 3 : Ubicación */}
         {currentStep === 3 && (
           <LocationStep
+            getGeolocation={getGeolocation}
             setValue={form.setValue}
             register={form.register}
             errors={form.formState.errors}

@@ -16,12 +16,16 @@ import {
 } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
 import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import { Spinner } from "@/components/ui/spinner";
+import { useState } from "react";
 
 interface LocationStepProps {
   register: UseFormRegister<FormData>;
   setValue: UseFormSetValue<FormData>;
   errors: FieldErrors<FormData>;
   form: UseFormReturn<FormData>;
+  getGeolocation: () => Promise<any>;
 }
 
 export function LocationStep({
@@ -29,7 +33,9 @@ export function LocationStep({
   setValue,
   errors,
   form,
+  getGeolocation,
 }: LocationStepProps) {
+  const [isLoading, setIsLoading] = useState(false);
   const handleCheckboxChange = (
     field: "aceptoTerminos" | "aceptoPrivacidad"
   ) => {
@@ -42,8 +48,24 @@ export function LocationStep({
   return (
     <div className="space-y-4">
       <h2 className="text-2xl font-bold mb-6">Ubicación</h2>
-      <Label>Finalizamos con la información de la ubicación</Label>
-
+      <Label>
+        Finalizamos con la información de la ubicación. Permítenos usar tu
+        ubicación actual para encontrar tu negocio.
+      </Label>
+      <div className="flex flex-row gap-2">
+        <Button
+          type="button"
+          onClick={async () => {
+            setIsLoading(true);
+            await getGeolocation();
+            setIsLoading(false);
+          }}
+          variant="outline"
+        >
+          {isLoading ? <Spinner className="mr-2" /> : null}
+          Obtener ubicación actual
+        </Button>
+      </div>
       <div className="space-y-2">
         <Label htmlFor="direccion">Dirección</Label>
         <Input

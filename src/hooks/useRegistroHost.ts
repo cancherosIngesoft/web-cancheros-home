@@ -71,6 +71,19 @@ export function useRegistroHost() {
     }
   };
 
+  const getGeolocation = async () => {
+    try {
+      const response = await fetch("https://ipapi.co/json/");
+      const data = await response.json();
+      form.setValue("latitud", data.latitude);
+      form.setValue("longitud", data.longitude);
+      return data;
+    } catch (error) {
+      toast.error("Error al obtener ubicación");
+      throw error;
+    }
+  };
+
   return {
     currentStep,
     selectedTypes,
@@ -79,6 +92,7 @@ export function useRegistroHost() {
     prevStep,
     onSubmit,
     setSelectedTypes,
+    getGeolocation,
   };
 }
 
