@@ -24,7 +24,8 @@ const Navbar = () => {
       })
     }
     const handleSingIn=()=>{
-      signIn('auth0', { callbackUrl: '/reservar_cancha' ,
+      signIn('auth0', {
+        callbackUrl: '/reservar_cancha',
         authorizationParams: {
           prompt: 'login'
         }
