@@ -58,7 +58,7 @@ export interface RequestsOwners {
 
 export async function fetchRequestsOwnersPending(): Promise<RequestsOwners[]> {
   try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/requests`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/requests?status=pending`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -169,13 +169,12 @@ const mockRequestDetail: RequestDetail = {
 }
 // Simulated API calls
 export async function fetchRequestDetails(id: string): Promise<RequestDetail> {
-  console.log("se pidio la informacion de la solicitud detalles", id)
+  console.log("se pidio la informacion de la solicitud detalles", id);
   try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/requests_detail?id=${id}`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/requests/${id}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        
       },
     });
 
@@ -185,8 +184,41 @@ export async function fetchRequestDetails(id: string): Promise<RequestDetail> {
 
     const data = await res.json();
 
+    // Mapeo de la respuesta a la interfaz RequestDetail
+    const requestDetail: RequestDetail = {
+      id: String(data.id), // Asegúrate de convertir el id a string si es necesario
+      personalInfo: {
+        documentType: data.personalInfo.tipo_doc_duenio,
+        documentNumber: data.personalInfo.doc_duenio,
+        birthDate: data.personalInfo.fecha_nacimiento,
+        name: data.personalInfo.nombre_duenio.split(' ')[0], // Nombre
+        lastName: data.personalInfo.apellido_duenio, // Apellido
+        email: data.personalInfo.email_duenio,
+        phone: data.personalInfo.tel_duenio,
+      },
+      businessInfo: {
+        name: data.businessInfo.nombre_est,
+        courtCount: data.businessInfo.num_canchas,
+        courtTypes: data.businessInfo.type_canchas,
+        phone: data.businessInfo.tel_est,
+        legalDocuments: [
+          {
+            name: data.businessInfo.legalDocuments.name,
+            url: data.businessInfo.legalDocuments.url || "", // Asignar un valor por defecto si es null
+          },
+        ],
+      },
+      locationInfo: {
+        locality: data.locationInfo.localidad,
+        address: data.locationInfo.direccion,
+        coordinates: {
+          lat: parseFloat(data.locationInfo.coordinates.latitud), // Asegúrate de convertir las coordenadas a números
+          lng: parseFloat(data.locationInfo.coordinates.longitud),
+        },
+      },
+    };
 
-    return data;
+    return requestDetail;
   } catch (e) {
     if (e instanceof Error) {
       console.error("Error en fetchRequestsOwnersDetails:", e.message);
@@ -197,10 +229,11 @@ export async function fetchRequestDetails(id: string): Promise<RequestDetail> {
   }
 }
 
+
 export async function approveRequest(id: string): Promise<{ success: boolean }> {
   console.log("se aprobo la solicitud", id)
   try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/requests/approve`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/requests/${id}/approve`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -228,13 +261,13 @@ export async function approveRequest(id: string): Promise<{ success: boolean }> 
 export async function rejectRequest(id: string, reason: string): Promise<{ success: boolean }> {
   console.log("se rechazo la solicitud", id, reason)
   try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/requests/approve`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/requests/${id}/reject`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         
       },
-      body: JSON.stringify({ id,reason }),
+      body: JSON.stringify({ reason }),
     });
 
     if (!res.ok) {
