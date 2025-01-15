@@ -64,7 +64,7 @@ export default function RegisterBusinessPage() {
               Siguiente
             </Button>
           ) : null}
-          {currentStep === 3 && (
+          {currentStep === 3 ? (
             <Button
               type="submit"
               disabled={!form.formState.isValid}
@@ -74,7 +74,7 @@ export default function RegisterBusinessPage() {
             >
               Enviar solicitud
             </Button>
-          )}
+          ) : null}
           {currentStep === 4 && <CongratulationsStep />}
         </div>
       </form>
