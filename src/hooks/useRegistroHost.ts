@@ -2,10 +2,13 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { type FormData } from "@/components/forms/host-register/types";
 import { toast } from "sonner";
+import { registerHost } from "@/actions/registro_host/host";
+import { getRut } from "@/actions/registro_host/rut";
 
 export function useRegistroHost() {
   const [currentStep, setCurrentStep] = useState(0);
   const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   const form = useForm<FormData>({
     defaultValues: {
@@ -40,34 +43,48 @@ export function useRegistroHost() {
 
   const onSubmit = async (data: FormData) => {
     try {
-      // 1. Enviar datos principales como JSON
-      const { rut, ...jsonData } = data;
-      const response = await fetch("/api/register-host", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(jsonData),
-      });
-
-      if (!response.ok) throw new Error("Error al registrar host");
-      const { hostId } = await response.json();
-
-      // 2. Si hay RUT, enviarlo en otro endpoint
-      if (rut?.[0]) {
-        const formData = new FormData();
-        formData.append("rut", rut[0]);
-
-        await fetch(`/api/upload-rut/${hostId}`, {
-          method: "POST",
-          body: formData,
-        });
+      setIsLoading(true);
+      const body = {
+        tipo_doc_duenio: form.getValues("tipoDocumento"),
+        doc_duenio: form.getValues("documento"),
+        fecha_nacimiento: new Date(
+          form.getValues("fechaNacimiento")
+        ).toISOString(),
+        nombre_duenio: form.getValues("nombre"),
+        apellido_duenio: form.getValues("apellidos"),
+        email_duenio: form.getValues("email"),
+        tel_duenio: form.getValues("telefono"),
+        tel_est: form.getValues("telefono"),
+        nombre_est: form.getValues("nombreNegocio"),
+        num_canchas: Number(form.getValues("numeroCanchas")),
+        localidad: form.getValues("localidad"),
+        direccion: form.getValues("direccion"),
+        latitud: form.getValues("latitud").toString(),
+        longitud: form.getValues("longitud").toString(),
+      };
+      const response = await registerHost(body);
+      console.log("response", response);
+      if (response) {
+        const requestId = response.id;
+        try {
+          const rutResponse = await getRut(
+            (form.getValues("rut") as FileList)[0],
+            requestId
+          );
+          console.log("rutResponse", rutResponse);
+          nextStep(); // Avanza al paso de felicitaciones
+          toast.success("Registro exitoso");
+        } catch (error) {
+          console.error("Error al subir el RUT", error);
+          toast.error("Error al subir el RUT vuelve a intentarlo");
+        }
+      } else {
+        toast.error("Error en el registro" + response);
       }
-
-      toast.success("¡Registro exitoso! Bienvenido a Cancheros");
-      setCurrentStep(4); // Ir al paso de felicitaciones
     } catch (error) {
-      toast.error("Error al registrar el host, intente nuevamente");
+      toast.error("Error en el registro" + error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -105,6 +122,7 @@ export function useRegistroHost() {
     onSubmit,
     setSelectedTypes,
     getGeolocation,
+    isLoading,
   };
 }
 
