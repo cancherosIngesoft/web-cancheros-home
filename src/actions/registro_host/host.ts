@@ -1,7 +1,7 @@
 export async function registerHost(formData: object) {
   try {
     const response = await fetch(
-      "https://dev-canchas-service-259453285069.us-central1.run.app/api/requests",
+      process.env.NEXT_PUBLIC_API_URL + "/api/requests",
       {
         method: "POST",
         headers: {

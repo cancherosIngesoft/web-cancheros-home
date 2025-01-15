@@ -4,12 +4,13 @@ import { type FormData } from "@/components/forms/host-register/types";
 import { toast } from "sonner";
 import { registerHost } from "@/actions/registro_host/host";
 import { getRut } from "@/actions/registro_host/rut";
+import { useToast } from "./use-toast";
 
 export function useRegistroHost() {
   const [currentStep, setCurrentStep] = useState(0);
   const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState(false);
-
+  const { toast } = useToast();
   const form = useForm<FormData>({
     defaultValues: {
       aceptoTerminos: false,
@@ -72,17 +73,32 @@ export function useRegistroHost() {
             requestId
           );
           console.log("rutResponse", rutResponse);
-          nextStep(); // Avanza al paso de felicitaciones
-          toast.success("Registro exitoso");
+          setCurrentStep(4); // Avanza al paso de felicitaciones
+          toast({
+            title: "Registro exitoso",
+            description: "Tu solicitud ha sido registrada con éxito",
+          });
         } catch (error) {
           console.error("Error al subir el RUT", error);
-          toast.error("Error al subir el RUT vuelve a intentarlo");
+          toast({
+            title: "Error al subir el RUT",
+            description: "Vuelve a intentarlo",
+            variant: "destructive",
+          });
         }
       } else {
-        toast.error("Error en el registro" + response);
+        toast({
+          title: "Error en el registro",
+          description: response,
+          variant: "destructive",
+        });
       }
     } catch (error) {
-      toast.error("Error en el registro" + error);
+      toast({
+        title: "Error en el registro",
+        description: "Vuelve a intentarlo",
+        variant: "destructive",
+      });
     } finally {
       setIsLoading(false);
     }
@@ -108,7 +124,11 @@ export function useRegistroHost() {
       form.setValue("longitud", data.longitude);
       return data;
     } catch (error) {
-      toast.error("Error al obtener ubicación");
+      toast({
+        title: "Error al obtener ubicación",
+        description: "Vuelve a intentarlo",
+        variant: "destructive",
+      });
       throw error;
     }
   };

@@ -13,9 +13,11 @@ const BOGOTA_COORDS = { lat: 4.60971, lng: -74.08175 };
 export default function CustomMap({
   center = BOGOTA_COORDS,
   zoom = 12,
+  style = { width: "50vw", height: "50vh" },
 }: {
   center?: { lat: number; lng: number };
   zoom?: number;
+  style?: { width: string; height: string };
 }) {
   const [currentCenter, setCurrentCenter] = useState(center);
 
@@ -26,7 +28,7 @@ export default function CustomMap({
   return (
     <APIProvider apiKey={API_KEY as string}>
       <Map
-        style={{ width: "50vw", height: "50vh" }}
+        style={style}
         center={currentCenter}
         defaultZoom={zoom}
         gestureHandling={"none"}

@@ -2,7 +2,7 @@ export async function getRut(rut: File, requestId: string) {
   const formData = new FormData();
   formData.append("file", rut);
   const response = await fetch(
-    `https://dev-canchas-service-259453285069.us-central1.run.app/api/requests/upload-rut/${requestId}`,
+    process.env.NEXT_PUBLIC_API_URL + `/api/requests/upload-rut/${requestId}`,
     {
       method: "POST",
       body: formData,
