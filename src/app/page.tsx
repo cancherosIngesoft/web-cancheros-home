@@ -120,7 +120,7 @@ export default function Home() {
           className="flex flex-col items-center justify-center min-h-[400px] py-16"
         >
           <div className="relative text-center">
-            <p className="text-lg font-bold text-black">
+            <p className="text-2xl font-bold text-black">
               Por que solo nosotros entendemos lo que significa este deporte,
               <br />
               somos más que jugadores, somos
@@ -195,15 +195,15 @@ export default function Home() {
             <div className="max-w-2xl mx-auto text-center space-y-8">
               <h2 className="text-3xl font-bold mb-8">Misión</h2>
               <p className="text-lg leading-relaxed">
-                Ofrecemos una plataforma confiable y eficiente para la reserva y
-                gestión de canchas de fútbol amateur en Bogotá. Diseñada para
-                amantes del fútbol, nuestra solución fomenta la organización de
-                partidos de manera flexible y sencilla, promoviendo valores como
-                libertad, respeto y fraternidad. Brindamos servicios como
-                reservas rápidas con pagos electrónicos, información en tiempo
-                real sobre disponibilidad, y herramientas para registrar y
-                gestionar resultados, conectando a la comunidad futbolística y
-                mejorando cada experiencia en la cancha
+                Cancheros facilita la organización de encuentros deportivos,
+                ofreciendo servicios como reservas rápidas con información en
+                tiempo real y pagos directos. Buscamos fomentar la comunidad del
+                fútbol amateur en Bogotá al ofrecer una solución efectiva y
+                fiable que simplifica la reserva y gestión de canchas. Diseñada
+                con empatía por amantes del fútbol, cancheros promueve la
+                libertad de organizar partidos según las necesidades de los
+                jugadores, el respeto en cada interacción y la fraternidad que
+                fortalece los lazos entre jugadores.
               </p>
             </div>
           </div>
@@ -211,16 +211,14 @@ export default function Home() {
             <div className="max-w-2xl mx-auto text-center space-y-8">
               <h2 className="text-3xl font-bold mb-8">Visión</h2>
               <p className="text-lg leading-relaxed">
-                En cinco años, seremos la plataforma líder en la gestión de
-                reservas de canchas de fútbol en Bogotá, con el 70% de las
-                reservas realizadas a través de nuestra aplicación. Nos
-                comprometemos a transformar la manera en que los aficionados del
-                fútbol amateur organizan sus partidos, reduciendo
-                significativamente los tiempos de reserva y eliminando barreras
-                logísticas. Nuestro objetivo es consolidarnos como el puente que
-                conecta jugadores y propietarios, fortaleciendo la comunidad
-                deportiva de la ciudad y llevando el fútbol amateur a un nuevo
-                nivel de accesibilidad, confianza y unión.
+                En cinco años, Cancheros será el principal soporte para la
+                comunidad de fútbol amateur en Bogotá, facilitando la
+                organización de partidos con libertad, empatía y respeto.
+                Cancheros está diseñada para conectar jugadores y propietarios,
+                transformar la experiencia del fútbol local al simplificar
+                reservas y fortalecer la fraternidad entre los usuarios,
+                promoviendo un ecosistema donde la pasión por el deporte une y
+                beneficia a todos.
               </p>
             </div>
           </div>
