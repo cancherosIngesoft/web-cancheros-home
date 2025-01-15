@@ -58,6 +58,8 @@ jobs:
           vercel env rm AUTH0_BASE_URL production --token=${{ secrets.VERCEL_TOKEN }} -y || true
           vercel env rm NEXT_PUBLIC_API_URL production --token=${{ secrets.VERCEL_TOKEN }} -y || true
           vercel env rm NEXTAUTH_URL production --token=${{ secrets.VERCEL_TOKEN }} -y || true
+          vercel env rm NEXT_PUBLIC_GOOGLE_MAPS_API_KEY production --token=${{ secrets.VERCEL_TOKEN }} -y || true
+          vercel env rm GOOGLE_GEOCODING_API_KEY production --token=${{ secrets.VERCEL_TOKEN }} -y || true
 
           echo -n "${{ secrets.AUTH_SECRET }}" | vercel env add AUTH_SECRET production --token=${{ secrets.VERCEL_TOKEN }}
           echo -n "${{ secrets.AUTH0_ISSUER }}" | vercel env add AUTH0_ISSUER production --token=${{ secrets.VERCEL_TOKEN }}
@@ -66,6 +68,8 @@ jobs:
           echo -n "${{ secrets.AUTH0_BASE_URL }}" | vercel env add AUTH0_BASE_URL production --token=${{ secrets.VERCEL_TOKEN }}
           echo -n "${{ secrets.NEXT_PUBLIC_API_URL }}" | vercel env add NEXT_PUBLIC_API_URL production --token=${{ secrets.VERCEL_TOKEN }}
           echo -n "${{ secrets.NEXTAUTH_URL }}" | vercel env add NEXTAUTH_URL production --token=${{ secrets.VERCEL_TOKEN }}
+          echo -n "${{ secrets.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY }}" | vercel env add NEXT_PUBLIC_GOOGLE_MAPS_API_KEY production --token=${{ secrets.VERCEL_TOKEN }}
+          echo -n "${{ secrets.GOOGLE_GEOCODING_API_KEY }}" | vercel env add GOOGLE_GEOCODING_API_KEY production --token=${{ secrets.VERCEL_TOKEN }}
 
       # Luego hacemos pull de la información
       - name: Pull Vercel Environment Information
@@ -78,7 +82,6 @@ jobs:
       # Finalmente desplegamos
       - name: Deploy Project Artifacts to Vercel
         run: vercel deploy --prebuilt --prod --token=${{ secrets.VERCEL_TOKEN }}
-
 
   deploy-preview:
     needs: test
@@ -107,6 +110,8 @@ jobs:
           vercel env rm AUTH0_BASE_URL_DEVELOPMENT development --token=${{ secrets.VERCEL_TOKEN }} -y || true
           vercel env rm NEXT_PUBLIC_API_URL development --token=${{ secrets.VERCEL_TOKEN }} -y || true
           vercel env rm NEXTAUTH_URL_DEVELOPMENT development --token=${{ secrets.VERCEL_TOKEN }} -y || true
+          vercel env rm NEXT_PUBLIC_GOOGLE_MAPS_API_KEY development --token=${{ secrets.VERCEL_TOKEN }} -y || true
+          vercel env rm GOOGLE_GEOCODING_API_KEY development --token=${{ secrets.VERCEL_TOKEN }} -y || true
 
           echo "${{ secrets.AUTH_SECRET }}" | vercel env add AUTH_SECRET development --token=${{ secrets.VERCEL_TOKEN }}
           echo "${{ secrets.AUTH0_ISSUER }}" | vercel env add AUTH0_ISSUER development --token=${{ secrets.VERCEL_TOKEN }}
@@ -115,6 +120,8 @@ jobs:
           echo "${{ env.PREVIEW_URL }}" | vercel env add AUTH0_BASE_URL_DEVELOPMENT development --token=${{ secrets.VERCEL_TOKEN }}
           echo "${{ secrets.NEXT_PUBLIC_API_URL }}" | vercel env add NEXT_PUBLIC_API_URL development --token=${{ secrets.VERCEL_TOKEN }}
           echo "${{ env.PREVIEW_URL }}" | vercel env add NEXTAUTH_URL_DEVELOPMENT development --token=${{ secrets.VERCEL_TOKEN }}
+          echo "${{ secrets.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY }}" | vercel env add NEXT_PUBLIC_GOOGLE_MAPS_API_KEY development --token=${{ secrets.VERCEL_TOKEN }}
+          echo "${{ secrets.GOOGLE_GEOCODING_API_KEY }}" | vercel env add GOOGLE_GEOCODING_API_KEY development --token=${{ secrets.VERCEL_TOKEN }}
 
       # Luego hacemos pull de la información actualizada
       - name: Pull Vercel Environment Information

@@ -1,5 +1,3 @@
-
-
 "use client";
 import { signIn, signOut, useSession } from "next-auth/react";
 
@@ -10,18 +8,19 @@ import { Button } from "@/components/ui/button";
 
 import Image from "next/image";
 import { motion } from "framer-motion";
+import { useRouter } from "next/navigation";
 
 export default function Home() {
-
-  const { data: session } = useSession()
-
-  const handleSingIn=()=>{
-    signIn('auth0', { callbackUrl: '/reservar_cancha' ,
+  const { data: session } = useSession();
+  const router = useRouter();
+  const handleSingIn = () => {
+    signIn("auth0", {
+      callbackUrl: "/reservar_cancha",
       authorizationParams: {
-        prompt: 'login'
-      }
-    })
-  }
+        prompt: "login",
+      },
+    });
+  };
 
   useEffect(() => {
     const handleScroll = () => {
@@ -63,19 +62,27 @@ export default function Home() {
           transition={{ duration: 1, delay: 0.5 }}
           className="relative z-10 text-center px-4 max-w-5xl"
         >
-          <h1 className="text-7xl font-bold text-[#1A6B51] mb-6">
+          <h1 className="text-7xl font-bold bg-gradient-to-t from-green-900 to-green-500 text-transparent bg-clip-text mb-6">
             Reserva canchas de fútbol en Bogotá
           </h1>
-          <p className="text-xl text-gray-800 mb-8 max-w-3xl mx-auto font-medium">
+          <p className="text-xl text-black mb-8 max-w-3xl mx-auto font-medium">
             Encuentra canchas de futbol sintetico en Bogotá, de acuerdo lo que
             necesites, y realiza tu reserva de forma directa, sin esperas. Unete
             y crea tu equipo y disfruta de esta pasion que nos une
           </p>
           <div className="flex gap-6 justify-center">
-            <Button variant="default" className="text-lg px-8" onClick={handleSingIn}>
+            <Button
+              variant="default"
+              className="text-lg px-8"
+              onClick={handleSingIn}
+            >
               Iniciar sesión
             </Button>
-            <Button variant="outline" className="text-lg px-8">
+            <Button
+              variant="outline"
+              className="text-lg px-8"
+              onClick={() => router.push("/registro_host")}
+            >
               Trabaja con nosotros
             </Button>
           </div>
@@ -222,5 +229,4 @@ export default function Home() {
       <Footer />
     </div>
   );
-
 }

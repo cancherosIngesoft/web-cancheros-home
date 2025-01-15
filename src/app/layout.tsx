@@ -16,7 +16,6 @@ const geistMono = localFont({
   weight: "100 900",
 });
 
-
 export const metadata: Metadata = {
   title: "Cancheros",
   description: "Encuentra tu cancha de futbol más cercana en Bogotá",
@@ -30,15 +29,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg-surface text-onSurface w-screen h-screen`}
-
       >
-        <Providers>
-          {children}
-        </Providers>
+        <Providers>{children}</Providers>
         <Toaster />
-        
       </body>
     </html>
   );
