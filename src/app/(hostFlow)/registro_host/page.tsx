@@ -8,11 +8,13 @@ import { useRegistroHost } from "@/hooks/useRegistroHost";
 import { Button } from "@/components/ui/button";
 import { CongratulationsStep } from "@/components/forms/host-register/CongratulationsStep";
 import { WelcomeStep } from "@/components/forms/host-register/WelcomeStep";
+import { useState } from "react";
+import { Loader2 } from "lucide-react";
 
 export default function RegisterBusinessPage() {
   const { currentStep, form, nextStep, prevStep, onSubmit, getGeolocation } =
     useRegistroHost();
-
+  const [isLoading, setIsLoading] = useState(false);
   return (
     <div className="container mx-auto py-10 border border-gray-200 rounded-lg  self-center">
       <StepIndicator currentStep={currentStep} />
@@ -64,17 +66,19 @@ export default function RegisterBusinessPage() {
               Siguiente
             </Button>
           ) : null}
-          {currentStep === 3 && (
+          {currentStep === 3 ? (
             <Button
               type="submit"
               disabled={!form.formState.isValid}
               onClick={() => {
+                setIsLoading(true);
                 form.handleSubmit(onSubmit);
               }}
             >
               Enviar solicitud
+              {isLoading && <Loader2 className="w-4 h-4 animate-spin" />}
             </Button>
-          )}
+          ) : null}
           {currentStep === 4 && <CongratulationsStep />}
         </div>
       </form>

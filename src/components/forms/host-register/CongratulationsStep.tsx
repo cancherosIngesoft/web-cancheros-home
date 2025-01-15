@@ -21,7 +21,9 @@ export function CongratulationsStep() {
         width={200}
         height={200}
       />
-      <Button onClick={() => router.push("/")}>Volver al inicio</Button>
+      <Button type="button" onClick={() => router.push("/")}>
+        Volver al inicio
+      </Button>
     </div>
   );
 }
