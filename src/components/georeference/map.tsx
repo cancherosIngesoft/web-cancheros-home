@@ -8,8 +8,6 @@ import {
 import { useEffect, useState } from "react";
 
 const API_KEY = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
-console.log("Api key is (maps): ", API_KEY);
-console.log("geocoding api key is: ", process.env.GOOGLE_GEOCODING_API_KEY);
 const BOGOTA_COORDS = { lat: 4.60971, lng: -74.08175 };
 
 export default function CustomMap({

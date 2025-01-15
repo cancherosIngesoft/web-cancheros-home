@@ -45,7 +45,7 @@ export const authOptions: NextAuthOptions = {
   ],
   callbacks: {
     async signIn({ user }: { user: User }) {
-      return true
+      return true;
     },
 
     async jwt({
@@ -63,9 +63,7 @@ export const authOptions: NextAuthOptions = {
           if (response && response.rol) {
             token.role = response.rol;
           }
-        } catch (error) {
-          console.error("Error obteniendo el rol:", error);
-        }
+        } catch (error) {}
       }
       if (account) {
         token.accessToken = account.access_token;
@@ -86,10 +84,12 @@ export const authOptions: NextAuthOptions = {
       newSession: any;
       trigger: "update";
     }): Promise<Session> {
-      console.log("session callback", session);
-      
-      (session.user as ExtendedSession['user']).role = token.role as string | undefined;
-      (session as ExtendedSession).accessToken = token.accessToken as string | undefined;
+      (session.user as ExtendedSession["user"]).role = token.role as
+        | string
+        | undefined;
+      (session as ExtendedSession).accessToken = token.accessToken as
+        | string
+        | undefined;
       return session;
     },
 
