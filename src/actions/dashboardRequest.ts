@@ -78,7 +78,7 @@ export async function fetchRequestsOwnersPending(): Promise<RequestsOwners[]> {
       email: item.personalInfo?.email_duenio || "No especificado",
       phone: item.personalInfo?.tel_duenio || "No especificado",
       businessName: item.businessInfo?.nombre_est || "Sin nombre comercial",
-      address: "Sin dirección", // Valor por defecto, ya que no está en la respuesta
+      address: item.locationInfo?.direccion, // Valor por defecto, ya que no está en la respuesta
     }));
 
     return formattedData;
@@ -94,10 +94,11 @@ export async function fetchRequestsOwnersPending(): Promise<RequestsOwners[]> {
 
 export async function fetchRequestsOwnersRejected(): Promise<RequestsOwners[]> {
   try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/requests?status=$rejected`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/requests?status=rejected`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
+        "mode": "no-cors"
         
       },
     });
@@ -115,7 +116,7 @@ export async function fetchRequestsOwnersRejected(): Promise<RequestsOwners[]> {
       email: item.personalInfo?.email_duenio || "No especificado",
       phone: item.personalInfo?.tel_duenio || "No especificado",
       businessName: item.businessInfo?.nombre_est || "Sin nombre comercial",
-      address: "Sin dirección", // Valor por defecto, ya que no está en la respuesta
+      address: item.locationInfo?.direccion, // Valor por defecto, ya que no está en la respuesta
     }));
 
     return formattedData;
