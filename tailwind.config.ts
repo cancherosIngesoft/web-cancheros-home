@@ -43,8 +43,9 @@ export default {
         danger: "#DC3545",
         light: "#F8F9FA",
         dark: "#343A40",
+        destructive:"#DC3545",
         primary: {
-          DEFAULT: "#37693D",
+          DEFAULT: "#2FC458",
           0: "#000000",
           5: "#001504",
           10: "#002107",
