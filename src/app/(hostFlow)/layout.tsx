@@ -7,7 +7,7 @@ export default function Layout({
 }>) {
   return (
     <div className="w-full h-full flex flex-row">
-      <nav className="w-16 h-full">
+      <nav className="fixed top-0 left-0 h-full w-16">
         <LateralNavBar />
       </nav>
       <main className="flex-1 h-full p-8">{children}</main>
