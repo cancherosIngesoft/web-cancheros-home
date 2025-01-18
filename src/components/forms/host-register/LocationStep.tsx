@@ -162,7 +162,11 @@ export function LocationStep({
       <Label className="text-sm text-gray-500 pt-10">
         Utiliza el mapa para confirmar la ubicación de tu establecimiento.
       </Label>
-      <CustomMap center={mapCenter} zoom={15}></CustomMap>
+      <CustomMap
+        center={mapCenter}
+        zoom={15}
+        showInfoWindow={false}
+      ></CustomMap>
 
       <div className="flex flex-col gap-2 mt-15">
         <div className="flex flex-row gap-2 mb-2">
