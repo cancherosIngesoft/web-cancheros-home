@@ -4,10 +4,10 @@ import SelectBussiness from "@/components/reservar_components/SelectBussiness";
 import { Suspense } from "react";
 
 export default async function reservar_cancha() {
-  let initialPendingRequests;
+  let allTheBussiness;
 
   try {
-    initialPendingRequests = await getBussiness();
+    allTheBussiness = await getBussiness();
   } catch (error) {
     console.error("Error fetching pending requests:", error);
     // Opcionalmente, puedes retornar contenido alternativo aquí
@@ -24,7 +24,7 @@ export default async function reservar_cancha() {
       <Suspense fallback={<Loading />}>
         <h1>Seleciona el negocio donde quires hacer tus reservas</h1>
         <p>Utiliza los filtros para encontar la cancha que responda atus necesidades. Luego seleciona uno de nuestro establecimientos para ver mas de sus detalles</p>
-        <SelectBussiness bussiness={initialPendingRequests} />
+        <SelectBussiness initialBusinesses={allTheBussiness} />
       </Suspense>
 
       
