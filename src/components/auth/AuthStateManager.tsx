@@ -16,7 +16,6 @@ interface ExtendedSession {
 export function AuthStateManager() {
   const { data: session } = useSession();
   const updateStore = useGlobalStore((state) => state.updateStore);
-  console.log("session", session);
   useEffect(() => {
     if (session) {
       updateStore("auth", {
