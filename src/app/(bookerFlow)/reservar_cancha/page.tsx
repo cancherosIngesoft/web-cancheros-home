@@ -5,21 +5,23 @@ import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
 import { Button } from "@/components/ui/button";
-
+import { useGlobalStore } from "@/store";
 export default function reservar_cancha() {
   const { data: session, status } = useSession();
   const router = useRouter();
-
+  const auth = useGlobalStore((state) => state.auth);
   return (
     <div className="flex  flex-col items-center justify-center p-24">
       <h1 className="text-4xl font-bold mb-4">Reservar Cancha</h1>
-      {session && (
-        <p>Bienvenido, {session.user?.name || session.user?.email}</p>
-      )}
+      {session && <p>Bienvenido, {auth.name || auth.email}</p>}
       {/* Aquí puedes agregar el formulario de reserva de cancha */}
       <p>
         Esto está en trabajo de ser desarrollado. Mientras, puedes cerrar sesión
         o escuchar esta canción:
+      </p>
+      <p>
+        Esto es una muestra de que la store funciona adecuadamente:{" "}
+        <b>Tu rol es: {auth.userRole}</b>
       </p>
       <iframe
         width="560"
