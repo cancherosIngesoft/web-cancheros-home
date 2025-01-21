@@ -23,16 +23,30 @@ export async function middleware(req: NextRequest) {
   const userRole = token.role as string;
   console.log("userRole middleware", userRole);
   // Definir rutas específicas para cada rol
-  const roleRoutes: Record<string, string> = {
+  const roleRoutes: Record<string, string | string[]> = {
     aficionado: "/reservar_cancha",
     admin: "/panel_solicitudes",
-    duenio: "/panel_negocio",
+    duenio: ["/panel_negocio", "/mis_canchas"],
   };
+
   if (userRole) {
     const allowedRoute = roleRoutes[userRole];
 
-    if (allowedRoute && !pathname.startsWith(allowedRoute)) {
-      return NextResponse.redirect(new URL(allowedRoute, req.url));
+    if (allowedRoute) {
+      const routes = Array.isArray(allowedRoute)
+        ? allowedRoute
+        : [allowedRoute];
+      const isAllowedPath = routes.some((route) => pathname.startsWith(route));
+
+      if (!isAllowedPath) {
+        // Si no está en una ruta permitida, redirigir a la primera ruta del rol
+        return NextResponse.redirect(
+          new URL(
+            Array.isArray(allowedRoute) ? allowedRoute[0] : allowedRoute,
+            req.url
+          )
+        );
+      }
     }
   } else {
     return NextResponse.redirect(new URL("/api/auth/signin/auth0", req.url));
@@ -46,6 +60,7 @@ export const config = {
     "/reservar_cancha",
     "/panel_solicitudes",
     "/panel_negocio",
+    "/mis_canchas",
     // "/((?!api/auth|_next/static|_next/image|favicon.ico|/|public).*)", no esta permitiendo cargar las imagenes de la home, toca corregir el comportamiento
   ],
 };
