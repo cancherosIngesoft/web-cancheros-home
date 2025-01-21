@@ -6,55 +6,62 @@ export interface bussinessInfo{
         lon:number
     }
     calification: number
+    priceRange: string
 }
 
 const businessesMock: bussinessInfo[] = [
-    {
-      id: "1",
-      name: "Café Bogotá",
-      geoReference: {
-        lat: 4.7110,
-        lon: -74.0721,
-      },
-      calification: 4.5,
+  {
+    id: "1",
+    name: "Café Bogotá",
+    geoReference: {
+      lat: 4.7110,
+      lon: -74.0721,
     },
-    {
-      id: "2",
-      name: "Restaurante Monserrate",
-      geoReference: {
-        lat: 4.6050,
-        lon: -74.0760,
-      },
-      calification: 4.7,
+    calification: 4.5,
+    priceRange: "50.000 - 100.000",
+  },
+  {
+    id: "2",
+    name: "Restaurante Monserrate",
+    geoReference: {
+      lat: 4.6050,
+      lon: -74.0760,
     },
-    {
-      id: "3",
-      name: "Tienda Chapinero",
-      geoReference: {
-        lat: 4.6486,
-        lon: -74.0645,
-      },
-      calification: 4.2,
+    calification: 4.7,
+    priceRange: "100.000 - 200.000",
+  },
+  {
+    id: "3",
+    name: "Tienda Chapinero",
+    geoReference: {
+      lat: 4.6486,
+      lon: -74.0645,
     },
-    {
-      id: "4",
-      name: "Centro Comercial Andino",
-      geoReference: {
-        lat: 4.6718,
-        lon: -74.0554,
-      },
-      calification: 4.8,
+    calification: 4.2,
+    priceRange: "30.000 - 70.000",
+  },
+  {
+    id: "4",
+    name: "Centro Comercial Andino",
+    geoReference: {
+      lat: 4.6718,
+      lon: -74.0554,
     },
-    {
-      id: "5",
-      name: "Parque 93 Eventos",
-      geoReference: {
-        lat: 4.6763,
-        lon: -74.0488,
-      },
-      calification: 4.6,
+    calification: 4.8,
+    priceRange: "150.000 - 300.000",
+  },
+  {
+    id: "5",
+    name: "Parque 93 Eventos",
+    geoReference: {
+      lat: 4.6763,
+      lon: -74.0488,
     },
-  ];
+    calification: 4.6,
+    priceRange: "120.000 - 250.000",
+  },
+];
+
   
 export async function getBussiness(): Promise<bussinessInfo[]> {
 
@@ -86,36 +93,39 @@ export async function getBussiness(): Promise<bussinessInfo[]> {
     return businessesMock
 
 }
+export const businessesFilterMock:bussinessInfo[] = [
+  {
+    id: "1",
+    name: "Futbol Club A",
+    geoReference: {
+      lat: 4.7110,
+      lon: -74.0721,
+    },
+    calification: 4.5,
+    priceRange: "80.000 - 150.000",
+  },
+  {
+    id: "2",
+    name: "Canchas El Campín",
+    geoReference: {
+      lat: 4.6473,
+      lon: -74.0962,
+    },
+    calification: 4.8,
+    priceRange: "120.000 - 200.000",
+  },
+  {
+    id: "3",
+    name: "Soccer 5 Premium",
+    geoReference: {
+      lat: 4.6937,
+      lon: -74.0356,
+    },
+    calification: 4.2,
+    priceRange: "90.000 - 170.000",
+  },
+];
 
-export const businessesFilterMock = [
-    {
-      id: "1",
-      name: "Futbol Club A",
-      geoReference: {
-        lat: 4.7110,
-        lon: -74.0721
-      },
-      calification: 4.5
-    },
-    {
-      id: "2",
-      name: "Canchas El Campín",
-      geoReference: {
-        lat: 4.6473,
-        lon: -74.0962
-      },
-      calification: 4.8
-    },
-    {
-      id: "3",
-      name: "Soccer 5 Premium",
-      geoReference: {
-        lat: 4.6937,
-        lon: -74.0356
-      },
-      calification: 4.2
-    }
-  ]
 
 export async function getBussinessFilters(
   location: string,
