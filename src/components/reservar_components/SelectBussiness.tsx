@@ -12,9 +12,10 @@ const SelectBusiness = ({ initialBusinesses }: { initialBusinesses: bussinessInf
     const [businesses, setBusinesses] = useState<bussinessInfo[]>(initialBusinesses)
 
     return (
-        
 
-            <Card className="p-4 grid grid-cols-1 md:grid-cols-2 gap-4">
+
+        <Card className="p-4 flex flex-row gap-8 bg-background w-full">
+            <div className="flex-1">
                 <CustomMap
                     center={{ lat: 4.60971, lng: -74.08175 }}
                     markers={businesses.map((item) => ({
@@ -29,10 +30,15 @@ const SelectBusiness = ({ initialBusinesses }: { initialBusinesses: bussinessInf
                     style={{ width: "60 vh", height: "60vh" }}
                     gestureHandling="auto"
                 />
+            </div>
+            <div className="flex-1">
                 <FiltersForm onSearchResults={setBusinesses} />
-            </Card>
-            
-       
+            </div>
+
+
+        </Card>
+
+
     )
 }
 

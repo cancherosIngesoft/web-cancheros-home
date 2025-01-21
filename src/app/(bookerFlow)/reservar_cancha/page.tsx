@@ -26,8 +26,10 @@ export default async function reservar_cancha() {
           <h1 className="text-3xl text-primary-40 font-bold">Seleciona el negocio donde quires hacer tus reservas</h1>
           <p className="text-gray-500 mt-2">Utiliza los filtros para encontar la cancha que responda atus necesidades. Luego seleciona uno de nuestro establecimientos para ver mas de sus detalles</p>
         </div>
-
-        <SelectBussiness initialBusinesses={allTheBussiness}/>
+        <div className="px-6 w-full">
+          <SelectBussiness initialBusinesses={allTheBussiness}/>
+        </div>
+       
       </Suspense>
 
 
