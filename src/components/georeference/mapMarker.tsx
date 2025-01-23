@@ -10,7 +10,7 @@ type MapMarkerProps = {
     lng: number;
     text?: string;
     calification?: number;
-    priceRange?: string;
+    priceRange?: string[];
   }
   index: number
   selectedMarker: number | null
@@ -41,7 +41,7 @@ export function MapMarker({ marker, index, selectedMarker, setSelectedMarker }: 
               </div>
               <div className="flex items-center mb-2">
                 <DollarSign size={20} className="text-green-400 mr-1" />
-                <span className="font-medium">{marker.priceRange}</span>
+                <span className="font-medium">{marker.priceRange ? marker.priceRange[0]+ " - " + marker.priceRange[1]: 'N/A'}</span>
               </div>
               
               <div className="flex justify-center w-full">

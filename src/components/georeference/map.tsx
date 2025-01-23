@@ -20,7 +20,7 @@ type Marker = {
   lng: number;
   text?: string;
   calification?: number;
-  priceRange?: string;
+  priceRange?: string[];
 };
 
 export default function CustomMap({

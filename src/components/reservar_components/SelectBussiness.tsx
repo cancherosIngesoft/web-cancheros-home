@@ -10,7 +10,7 @@ import { FiltersForm } from "./FiltersForm"
 
 const SelectBusiness = ({ initialBusinesses }: { initialBusinesses: bussinessInfo[] }) => {
     const [businesses, setBusinesses] = useState<bussinessInfo[]>(initialBusinesses)
-
+    console.log(businesses) 
     return (
 
 
@@ -20,8 +20,8 @@ const SelectBusiness = ({ initialBusinesses }: { initialBusinesses: bussinessInf
                     center={{ lat: 4.60971, lng: -74.08175 }}
                     markers={businesses.map((item) => ({
                         id: item.id,
-                        lat: item.geoReference.lat,
-                        lng: item.geoReference.lon,
+                        lat: parseFloat(item.geoReference.lat),
+                        lng: parseFloat(item.geoReference.lon),
                         text: item.name,
                         calification: item.calification,
                         priceRange: item.priceRange,
