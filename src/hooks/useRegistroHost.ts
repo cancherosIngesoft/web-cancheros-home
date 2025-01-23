@@ -34,8 +34,6 @@ export function useRegistroHost() {
     const isStepValid = await form.trigger(fieldsToValidate as any[]);
 
     if (isStepValid) {
-      console.log("isStepValid", isStepValid);
-      console.log("current data", form.getValues());
       setCurrentStep((prev) => Math.min(prev + 1, 3));
     }
   };
@@ -64,7 +62,6 @@ export function useRegistroHost() {
         longitud: form.getValues("longitud").toString(),
       };
       const response = await registerHost(body);
-      console.log("response", response);
       if (response) {
         const requestId = response.id;
         try {
@@ -72,14 +69,12 @@ export function useRegistroHost() {
             (form.getValues("rut") as FileList)[0],
             requestId
           );
-          console.log("rutResponse", rutResponse);
           setCurrentStep(4); // Avanza al paso de felicitaciones
           toast({
             title: "Registro exitoso",
             description: "Tu solicitud ha sido registrada con éxito",
           });
         } catch (error) {
-          console.error("Error al subir el RUT", error);
           toast({
             title: "Error al subir el RUT",
             description: "Vuelve a intentarlo",
