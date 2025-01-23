@@ -8,12 +8,16 @@ export async function middleware(req: NextRequest) {
   console.log("token middleware", token);
 
   // Permitir acceso a rutas de autenticación
-  if (pathname.startsWith('/api/auth') || pathname === '/login' || pathname === '/') {
+  if (
+    pathname.startsWith("/api/auth") ||
+    pathname === "/login" ||
+    pathname === "/"
+  ) {
     return NextResponse.next();
   }
 
   if (!token) {
-    return NextResponse.redirect(new URL('/api/auth/signin/auth0', req.url));
+    return NextResponse.redirect(new URL("/api/auth/signin/auth0", req.url));
   }
 
   const userRole = token.role as string;
@@ -24,16 +28,15 @@ export async function middleware(req: NextRequest) {
     admin: "/panel_solicitudes",
     duenio: "/panel_negocio",
   };
-  if(userRole){
+  if (userRole) {
     const allowedRoute = roleRoutes[userRole];
 
     if (allowedRoute && !pathname.startsWith(allowedRoute)) {
       return NextResponse.redirect(new URL(allowedRoute, req.url));
     }
-  }else{
-    return NextResponse.redirect(new URL('/api/auth/signin/auth0', req.url));
+  } else {
+    return NextResponse.redirect(new URL("/api/auth/signin/auth0", req.url));
   }
-  
 
   return NextResponse.next();
 }
