@@ -13,6 +13,7 @@ export default {
     extend: {
       colors: {
         onPrimary: "#FFFFFF",
+        popover: "#FFFFFF",
         primaryContainer: "#B8F0B8",
         onPrimaryContainer: "#002107",
         onSecondary: "#FFFFFF",

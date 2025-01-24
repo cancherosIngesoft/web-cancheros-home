@@ -12,7 +12,6 @@ export default function ContactForm() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     // Aquí iría tu lógica de envío
-    console.log("Formulario enviado:", formData);
   };
 
   const handleChange = (

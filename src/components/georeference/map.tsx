@@ -15,9 +15,12 @@ const BOGOTA_COORDS = { lat: 4.60971, lng: -74.08175 };
 
 // Definir el tipo para los marcadores
 type Marker = {
+  id?:string;
   lat: number;
   lng: number;
   text?: string;
+  calification?: number;
+  priceRange?: string[];
 };
 
 export default function CustomMap({
@@ -26,12 +29,14 @@ export default function CustomMap({
   zoom = 12,
   style = { width: "50vw", height: "50vh" },
   showInfoWindow = false,
+  gestureHandling = "none",
 }: {
   center?: { lat: number; lng: number };
   zoom?: number;
   style?: { width: string; height: string };
   markers?: Marker[];
   showInfoWindow?: boolean;
+  gestureHandling?: "none" | "greedy" | "cooperative" | "auto";
 }) {
   const [currentCenter, setCurrentCenter] = useState(center);
   const [currentMarkers, setCurrentMarkers] = useState(markers);
@@ -46,9 +51,10 @@ export default function CustomMap({
     <APIProvider apiKey={API_KEY as string}>
       <Map
         style={style}
-        center={currentCenter}
+        defaultCenter={currentCenter}
         defaultZoom={zoom}
-        gestureHandling={"none"}
+        gestureHandling={gestureHandling}
+        cameraControl={false}
         disableDefaultUI={true}
         zoomControl={true}
         streetViewControl={true}
@@ -57,7 +63,7 @@ export default function CustomMap({
           currentMarkers.map((marker, index) => (
             <MapMarker
               key={index}
-              marker={marker}
+              marker={marker.id ? marker : { id: index.toString(), ...marker }}
               index={index}
               selectedMarker={selectedMarker}
               setSelectedMarker={setSelectedMarker}
