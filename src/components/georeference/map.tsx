@@ -52,7 +52,7 @@ export default function CustomMap({
       <Map
         style={style}
         defaultCenter={currentCenter}
-        defaultZoom={zoom}
+        defaultZoom={zoom} 
         gestureHandling={gestureHandling}
         cameraControl={false}
         disableDefaultUI={true}
