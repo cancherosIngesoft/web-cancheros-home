@@ -25,7 +25,7 @@ export function AuthStateManager() {
         name: session.user?.name || null,
       });
     }
-  }, [session, updateStore]);
+  }, [session]);
 
   return null;
 }
