@@ -20,12 +20,18 @@ import { useToast } from "@/hooks/use-toast"
 
 const formSchema = z
   .object({
-    location: z.string().min(1, "Localidad es requerida"),
-    fieldType: z.string().min(1, "Tipo de cancha es requerido"),
-    minPrice: z.number().min(0, "El precio mínimo debe ser mayor o igual a 0"),
-    maxPrice: z.number().min(0, "El precio máximo debe ser mayor o igual a 0"),
+    location: z.string(),
+    fieldType: z.string(),
+    minPrice: z.number().min(0, "El precio mínimo debe ser mayor o igual a 0").optional(),
+    maxPrice: z.number().min(0, "El precio máximo debe ser mayor o igual a 0").optional(),
   })
-  .refine((data) => data.minPrice < data.maxPrice, {
+  .refine((data) => {
+
+    if (data.minPrice !== undefined && data.maxPrice !== undefined) {
+      return data.minPrice < data.maxPrice;
+    }
+    return true;
+  }, {
     message: "El precio mínimo debe ser menor que el precio máximo",
     path: ["minPrice"],
   })
@@ -43,8 +49,8 @@ export function FiltersForm({ onSearchResults }: SearchFormProps) {
     defaultValues: {
       location: "",
       fieldType: "",
-      minPrice: 0,
-      maxPrice: 0,
+      minPrice: undefined,
+      maxPrice: undefined,
     },
   })
 
@@ -53,11 +59,20 @@ export function FiltersForm({ onSearchResults }: SearchFormProps) {
       getBussinessFilters(variables.location, variables.fieldType, variables.minPrice, variables.maxPrice),
     onSuccess: (data: bussinessInfo[]) => {
       onSearchResults(data)
-      toast({
-        title: "Búsqueda exitosa",
-        description: "Se han aplicado los filtros correctamente.",
-        variant: "default",
-      })
+      if (data.length === 0) {
+        toast({
+          title: "No se encontraron resultados",
+          description: "No se encontraron negocios que cumplan con los filtros seleccionados.",
+          variant: "alert",
+        })
+      } else {
+        toast({
+          title: "Búsqueda exitosa",
+          description: "Se han aplicado los filtros correctamente.",
+          variant: "default",
+        })
+      }
+
     },
     onError: (error: unknown) => {
       console.error("Error en getBussinessFilters:", error)
@@ -142,9 +157,9 @@ export function FiltersForm({ onSearchResults }: SearchFormProps) {
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    <SelectItem value="futbol5">Fútbol 5</SelectItem>
-                    <SelectItem value="futbol7">Fútbol 7</SelectItem>
-                    <SelectItem value="futbol11">Fútbol 11</SelectItem>
+                    <SelectItem value="5">Fútbol 5</SelectItem>
+                    <SelectItem value="7">Fútbol 7</SelectItem>
+                    <SelectItem value="11">Fútbol 11</SelectItem>
                   </SelectContent>
                 </Select>
                 <FormMessage />
@@ -170,7 +185,7 @@ export function FiltersForm({ onSearchResults }: SearchFormProps) {
                         type="number"
                         placeholder="Mínimo"
                         {...field}
-                        onChange={(e) => field.onChange(Number.parseInt(e.target.value, 10))}
+                        onChange={(e) => field.onChange(e.target.value === "" ? undefined : Number.parseInt(e.target.value, 10))}
                       />
                     </FormControl>
                     <FormMessage className="text-xs" />
@@ -193,7 +208,7 @@ export function FiltersForm({ onSearchResults }: SearchFormProps) {
                         type="number"
                         placeholder="Máximo"
                         {...field}
-                        onChange={(e) => field.onChange(Number.parseInt(e.target.value, 10))}
+                        onChange={(e) => field.onChange(e.target.value === "" ? undefined : Number.parseInt(e.target.value, 10))}
                       />
                     </FormControl>
                     <FormMessage className="text-xs" />
