@@ -23,6 +23,8 @@ const initialState: IGlobalState = {
     field_images: [],
     field_price: 0,
     field_schedule: [],
+    field_type: "",
+    field_capacity: 0,
   },
   // Otros slices iniciales aquí. Un slice es una parte del store. Como una mini store.
 };
