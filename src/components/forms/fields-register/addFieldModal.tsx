@@ -31,7 +31,9 @@ import { useGlobalStore } from "@/store";
 import { compressImage } from "@/utils/utils";
 import { X } from "lucide-react";
 import { ScheduleSelector } from "./scheduleSelector";
-
+import { toast } from "@/hooks/use-toast";
+import { formatCOP, parseCOP } from "@/utils/utils";
+import { registerField } from "@/actions/registro_host/field";
 interface FieldFormData {
   nombre: string;
   tipo: string;
@@ -50,26 +52,55 @@ export function AddFieldModal({ open, onOpenChange }: AddFieldModalProps) {
   const [images, setImages] = useState<{ preview: string; base64: string }[]>(
     []
   );
+  const [displayPrice, setDisplayPrice] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const { field } = useGlobalStore();
+
   const {
     register,
     handleSubmit,
     setValue,
+    reset,
     formState: { errors },
   } = useForm<FieldFormData>();
+
+  // Función para limpiar todos los estados
+  const clearForm = () => {
+    setImages([]);
+    setDisplayPrice("");
+    reset(); // Limpia el formulario
+    useGlobalStore.getState().clearStore("field"); // Limpia el estado global
+  };
+
+  // Manejar el cierre del modal
+  const handleOpenChange = (open: boolean) => {
+    if (!open) {
+      clearForm();
+    }
+    onOpenChange(open);
+  };
 
   const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
     if (!files) return;
 
+    if (images.length + files.length > 5) {
+      toast({
+        title: "Solo se permiten hasta 5 imágenes",
+        variant: "destructive",
+      });
+      return;
+    }
+
     const newImages = await Promise.all(
       Array.from(files).map(async (file) => {
         const preview = URL.createObjectURL(file);
-
         const base64 = await compressImage(file);
-
         return { preview, base64 };
       })
     );
+
+    e.target.value = "";
 
     setImages((prev) => [...prev, ...newImages]);
 
@@ -90,8 +121,74 @@ export function AddFieldModal({ open, onOpenChange }: AddFieldModalProps) {
     });
   };
 
+  const handlePriceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const rawValue = parseCOP(e.target.value);
+    const formattedValue = formatCOP(rawValue);
+    setDisplayPrice(formattedValue);
+    setValue("precioHora", rawValue);
+  };
+
+  const onSubmit = handleSubmit(async (data) => {
+    setIsLoading(true);
+    try {
+      const formattedData = {
+        ...data,
+        capacidad: parseInt(data.capacidad.toString()),
+        precioHora: parseCOP(data.precioHora.toString()),
+      };
+
+      if (images.length === 0) {
+        toast({
+          title: "Error",
+          description: "Debes agregar al menos una imagen",
+          variant: "destructive",
+        });
+        setIsLoading(false);
+        return;
+      }
+
+      if (!field.field_schedule || field.field_schedule.length === 0) {
+        toast({
+          title: "Error",
+          description: "Debes agregar al menos un horario",
+          variant: "destructive",
+        });
+        setIsLoading(false);
+        return;
+      }
+
+      useGlobalStore.getState().updateStore("field", {
+        field_name: formattedData.nombre,
+        field_description: formattedData.descripcion,
+        field_price: formattedData.precioHora,
+        field_type: formattedData.tipo,
+        field_capacity: formattedData.capacidad,
+        field_images: images.map((img) => img.base64),
+      });
+
+      console.log("la store es: ", useGlobalStore.getState().field);
+
+      await registerField(useGlobalStore.getState().field);
+
+      toast({
+        title: "Éxito",
+        description: "Cancha guardada correctamente",
+      });
+      clearForm();
+      handleOpenChange(false);
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Hubo un error al guardar la cancha",
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  });
+
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
+    <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogContent className="max-w-none w-[80vw] h-[90vh] border overflow-y-auto overflow-x-hidden p-20">
         <DialogHeader>
           <DialogTitle className="text-2xl font-bold">
@@ -121,29 +218,31 @@ export function AddFieldModal({ open, onOpenChange }: AddFieldModalProps) {
                   htmlFor="imagenes"
                   className="text-center text-xl text-[#1A6B51] font-bold"
                 >
-                  AGREGA IMÁGENES DE TU CANCHAS
+                  AGREGA IMÁGENES DE TU CANCHAS ({images.length}/5)
                 </Label>
-                <div className="border-2 border-dashed border-gray-300 rounded-lg p-4">
-                  <Input
-                    id="imagenes"
-                    type="file"
-                    multiple
-                    accept="image/*"
-                    className="hidden"
-                    {...register("imagenes")}
-                    onChange={handleImageChange}
-                  />
-                  <Label
-                    htmlFor="imagenes"
-                    className="flex flex-col items-center justify-center cursor-pointer"
-                  >
-                    <div className="w-full h-64 bg-gray-100 rounded-lg mb-4" />
-                    <p className="text-center text-sm text-gray-500">
-                      Arrastra y suelta las imágenes aquí o haz clic para
-                      seleccionar
-                    </p>
-                  </Label>
-                </div>
+                {images.length < 5 && (
+                  <div className="border-2 border-dashed border-gray-300 rounded-lg p-4">
+                    <Input
+                      id="imagenes"
+                      type="file"
+                      multiple
+                      accept="image/*"
+                      className="hidden"
+                      {...register("imagenes")}
+                      onChange={handleImageChange}
+                    />
+                    <Label
+                      htmlFor="imagenes"
+                      className="flex flex-col items-center justify-center cursor-pointer"
+                    >
+                      <div className="w-full h-64 bg-gray-100 rounded-lg mb-4" />
+                      <p className="text-center text-sm text-gray-500">
+                        Arrastra y suelta las imágenes aquí o haz clic para
+                        seleccionar
+                      </p>
+                    </Label>
+                  </div>
+                )}
 
                 {images.length > 0 && (
                   <Carousel className="w-full">
@@ -227,12 +326,28 @@ export function AddFieldModal({ open, onOpenChange }: AddFieldModalProps) {
                   <Label htmlFor="precioHora">Precio por hora</Label>
                   <Input
                     id="precioHora"
-                    type="number"
+                    type="text"
+                    value={displayPrice}
+                    placeholder="0"
                     {...register("precioHora", {
                       required: "El precio es requerido",
-                      min: { value: 0, message: "El precio debe ser positivo" },
+                      min: {
+                        value: 0,
+                        message: "El precio debe ser valido",
+                      },
+                      validate: {
+                        isNumber: (value) =>
+                          !isNaN(parseCOP(value.toString())) ||
+                          "Debe ser un número válido",
+                      },
+                      onChange: handlePriceChange,
                     })}
                   />
+                  {errors.precioHora && (
+                    <p className="text-sm text-red-500">
+                      {errors.precioHora.message}
+                    </p>
+                  )}
                 </div>
               </div>
 
@@ -253,12 +368,31 @@ export function AddFieldModal({ open, onOpenChange }: AddFieldModalProps) {
           </TabsContent>
         </Tabs>
 
-        <div className="flex justify-end gap-4">
-          <Button variant="outline" onClick={() => onOpenChange(false)}>
-            Cancelar
-          </Button>
-          <Button className="bg-[#46C556] text-white">Guardar</Button>
-        </div>
+        <form onSubmit={onSubmit}>
+          <div className="flex justify-end gap-4">
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => handleOpenChange(false)}
+            >
+              Cancelar
+            </Button>
+            <Button
+              type="submit"
+              className="bg-[#46C556] text-white"
+              disabled={isLoading}
+            >
+              {isLoading ? (
+                <>
+                  <span className="animate-spin mr-2">🕒</span>
+                  Guardando...
+                </>
+              ) : (
+                "Guardar"
+              )}
+            </Button>
+          </div>
+        </form>
       </DialogContent>
     </Dialog>
   );

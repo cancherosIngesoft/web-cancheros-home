@@ -13,6 +13,8 @@ export interface IFieldState {
   field_description: string;
   field_images: string[];
   field_price: number;
+  field_type: string;
+  field_capacity: number;
   field_schedule: {
     day: string;
     startTime: string;

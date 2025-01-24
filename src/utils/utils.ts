@@ -41,3 +41,15 @@ export const compressImage = (file: File): Promise<string> => {
     reader.onerror = reject;
   });
 };
+
+export const formatCOP = (value: number) => {
+  return new Intl.NumberFormat("es-CO", {
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0,
+  }).format(value);
+};
+
+export const parseCOP = (value: string) => {
+  // Elimina cualquier caracter que no sea número
+  return parseInt(value.replace(/\D/g, "")) || 0;
+};

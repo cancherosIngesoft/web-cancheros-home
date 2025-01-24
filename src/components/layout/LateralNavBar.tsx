@@ -37,8 +37,8 @@ export const LateralNavBar = () => {
         <Image src="/LogoWithOutTitle.png" alt="Logo" width={50} height={50} />
       </Link>
       <section className="flex flex-col items-center gap-4 mt-10">
-        {true && (
-          <Link href="/registro_cancha">
+        {authUser?.userRole === "duenio" && (
+          <Link href="/mis_canchas">
             <Image
               src="/icons/miscanchas.svg"
               alt="Logo"

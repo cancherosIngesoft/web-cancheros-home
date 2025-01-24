@@ -30,13 +30,13 @@ export function ScheduleSelector() {
   const [selectedRange, setSelectedRange] = useState<string>("2");
 
   const days = [
-    "Lunes",
-    "Martes",
-    "Miércoles",
-    "Jueves",
-    "Viernes",
-    "Sábado",
-    "Domingo",
+    "lunes",
+    "martes",
+    "miercoles",
+    "jueves",
+    "viernes",
+    "sabado",
+    "domingo",
   ];
 
   const timeSlots = Array.from({ length: 24 }, (_, i) => {
