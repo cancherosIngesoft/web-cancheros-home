@@ -1,7 +1,8 @@
 import { create } from "zustand";
 import { devtools } from "zustand/middleware";
-import { IGlobalState } from "./types";
-import { TGlobalStoreData } from "./types";
+import { BussinessState, IGlobalState } from "./types";
+import { TGlobalStoreData,  BussinessData } from "./types";
+import { de } from "date-fns/locale";
 export { useShallow } from "zustand/react/shallow";
 
 //Estado inicial del store. Cada slice es una parte del store.
@@ -58,3 +59,54 @@ export const useGlobalStore = create<TGlobalStoreData>()(
     }
   )
 );
+
+const initialStateBussinessID:BussinessState={
+  bussinessID: null
+}
+export const useBussinessStore = create<BussinessData>()(
+  devtools(
+    (set) => ({
+      ...initialStateBussinessID,
+      updateBussinessStore: (slice, payload) => {
+        set(
+          (state) => ({
+            [slice]: { ...state[slice], ...payload },
+          }),
+          false,
+          "UPDATE_STORE" // Acción identificable en DevTools
+        );
+      },
+      clearBussinessStore: (slice) => {
+        set(
+          (state) => ({
+            [slice]: initialStateBussinessID[slice],
+          }),
+          false,
+          "CLEAR_STORE" // Acción identificable en DevTools
+        );
+      },
+      changeBussinessID: (bussinessID) => {
+        set(
+          () => ({
+            bussinessID: bussinessID,
+          }),
+          false,
+          "CHANGE_BUSSINESS_ID" // Acción identificable en DevTools
+        );
+      },
+      clearBussinessID: () => {
+        set(
+          (state) => ({
+            bussinessID: null,
+          }),
+          false,
+          "CLEAR_BUSSINESS_ID" // Acción identificable en DevTools
+        );
+      },
+    }),
+    {
+      name: "BussinessStore", // Nombre que aparecerá en DevTools
+      enabled: process.env.NODE_ENV === "development", // Solo activo en desarrollo
+    }
+  )
+)

@@ -1,9 +1,10 @@
 import { Marker, InfoWindow } from "@vis.gl/react-google-maps"
 import { Button } from "@/components/ui/button"
 import { Star,DollarSign } from "lucide-react"
+import { useBussinessStore } from "@/store"
 
 
-type MapMarkerProps = {
+type MapMarkerProps = { 
   marker: {
     id?: string;
     lat: number;
@@ -19,8 +20,12 @@ type MapMarkerProps = {
 }
 
 export function MapMarker({ marker, index, selectedMarker, setSelectedMarker }: MapMarkerProps) {
+  
+  const changeBusssinessID = useBussinessStore(state => state.changeBussinessID)
+ 
   const onGoToField = (id: string) => {
-    console.log("Go to field", id)
+
+    changeBusssinessID(id)
   }
   return (
     <div key={index}>
