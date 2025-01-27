@@ -72,6 +72,7 @@ const BussinessInfo = ({ id }: { id: string }) => {
         data: availableHours,
         isLoading: isLoadingHours,
         isError: isErrorHours,
+        refetch: refetchHours,
     } = useAvailableHours(selectedField?.id_field ?? null, selectedDate)
 
     if (isLoading) return <LoadingState />
@@ -171,11 +172,11 @@ const BussinessInfo = ({ id }: { id: string }) => {
                             {isLoadingHours ? (
                                 <div className="grid grid-cols-3 gap-2">
                                     {[1, 2, 3].map((i) => (
-                                        <div key={i} className="h-10 bg-muted animate-pulse rounded-md" />
+                                        <div key={i} className="h-10 bg-gray-300 animate-pulse rounded-md" />
                                     ))}
                                 </div>
                             ) : isErrorHours ? (
-                                <ErrorGetInfo retry={() => refetch()} />
+                                <ErrorGetInfo retry={() => refetchHours()} />
                             ) : (
                                 <div className="flex flex-row flex-wrap gap-2">
                                     {availableHours?.hours.map((hour) => (

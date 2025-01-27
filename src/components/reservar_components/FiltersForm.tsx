@@ -115,7 +115,7 @@ export function FiltersForm({ onSearchResults }: SearchFormProps) {
                   name="location"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="font-semibold">Localidad</FormLabel>
+                      <FormLabel className="font-semibold text-lg">Localidad</FormLabel>
                       <Select onValueChange={field.onChange} defaultValue={field.value}>
                         <FormControl>
                           <SelectTrigger>
@@ -144,7 +144,7 @@ export function FiltersForm({ onSearchResults }: SearchFormProps) {
                 name="fieldType"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="font-semibold">Tipo de cancha</FormLabel>
+                    <FormLabel className="font-semibold text-lg">Tipo de cancha</FormLabel>
                     <Select onValueChange={field.onChange} defaultValue={field.value}>
                       <FormControl>
                         <SelectTrigger>
@@ -174,7 +174,7 @@ export function FiltersForm({ onSearchResults }: SearchFormProps) {
                     name="minPrice"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className="font-semibold">Minimo</FormLabel>
+                        <FormLabel className="font-semibold text-lg">Minimo</FormLabel>
                         <FormControl>
                           <Input
                             type="number"
@@ -197,7 +197,7 @@ export function FiltersForm({ onSearchResults }: SearchFormProps) {
                     name="maxPrice"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className="font-semibold">Maximo</FormLabel>
+                        <FormLabel className="font-semibold text-lg">Maximo</FormLabel>
                         <FormControl>
                           <Input
                             type="number"
