@@ -30,7 +30,7 @@ const FieldCard = ({ field, setSelectedField, selectedField }: FieldCardProps) =
         <>
             <Card
                 key={field.id_cancha}
-                className={`cursor-pointer transition-colors ${selectedField?.id_field === field.id_cancha ? "border-primary bg-green-100" : "hover:border-muted"
+                className={`cursor-pointer transition-colors h-full ${selectedField?.id_field === field.id_cancha ? "border-primary bg-green-100" : "hover:border-muted"
                     }`}
                 onClick={() => setSelectedField({id_field: field.id_cancha, price: field.precio})}
             >
