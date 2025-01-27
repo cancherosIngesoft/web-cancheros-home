@@ -57,7 +57,7 @@ export async function getBussinessFilters(
 ): Promise<bussinessInfo[]> {
   try {
     // Construcción de la URL con los parámetros´
-    let urlConstruct: { min_price?: string; max_price?: string; location?: string, field_type?:string } = {}
+    let urlConstruct: { min_price?: string; max_price?: string; location?: string, field_type?: string } = {}
     if (minPrice !== undefined) {
       urlConstruct["min_price"] = minPrice.toString()
     }
@@ -67,7 +67,7 @@ export async function getBussinessFilters(
     if (location !== "") {
       urlConstruct["location"] = location
     }
-    if(fieldType !== ""){
+    if (fieldType !== "") {
       urlConstruct["field_type"] = fieldType
     }
     const queryParams = new URLSearchParams(urlConstruct).toString();
@@ -95,4 +95,92 @@ export async function getBussinessFilters(
       throw new Error("Error desconocido");
     }
   }
+}
+export interface Cancha {
+  capacidad: number;
+  descripcion: string;
+  id_cancha: string;
+  id_establecimiento: number;
+  imagen1: string | null;
+  imagen2: string | null;
+  imagen3: string | null;
+  imagen4: string | null;
+  imagen5: string | null;
+  nombre: string;
+  precio: number;
+  tipo: string;
+}
+
+export interface GeoReference {
+  lat: string;
+  lon: string;
+}
+
+export interface bussinessID {
+  canchas: Cancha[];
+  geoReference: GeoReference;
+  id: number;
+  name: string;
+}
+
+
+export async function getBussinessByID(
+  id: string
+): Promise<bussinessID> {
+  try {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/business/${id}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        }
+      }
+    )
+    if (!res.ok) {
+      throw new Error("Error al obtener el negocio")
+    }
+    return await res.json()
+  } catch (e) {
+    if (e instanceof Error) {
+      console.error("Error en get Bussines:", e.message)
+      throw new Error(e.message)
+    } else {
+      throw new Error("Error desconocido")
+    }
+
+  }
+
+}
+interface Schedules{
+  hours:string[]
+}
+
+export async function getAvailableHour(
+  id_field: string,
+  date: Date
+): Promise<Schedules> {
+  return {hours:["18:00", "19:00", "20:00", "21:00", "22:00", "23:00"]}
+  try {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/field/?field_id=${id_field}?date=${date}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        }
+      }
+    )
+    if (!res.ok) {
+      throw new Error("Error al obtener el los horarios")
+    }
+    return await res.json()
+  } catch (e) {
+    if (e instanceof Error) {
+      console.error("Error en get schedules:", e.message)
+      throw new Error(e.message)
+    } else {
+      throw new Error("Error desconocido")
+    }
+
+  }
+
 }
