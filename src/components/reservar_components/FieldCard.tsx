@@ -13,8 +13,8 @@ import FieldIcon from "../icon/FieldIcon"
 
 interface FieldCardProps {
     field: Cancha
-    setSelectedField: (id: string) => void
-    selectedField: string | null
+    setSelectedField: ({id_field, price}: { id_field: string, price: number }) => void
+    selectedField: {id_field:string, price:number} | null
 }
 
 const FieldCard = ({ field, setSelectedField, selectedField }: FieldCardProps) => {
@@ -30,11 +30,11 @@ const FieldCard = ({ field, setSelectedField, selectedField }: FieldCardProps) =
         <>
             <Card
                 key={field.id_cancha}
-                className={`cursor-pointer transition-colors ${selectedField === field.id_cancha ? "border-primary bg-green-100" : "hover:border-muted"
+                className={`cursor-pointer transition-colors ${selectedField?.id_field === field.id_cancha ? "border-primary bg-green-100" : "hover:border-muted"
                     }`}
-                onClick={() => setSelectedField(field.id_cancha)}
+                onClick={() => setSelectedField({id_field: field.id_cancha, price: field.precio})}
             >
-                <CardContent className="flex flex-col h-52 aspect-square p-4">
+                <CardContent className="flex flex-col h-56 aspect-square p-4">
                     <div className="relative h-24 aspect-video group" onClick={(e) => e.stopPropagation()}>
                         {field.imagen1 ? (
                             <>
@@ -51,21 +51,21 @@ const FieldCard = ({ field, setSelectedField, selectedField }: FieldCardProps) =
                                 </div>
                             </>
                         ) : (
-                            <div className="h-full w-full flex items-center rounded-md bg-background">
+                            <div className="h-full w-full flex items-center rounded-md bg-gray-200">
                                 <ImageOff className="h-10 w-10 mx-auto text-primary-50" />
                             </div>
                         )}
                     </div>
-                    <div className="flex flex-col justify-between mt-2">
+                    <div className="flex flex-col justify-between mt-2 gap-2">
                         <div>
                             <CardTitle className="text-lg">{field.nombre}</CardTitle>
-                            <CardDescription className="flex items-center">
-                                <Users className="h-4 w-4 mr-1" />
-                                Capacidad: {field.capacidad} personas
+                            <CardDescription className="flex items-center font-semibold">
+                                <Users className="h-4 w-4 mr-1 " />
+                                Capacidad:<span className="font-normal"> {field.capacidad} personas</span>
                             </CardDescription>
                         </div>
                         <p className="font-semibold text-primary-50 flex items-center">
-                            <DollarSign className="h-4 w-4 mr-1" />${field.precio.toLocaleString()} / hora
+                            <DollarSign className="h-4 w-4 mr-1" />{field.precio.toLocaleString()} / hora
                         </p>
                     </div>
                 </CardContent>

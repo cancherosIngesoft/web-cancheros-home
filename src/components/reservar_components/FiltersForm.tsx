@@ -17,6 +17,7 @@ import { Input } from "@/components/ui/input"
 import { useForm } from "react-hook-form"
 import { type bussinessInfo, getBussinessFilters } from "@/actions/book_field/field_actions"
 import { useToast } from "@/hooks/use-toast"
+import { AnimatePresence, motion } from "framer-motion"
 
 const formSchema = z
   .object({
@@ -97,133 +98,143 @@ export function FiltersForm({ onSearchResults }: SearchFormProps) {
   }
 
   return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-        <div className="flex flex-row justify-start gap-4">
-          <div className="flex-1">
-            <FormField
-              control={form.control}
-              name="location"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="font-semibold">Localidad</FormLabel>
-                  <Select onValueChange={field.onChange} defaultValue={field.value}>
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Selecciona una localidad" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      <SelectItem value="usaquen">Usaquén</SelectItem>
-                      <SelectItem value="chapinero">Chapinero</SelectItem>
-                      <SelectItem value="santafe">Santa Fe</SelectItem>
-                      <SelectItem value="sancristobal">San Cristóbal</SelectItem>
-                      <SelectItem value="usme">Usme</SelectItem>
-                      <SelectItem value="tunjuelito">Tunjuelito</SelectItem>
-                      <SelectItem value="bosa">Bosa</SelectItem>
-                      <SelectItem value="kennedy">Kennedy</SelectItem>
-                      <SelectItem value="fontibon">Fontibón</SelectItem>
-                      <SelectItem value="engativa">Engativá</SelectItem>
-                      <SelectItem value="suba">Suba</SelectItem>
-                      <SelectItem value="barriosunidos">Barrios Unidos</SelectItem>
-                      <SelectItem value="teusaquillo">Teusaquillo</SelectItem>
-                      <SelectItem value="martires">Los Mártires</SelectItem>
-                      <SelectItem value="antonionarino">Antonio Nariño</SelectItem>
-                      <SelectItem value="puente">Puente Aranda</SelectItem>
-                      <SelectItem value="candelaria">La Candelaria</SelectItem>
-                      <SelectItem value="rafaeluribe">Rafael Uribe Uribe</SelectItem>
-                      <SelectItem value="ciudadbolivar">Ciudad Bolívar</SelectItem>
-                      <SelectItem value="sumapaz">Sumapaz</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
-        </div>
+    <AnimatePresence>
+      <motion.div
+        initial={{ x: 300, opacity: 0 }}
+        animate={{ x: 0, opacity: 1 }}
+        exit={{ x: 300, opacity: 0 }}
+        className="relative w-full h-full p-4"
+      >
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+            <div className="flex flex-row justify-start gap-4">
+              <div className="flex-1">
+                <FormField
+                  control={form.control}
+                  name="location"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="font-semibold">Localidad</FormLabel>
+                      <Select onValueChange={field.onChange} defaultValue={field.value}>
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Selecciona una localidad" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          <SelectItem value="usaquen">Usaquén</SelectItem>
+                          <SelectItem value="chapinero">Chapinero</SelectItem>
+                          <SelectItem value="santafe">Santa Fe</SelectItem>
+                          <SelectItem value="sancristobal">San Cristóbal</SelectItem>
+                          <SelectItem value="usme">Usme</SelectItem>
+                          <SelectItem value="tunjuelito">Tunjuelito</SelectItem>
+                          <SelectItem value="bosa">Bosa</SelectItem>
+                          <SelectItem value="kennedy">Kennedy</SelectItem>
+                          <SelectItem value="fontibon">Fontibón</SelectItem>
+                          <SelectItem value="engativa">Engativá</SelectItem>
+                          <SelectItem value="suba">Suba</SelectItem>
+                          <SelectItem value="barriosunidos">Barrios Unidos</SelectItem>
+                          <SelectItem value="teusaquillo">Teusaquillo</SelectItem>
+                          <SelectItem value="martires">Los Mártires</SelectItem>
+                          <SelectItem value="antonionarino">Antonio Nariño</SelectItem>
+                          <SelectItem value="puente">Puente Aranda</SelectItem>
+                          <SelectItem value="candelaria">La Candelaria</SelectItem>
+                          <SelectItem value="rafaeluribe">Rafael Uribe Uribe</SelectItem>
+                          <SelectItem value="ciudadbolivar">Ciudad Bolívar</SelectItem>
+                          <SelectItem value="sumapaz">Sumapaz</SelectItem>
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+            </div>
 
-        <div className="w-1/2">
-          <FormField
-            control={form.control}
-            name="fieldType"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel className="font-semibold">Tipo de cancha</FormLabel>
-                <Select onValueChange={field.onChange} defaultValue={field.value}>
-                  <FormControl>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Selecciona tipo de cancha" />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent>
-                    <SelectItem value="5">Fútbol 5</SelectItem>
-                    <SelectItem value="7">Fútbol 7</SelectItem>
-                    <SelectItem value="11">Fútbol 11</SelectItem>
-                  </SelectContent>
-                </Select>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        </div>
-
-        <div className="space-y-2 pt-8">
-          <h2 className="font-semibold text-xl text-primary-40 ">
-            Rango de precio <span className="text-gray-400 text-sm font-normal ">(por hora)</span>
-          </h2>
-          <div className="flex flex-wrap items-start space-x-2">
-            <div className="flex-1 min-w-[120px]">
+            <div className="w-1/2">
               <FormField
                 control={form.control}
-                name="minPrice"
+                name="fieldType"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="font-semibold">Minimo</FormLabel>
-                    <FormControl>
-                      <Input
-                        type="number"
-                        placeholder="Mínimo"
-                        {...field}
-                        onChange={(e) => field.onChange(e.target.value === "" ? undefined : Number.parseInt(e.target.value, 10))}
-                      />
-                    </FormControl>
-                    <FormMessage className="text-xs" />
+                    <FormLabel className="font-semibold">Tipo de cancha</FormLabel>
+                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Selecciona tipo de cancha" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        <SelectItem value="5">Fútbol 5</SelectItem>
+                        <SelectItem value="7">Fútbol 7</SelectItem>
+                        <SelectItem value="11">Fútbol 11</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
                   </FormItem>
                 )}
               />
             </div>
 
-            <span className="mt-8">-</span>
+            <div className="space-y-2 pt-8">
+              <h2 className="font-semibold text-xl text-primary-40 ">
+                Rango de precio <span className="text-gray-400 text-sm font-normal ">(por hora)</span>
+              </h2>
+              <div className="flex flex-wrap items-start space-x-2">
+                <div className="flex-1 min-w-[120px]">
+                  <FormField
+                    control={form.control}
+                    name="minPrice"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="font-semibold">Minimo</FormLabel>
+                        <FormControl>
+                          <Input
+                            type="number"
+                            placeholder="Mínimo"
+                            {...field}
+                            onChange={(e) => field.onChange(e.target.value === "" ? undefined : Number.parseInt(e.target.value, 10))}
+                          />
+                        </FormControl>
+                        <FormMessage className="text-xs" />
+                      </FormItem>
+                    )}
+                  />
+                </div>
 
-            <div className="flex-1 min-w-[120px]">
-              <FormField
-                control={form.control}
-                name="maxPrice"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="font-semibold">Maximo</FormLabel>
-                    <FormControl>
-                      <Input
-                        type="number"
-                        placeholder="Máximo"
-                        {...field}
-                        onChange={(e) => field.onChange(e.target.value === "" ? undefined : Number.parseInt(e.target.value, 10))}
-                      />
-                    </FormControl>
-                    <FormMessage className="text-xs" />
-                  </FormItem>
-                )}
-              />
+                <span className="mt-8">-</span>
+
+                <div className="flex-1 min-w-[120px]">
+                  <FormField
+                    control={form.control}
+                    name="maxPrice"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="font-semibold">Maximo</FormLabel>
+                        <FormControl>
+                          <Input
+                            type="number"
+                            placeholder="Máximo"
+                            {...field}
+                            onChange={(e) => field.onChange(e.target.value === "" ? undefined : Number.parseInt(e.target.value, 10))}
+                          />
+                        </FormControl>
+                        <FormMessage className="text-xs" />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
 
-        <Button type="submit" className="w-1/2 font-bold" disabled={searchMutation.isPending}>
-          {searchMutation.isPending ? "Buscando..." : "Buscar canchas"}
-        </Button>
-      </form>
-    </Form>
+            <Button type="submit" className="w-1/2 font-bold" disabled={searchMutation.isPending}>
+              {searchMutation.isPending ? "Buscando..." : "Buscar canchas"}
+            </Button>
+          </form>
+        </Form>
+      </motion.div>
+    </AnimatePresence>
+
   )
 }
 

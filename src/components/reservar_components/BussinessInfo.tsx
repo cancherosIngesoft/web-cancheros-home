@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { use, useState } from "react"
 import { format } from "date-fns"
 import { CalendarIcon, X } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
@@ -17,22 +17,43 @@ import FieldCard from "./FieldCard"
 import { getAvailableHour } from "@/actions/book_field/field_actions"
 import { ErrorGetInfo } from "./ErrorGetInfo"
 import { TimeSlot } from "./TimeSlot"
+import { CircleDollarSign } from 'lucide-react';
+import { CalendarDays } from 'lucide-react';
+import { Clock } from 'lucide-react';
 
-export function useAvailableHours(fieldId: string | null, date: Date | undefined) {
+import { z } from "zod";
+
+
+
+export function useAvailableHours(fieldId: string | null, data:{date:Date |undefined,valid:boolean} |undefined) {
     return useQuery({
-        queryKey: ["availableHours", fieldId, date],
-        queryFn: () => getAvailableHour(fieldId!, date!),
-        enabled: !!fieldId && !!date,
+        queryKey: ["availableHours", fieldId, data],
+        queryFn: () => getAvailableHour(fieldId!, data?.date!),
+        enabled: !!fieldId && !!data?.date && data?.valid,
         staleTime: 1000 * 60 * 5,
     })
 }
+const dateSchema = z
+  .date()
+  .refine(
+    (value) => {
+      const inputDate = new Date(value);
+      const today = new Date();
+      const startOfToday = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+      return inputDate > startOfToday;
+    },
+    {
+      message: "La fecha seleccionada debe ser un día mayor a hoy",
+    }
+  );
 
 
 
 const BussinessInfo = ({ id }: { id: string }) => {
-    const [selectedDate, setSelectedDate] = useState<Date>()
-    const [selectedField, setSelectedField] = useState<string | null>(null)
+    const [selectedDate, setSelectedDate] = useState<{date:Date | undefined, valid:boolean}>()
+    const [selectedField, setSelectedField] = useState<{id_field:string, price:number} | null>(null)
     const [selectedHours, setSelectedHours] = useState<string[] | null>([])
+    const [errorDate,setErrorDate]= useState<string>("")
     const clearBussinessID = useBussinessStore((state) => state.clearBussinessID)
 
     const {
@@ -50,7 +71,7 @@ const BussinessInfo = ({ id }: { id: string }) => {
         data: availableHours,
         isLoading: isLoadingHours,
         isError: isErrorHours,
-    } = useAvailableHours(selectedField, selectedDate)
+    } = useAvailableHours(selectedField?.id_field ?? null, selectedDate)
 
     if (isLoading) return <LoadingState />
     if (isError) return <ErrorGetInfo retry={() => refetch()} />
@@ -58,6 +79,21 @@ const BussinessInfo = ({ id }: { id: string }) => {
     const handleHourToggle = (hour: string) => {
         setSelectedHours((prev) => (prev?.includes(hour) ? prev.filter((h) => h !== hour) : [...(prev || []), hour]))
     }
+
+    const handleDateChange = (date:Date | undefined) => {
+    
+        // Validar la fecha con Zod
+        console.log("Fecha seleccionada")
+        console.log(typeof date)
+        const result = dateSchema.safeParse(date);
+        if (!result.success) {
+          setErrorDate(result.error.errors[0].message); // Muestra el mensaje de error
+        } else {
+          setErrorDate(""); // Limpia el error si la validación pasa
+          setSelectedDate({date:date,valid:true})
+          
+        }
+      };
 
     const onSubmit = () => {
         console.log("Reservar")
@@ -82,10 +118,10 @@ const BussinessInfo = ({ id }: { id: string }) => {
                     <div className="space-y-4">
                         <div>
                             <h3 className="text-lg font-semibold text-primary-50">Canchas disponibles</h3>
-                            <p className="text-xs">Seleccione la cancha que desea</p>
+                            <p className="text-xs text-gray-500">Seleccione la cancha que desea. Observa mas detalles dando click sobre las imagenes</p>
                         </div>
 
-                        <div className="flex flex-row overflow-x-scroll h-56 gap-4 py-2">
+                        <div className="flex flex-row overflow-x-scroll h-60 gap-4 py-2">
                             {business?.canchas.map((cancha) => (
                                 <FieldCard
                                     key={cancha.id_cancha}
@@ -102,23 +138,25 @@ const BussinessInfo = ({ id }: { id: string }) => {
                             <h3 className="text-lg font-semibold text-primary-50">Seleccionar fecha</h3>
                             <Popover>
                                 <PopoverTrigger asChild>
-                                    <Button variant="outline" className="w-full justify-start text-left font-normal">
+                                    <Button variant="outline" className={`${errorDate!=="" ? "border-destructive":""} w-full justify-start text-left font-norma`}>
                                         <CalendarIcon className="mr-2 h-4 w-4" />
-                                        {selectedDate ? format(selectedDate, "PPP") : <span>Selecciona una fecha</span>}
+                                        {selectedDate?.date ? format(selectedDate.date, "PPP") : <span>Selecciona una fecha</span>}
+
                                     </Button>
                                 </PopoverTrigger>
                                 <PopoverContent className="w-auto p-0">
                                     <Calendar
                                         mode="single"
-                                        selected={selectedDate}
+                                        selected={selectedDate?.date}
                                         onSelect={(date) => {
-                                            setSelectedDate(date)
+                                            handleDateChange(date)
                                             setSelectedHours(null)
                                         }}
                                         initialFocus
                                     />
                                 </PopoverContent>
                             </Popover>
+                            <span className="text-xs text-destructive">{errorDate}</span>
                         </motion.div>
                     )}
 
@@ -149,7 +187,27 @@ const BussinessInfo = ({ id }: { id: string }) => {
                     )}
 
                     {selectedField && selectedDate && selectedHours && (
-                        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="pt-4">
+                        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="pt-4 space-y-4 bg-tertiary-98 border-[1px]     border-gray-300 p-6 rounded-md">
+                            <h3 className="text-xl font-semibold text-tertiary-50">Resumen de la reserva</h3>
+                            <div className="flex flex-row  gap-6">
+                                <div className="flex flex-row items-center gap-2">
+                                    <CalendarDays className="h-6 w-6 text-tertiary-40" />
+                                    <p className="text-md font-bold">Fecha:</p>
+                                    <p className="text-sm ">{format(selectedDate.date!, "PPP")}</p>
+                                </div>
+                                <div className="flex flex-row items-center gap-2">
+                                    <Clock className="h-6 w-6 text-tertiary-40" />
+                                    <p className="text-md font-bold">Horario:</p>
+                                    <p className="text-sm ">{selectedHours.join(", ")}</p>
+                                </div>
+                            </div>
+                            <hr className="w-full border-gray-300 border-[1.5px] "/>
+                            <div className="flex flex-row  items-center">
+                            <CircleDollarSign className="h-6 w-6 text-primary-70" />
+
+                                <p className="font-bold text-xl text-primary-70">Total: <span className="text-black ">{selectedField.price* selectedHours.length}</span></p>
+
+                            </div>
                             <Button className="w-full" size="lg" onClick={onSubmit} >
                                 Reservar
                             </Button>
