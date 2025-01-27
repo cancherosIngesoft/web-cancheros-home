@@ -1,6 +1,6 @@
 "use client"
 
-import {useState } from "react"
+import { useState } from "react"
 import { format } from "date-fns"
 import { CalendarIcon, X } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
@@ -12,7 +12,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 
 import { useBussinessStore } from "@/store"
 import { getBussinessByID } from "@/actions/book_field/field_actions"
-import { LoadingState } from "./loadingState"
+import { LoadingState } from "./LoadingState"
 import FieldCard from "./FieldCard"
 import { getAvailableHour } from "@/actions/book_field/field_actions"
 import { ErrorGetInfo } from "./ErrorGetInfo"
@@ -72,15 +72,19 @@ const BussinessInfo = ({ id }: { id: string }) => {
                 exit={{ x: 300, opacity: 0 }}
                 className="relative w-full h-full p-4"
             >
-                <Button onClick={clearBussinessID} size="icon" variant="ghost" className="absolute right-0 top-0">
-                    <X className="h-4 w-4" />
+                <Button onClick={clearBussinessID} size="icon" variant="default" className="absolute w-20 bg-tertiary-40 hover:bg-tertiary-70 p-0 max-h-10 right-0 top-0">
+                    Volver
                 </Button>
 
                 <div className="space-y-4">
                     <h2 className="text-2xl font-bold">{business?.name}</h2>
 
                     <div className="space-y-4">
-                        <h3 className="text-lg font-semibold text-primary-50">Canchas disponibles</h3>
+                        <div>
+                            <h3 className="text-lg font-semibold text-primary-50">Canchas disponibles</h3>
+                            <p className="text-xs">Seleccione la cancha que desea</p>
+                        </div>
+
                         <div className="flex flex-row overflow-x-scroll h-56 gap-4 py-2">
                             {business?.canchas.map((cancha) => (
                                 <FieldCard
@@ -135,7 +139,7 @@ const BussinessInfo = ({ id }: { id: string }) => {
                                         <TimeSlot
                                             key={hour}
                                             time={hour}
-                                            isSelected={selectedHours?  selectedHours.includes(hour): false}
+                                            isSelected={selectedHours ? selectedHours.includes(hour) : false}
                                             onClick={() => handleHourToggle(hour)}
                                         />
                                     ))}
