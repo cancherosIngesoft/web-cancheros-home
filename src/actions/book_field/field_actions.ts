@@ -159,7 +159,7 @@ export async function getAvailableHour(
   id_field: string,
   date: Date
 ): Promise<Schedules> {
-  return {hours:["18:00", "19:00", "20:00", "21:00", "22:00", "23:00"]}
+  // return {hours:["18:00", "19:00", "20:00", "21:00", "22:00", "23:00"]}
   try {
     const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/field/?field_id=${id_field}?date=${date}`,
       {

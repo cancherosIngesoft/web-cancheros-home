@@ -9,7 +9,7 @@ import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious
 import { ImageOff, Eye, Users, DollarSign, Info } from "lucide-react"
 import { ImageViewer } from "./ImageViewer"
 import Image from "next/image"
-import FieldIcon from "../icon/fieldIcon"
+import FieldIcon from "../icon/FieldIcon"
 
 interface FieldCardProps {
     field: Cancha
