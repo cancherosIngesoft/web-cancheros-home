@@ -43,3 +43,19 @@ export type TGlobalStoreData = IGlobalState & {
   ) => void;
   clearStore: (slice: keyof IGlobalState) => void;
 };
+
+
+export interface BussinessState {
+  bussinessID: string | null; 
+  // Puedes agregar más slices aquí. una slice es una parte del store.
+  [key: string]: any; // Allow dynamic properties
+}
+export type BussinessData = BussinessState & {
+  updateBussinessStore: (
+    slice: keyof BussinessState,
+    payload: Partial<BussinessState[keyof BussinessState]>
+  ) => void;
+  clearBussinessStore: (slice: keyof BussinessState) => void;
+  changeBussinessID: (bussinessID: string) => void;
+  clearBussinessID: () => void;
+};
