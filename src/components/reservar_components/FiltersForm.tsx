@@ -18,6 +18,7 @@ import { useForm } from "react-hook-form"
 import { type bussinessInfo, getBussinessFilters } from "@/actions/book_field/field_actions"
 import { useToast } from "@/hooks/use-toast"
 import { AnimatePresence, motion } from "framer-motion"
+import { localidades } from "@/lib/localidades"
 
 const formSchema = z
   .object({
@@ -122,26 +123,12 @@ export function FiltersForm({ onSearchResults }: SearchFormProps) {
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>
-                          <SelectItem value="usaquen">Usaquén</SelectItem>
-                          <SelectItem value="chapinero">Chapinero</SelectItem>
-                          <SelectItem value="santafe">Santa Fe</SelectItem>
-                          <SelectItem value="sancristobal">San Cristóbal</SelectItem>
-                          <SelectItem value="usme">Usme</SelectItem>
-                          <SelectItem value="tunjuelito">Tunjuelito</SelectItem>
-                          <SelectItem value="bosa">Bosa</SelectItem>
-                          <SelectItem value="kennedy">Kennedy</SelectItem>
-                          <SelectItem value="fontibon">Fontibón</SelectItem>
-                          <SelectItem value="engativa">Engativá</SelectItem>
-                          <SelectItem value="suba">Suba</SelectItem>
-                          <SelectItem value="barriosunidos">Barrios Unidos</SelectItem>
-                          <SelectItem value="teusaquillo">Teusaquillo</SelectItem>
-                          <SelectItem value="martires">Los Mártires</SelectItem>
-                          <SelectItem value="antonionarino">Antonio Nariño</SelectItem>
-                          <SelectItem value="puente">Puente Aranda</SelectItem>
-                          <SelectItem value="candelaria">La Candelaria</SelectItem>
-                          <SelectItem value="rafaeluribe">Rafael Uribe Uribe</SelectItem>
-                          <SelectItem value="ciudadbolivar">Ciudad Bolívar</SelectItem>
-                          <SelectItem value="sumapaz">Sumapaz</SelectItem>
+                          {localidades.map((localidad) => (
+                            <SelectItem className={`hover:bg-primary-90 hover:cursor-pointer ${field.value === localidad.value ? "bg-primary-90":""} `} key={localidad.label} value={localidad.value}>
+                              {localidad.label}
+                            </SelectItem>
+                          ))}
+                          
                         </SelectContent>
                       </Select>
                       <FormMessage />
@@ -165,9 +152,9 @@ export function FiltersForm({ onSearchResults }: SearchFormProps) {
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        <SelectItem value="5">Fútbol 5</SelectItem>
-                        <SelectItem value="7">Fútbol 7</SelectItem>
-                        <SelectItem value="11">Fútbol 11</SelectItem>
+                        <SelectItem className={`hover:bg-primary-90 hover:cursor-pointer ${field.value === "5" ? "bg-primary-90":""} `}   value="5">Fútbol 5</SelectItem>
+                        <SelectItem className={`hover:bg-primary-90 hover:cursor-pointer ${field.value === "7" ? "bg-primary-90":""} `}   value="7">Fútbol 7</SelectItem>
+                        <SelectItem className={`hover:bg-primary-90 hover:cursor-pointer ${field.value === "11" ? "bg-primary-90":""} `}   value="11">Fútbol 11</SelectItem>
                       </SelectContent>
                     </Select>
                     <FormMessage />

@@ -1,0 +1,23 @@
+export const localidades = [
+    { value: "usaquen", label: "Usaquén" },
+    { value: "chapinero", label: "Chapinero" },
+    { value: "santafe", label: "Santa Fe" },
+    { value: "sancristobal", label: "San Cristóbal" },
+    { value: "usme", label: "Usme" },
+    { value: "tunjuelito", label: "Tunjuelito" },
+    { value: "bosa", label: "Bosa" },
+    { value: "kennedy", label: "Kennedy" },
+    { value: "fontibon", label: "Fontibón" },
+    { value: "engativa", label: "Engativá" },
+    { value: "suba", label: "Suba" },
+    { value: "barriosunidos", label: "Barrios Unidos" },
+    { value: "teusaquillo", label: "Teusaquillo" },
+    { value: "martires", label: "Los Mártires" },
+    { value: "antonionarino", label: "Antonio Nariño" },
+    { value: "puente", label: "Puente Aranda" },
+    { value: "candelaria", label: "La Candelaria" },
+    { value: "rafaeluribe", label: "Rafael Uribe Uribe" },
+    { value: "ciudadbolivar", label: "Ciudad Bolívar" },
+    { value: "sumapaz", label: "Sumapaz" },
+  ];
+  
