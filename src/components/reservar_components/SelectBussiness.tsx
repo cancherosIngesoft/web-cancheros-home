@@ -17,9 +17,10 @@ const SelectBusiness = ({ initialBusinesses }: { initialBusinesses: bussinessInf
     return (
 
 
-        <Card className="p-4 flex flex-row gap-8 bg-background w-full">
-            <div className="w-2/5">
+        <Card className="p-4 flex flex-row gap-8 bg-background w-full relative">
+            <div className="w-2/5 z-1">
                 <CustomMap
+                
                     center={{ lat: 4.60971, lng: -74.08175 }}
                     markers={businesses.map((item) => ({
                         id: item.id,
