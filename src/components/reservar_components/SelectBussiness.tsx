@@ -4,7 +4,7 @@ import { useState } from "react"
 import { Card } from "@/components/ui/card"
 
 import CustomMap from "@/components/georeference/map"
-import { bussinessInfo } from "@/actions/book_field/field_actions"
+import { bussinessInfo } from "@/actions/book_field/booking_actions"
 import { FiltersForm } from "./FiltersForm"
 import { useBussinessStore } from "@/store"
 import BussinessInfo from "./BussinessInfo"
