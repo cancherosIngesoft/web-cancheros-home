@@ -2,6 +2,8 @@
 
 import { Button } from "@/components/ui/button"
 import { Shield, X } from "lucide-react"
+import { useState } from "react"
+import { CreateClubModal } from "./CreateClubModal"
 
 interface Club {
   name: string
@@ -21,11 +23,13 @@ export function PanelClub({ isOpen, onClose, navbarWidth }: ClubsPanelProps) {
     { name: "EPIS FC", players: 22 },
     { name: "EPIS FC", players: 22 },
   ]
+  const [isCreateClubOpen, setIsCreateClubOpen] = useState(false)
 
   return (
+    <>
     <div
-      style={{ left: `${navbarWidth}px`,zIndex: 100 }}
-      className={`fixed top-0 h-full w-[20vw] z-4 bg-white shadow-lg transform transition-all duration-300 ease-in-out ${
+      style={{ left: `${navbarWidth}px`}}
+      className={`fixed top-0 h-full w-[25vw] z-10 bg-surface shadow-lg transform transition-all duration-300 ease-in-out ${
         isOpen ? "translate-x-0 opacity-100 " : "-translate-x-[40vw] opacity-0  "
       } `}
     >
@@ -40,7 +44,7 @@ export function PanelClub({ isOpen, onClose, navbarWidth }: ClubsPanelProps) {
           </Button>
         </div>
 
-        <Button variant="outline" className="flex items-center gap-2 mb-6 w-full border-2">
+        <Button variant="outline" className="flex items-center gap-2 mb-6 w-full border-2" onClick={()=>setIsCreateClubOpen(true)} >
           <Shield className="w-5 h-5" />
           <span>Crear Equipo</span>
         </Button>
@@ -72,6 +76,13 @@ export function PanelClub({ isOpen, onClose, navbarWidth }: ClubsPanelProps) {
         </div>
       </div>
     </div>
+    <CreateClubModal
+        isOpen={isCreateClubOpen}
+        onClose={() => setIsCreateClubOpen(false)}
+        
+      />
+    </>
+    
   )
 }
 
