@@ -1,4 +1,4 @@
-import { getBussiness } from "@/actions/book_field/field_actions";
+import { getBussiness } from "@/actions/book_field/booking_actions";
 import Loading from "@/app/(bookerFlow)/reservar_cancha/loading";
 import SelectBussiness from "@/components/reservar_components/SelectBussiness";
 import { Suspense } from "react";

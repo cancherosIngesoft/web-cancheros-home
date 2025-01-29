@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import type { Cancha } from "@/actions/book_field/field_actions"
+import type { Cancha } from "@/actions/book_field/booking_actions"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
