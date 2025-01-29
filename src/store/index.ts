@@ -1,6 +1,6 @@
 import { create } from "zustand";
 import { devtools } from "zustand/middleware";
-import { BussinessState, IGlobalState } from "./types";
+import { BussinessState, IGlobalState, ReservationData, ReservationState } from "./types";
 import { TGlobalStoreData,  BussinessData } from "./types";
 import { de } from "date-fns/locale";
 export { useShallow } from "zustand/react/shallow";
@@ -106,6 +106,48 @@ export const useBussinessStore = create<BussinessData>()(
     }),
     {
       name: "BussinessStore", // Nombre que aparecerá en DevTools
+      enabled: process.env.NODE_ENV === "development", // Solo activo en desarrollo
+    }
+  )
+)
+
+
+const initialStateReservationInfo:ReservationState={
+  reservationInfo:{
+    field: null,
+    date: null,
+    hours: null,
+    inTeam: false,
+    teamId: ""
+  }
+  
+
+}
+export const useReservationStore = create<ReservationData>()(
+  devtools(
+    (set) => ({
+      ...initialStateReservationInfo,
+      updateReservationInfoStore: (slice, payload) => {
+        set(
+          (state) => ({
+            [slice]: { ...state[slice], ...payload },
+          }),
+          false,
+          "UPDATE_STORE" // Acción identificable en DevTools
+        );
+      },
+      clearReservationInfoStore: (slice) => {
+        set(
+          (state) => ({
+            [slice]: initialStateReservationInfo[slice],
+          }),
+          false,
+          "CLEAR_STORE" // Acción identificable en DevTools
+        );
+      },
+    }),
+    {
+      name: "ReservationInfoStore", // Nombre que aparecerá en DevTools
       enabled: process.env.NODE_ENV === "development", // Solo activo en desarrollo
     }
   )

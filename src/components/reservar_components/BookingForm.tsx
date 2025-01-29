@@ -15,6 +15,7 @@ import { TimeSlot } from "./TimeSlot"
 
 import { z } from "zod"
 import TeamIcon from "../icon/TeamIcon"
+import {useReservationStore } from "@/store"
 
 const dateSchema = z.date().refine(
     (value) => {
@@ -75,15 +76,27 @@ const BookingForm: React.FC<BookingFormProps> = ({ selectedField }) => {
             setSelectedDate({ date: date, valid: true })
         }
     }
-
+    const updateReservationInfo = useReservationStore((state) => state.updateReservationInfoStore)
+    const cleanReservationInfo = useReservationStore((state) => state.clearReservationInfoStore)
     const onSubmit = () => {
-        console.log("Reservar", {
-            selectedField,
-            selectedDate,
-            selectedHours,
-            bookingModality,
-            selectedTeam,
-        })
+        cleanReservationInfo("reservationInfo")
+        const formData={
+            field:selectedField,
+            date:selectedDate?.date,
+            hours:selectedHours,
+            inTeam:bookingModality==="team",
+            teamId:selectedTeam?.id
+        }
+        console.log("formData",formData)
+        updateReservationInfo("reservationInfo",formData)
+
+        // console.log("Reservar", {
+        //     selectedField,
+        //     selectedDate?.date,
+        //     selectedHours,
+        //     bookingModality==="team" ?? false,
+        //     selectedTeam.id,
+        // })
     }
 
     return (
@@ -154,7 +167,7 @@ const BookingForm: React.FC<BookingFormProps> = ({ selectedField }) => {
                                     <SelectValue placeholder="Selecciona la modalidad de reserva" />
                                 </SelectTrigger>
                                 <SelectContent>
-                                    <SelectItem value="individual">Individual</SelectItem>
+                                    <SelectItem onClick={()=>setSelectedTeam(null)} value="individual">Individual</SelectItem>
                                     <SelectItem value="team">Por equipo</SelectItem>
                                 </SelectContent>
                             </Select>
