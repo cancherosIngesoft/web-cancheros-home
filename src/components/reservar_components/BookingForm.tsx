@@ -9,7 +9,7 @@ import { Calendar } from "@/components/ui/calendar"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 
-import { getAvailableHour, getTeamsUser } from "@/actions/book_field/booking_actions"
+import { getAvailableHour, getTeamsUser, SchedulesToBook } from "@/actions/book_field/booking_actions"
 import { ErrorGetInfo } from "./ErrorGetInfo"
 import { TimeSlot } from "./TimeSlot"
 
@@ -35,7 +35,7 @@ interface BookingFormProps {
 
 const BookingForm: React.FC<BookingFormProps> = ({ selectedField }) => {
     const [selectedDate, setSelectedDate] = useState<{ date: Date | undefined; valid: boolean }>()
-    const [selectedHours, setSelectedHours] = useState<string[] | null>([])
+    const [selectedHours, setSelectedHours] = useState<SchedulesToBook[] | null>([])
     const [errorDate, setErrorDate] = useState<string>("")
     const [bookingModality, setBookingModality] = useState<"individual" | "team" | "">("")
     const [selectedTeam, setSelectedTeam] = useState<{nameTeam:string,id:string} | null>(null)
@@ -62,8 +62,8 @@ const BookingForm: React.FC<BookingFormProps> = ({ selectedField }) => {
         enabled: bookingModality === "team",
     })
 
-    const handleHourToggle = (hour: string) => {
-        setSelectedHours((prev) => (prev?.includes(hour) ? prev.filter((h) => h !== hour) : [...(prev || []), hour]))
+    const handleHourToggle = (franja: SchedulesToBook) => {
+        setSelectedHours((prev) => (prev?.includes(franja) ? prev.filter((h) => h !== franja) : [...(prev || []), franja]))
     }
 
     const handleDateChange = (date: Date | undefined) => {
@@ -87,7 +87,7 @@ const BookingForm: React.FC<BookingFormProps> = ({ selectedField }) => {
     }
 
     return (
-        <div className="space-y-4">
+        <div className="space-y-4 mt-4">
             {selectedField && (
                 <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="space-y-4 w-1/2">
                     <h3 className="text-lg font-semibold text-primary-50">Seleccionar fecha</h3>
@@ -130,12 +130,12 @@ const BookingForm: React.FC<BookingFormProps> = ({ selectedField }) => {
                         <ErrorGetInfo retry={() => refetchHours()} />
                     ) : (
                         <div className="flex flex-row flex-wrap gap-2">
-                            {availableHours?.hours.map((hour) => (
+                            {availableHours?.map((franja) => (
                                 <TimeSlot
-                                    key={hour}
-                                    time={hour}
-                                    isSelected={selectedHours ? selectedHours.includes(hour) : false}
-                                    onClick={() => handleHourToggle(hour)}
+                                    key={franja.hora_inicio}
+                                    time={franja}
+                                    isSelected={selectedHours ? selectedHours.includes(franja) : false}
+                                    onClick={() => handleHourToggle(franja)}
                                 />
                             ))}
                         </div>
@@ -217,7 +217,7 @@ const BookingForm: React.FC<BookingFormProps> = ({ selectedField }) => {
                         <div className="flex flex-row items-center gap-2">
                             <Clock className="h-6 w-6 text-tertiary-40" />
                             <p className="text-md font-bold">Horario:</p>
-                            <p className="text-sm ">{selectedHours.join(", ")}</p>
+                            <p className="text-sm ">{selectedHours.map((item) => item.hora_inicio+"-"+item.hora_fin).join(", ")}</p>
                         </div>
                     </div>
                     <div className="flex flex-row items-center gap-2">
@@ -227,12 +227,20 @@ const BookingForm: React.FC<BookingFormProps> = ({ selectedField }) => {
 
                     </div>
                     <hr className="w-full border-gray-300 border-[1.5px] " />
+                    <div className="flex flex-row-reverse items-center">
+                        
+                        <p className="font-bold text-lg text-tertiary-30">
+                            Total: <span className="text-black ">{(selectedField.price * selectedHours.length)}</span>
+                        </p>
+                    </div>
                     <div className="flex flex-row items-center">
                         <CircleDollarSign className="h-6 w-6 text-primary-70" />
                         <p className="font-bold text-xl text-primary-70">
-                            Total: <span className="text-black ">{selectedField.price * selectedHours.length}</span>
+                            Total a pagar para reservar: <span className="text-black ">{(selectedField.price * selectedHours.length)/2}</span>
                         </p>
                     </div>
+                    <p className="text-xs text-gray-500">Para poder acceder a la reserva se tiene que pagar la mitad del valor total</p>
+
                     <Button className="w-full font-bold" size="lg" onClick={onSubmit}>
                         Reservar
                     </Button>

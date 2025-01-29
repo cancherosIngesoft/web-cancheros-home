@@ -151,15 +151,16 @@ export async function getBussinessByID(
   }
 
 }
-interface Schedules{
-  hours:string[]
+export interface SchedulesToBook {
+  hora_inicio:string
+  hora_fin:string
 }
 
 export async function getAvailableHour(
   id_field: string,
   date: Date
-): Promise<Schedules> {
-  return {hours:["18:00", "19:00", "20:00", "21:00", "22:00", "23:00"]}
+): Promise<SchedulesToBook[]> {
+  return [{hora_inicio:"10:00",hora_fin:"11:00"},{hora_inicio:"11:00",hora_fin:"12:00"}]
   try {
     const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/field/?field_id=${id_field}?date=${date}`,
       {
