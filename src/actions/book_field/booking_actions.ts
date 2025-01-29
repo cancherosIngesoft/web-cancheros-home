@@ -159,9 +159,43 @@ export async function getAvailableHour(
   id_field: string,
   date: Date
 ): Promise<Schedules> {
-  // return {hours:["18:00", "19:00", "20:00", "21:00", "22:00", "23:00"]}
+  return {hours:["18:00", "19:00", "20:00", "21:00", "22:00", "23:00"]}
   try {
     const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/field/?field_id=${id_field}?date=${date}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        }
+      }
+    )
+    if (!res.ok) {
+      throw new Error("Error al obtener el los horarios")
+    }
+    return await res.json()
+  } catch (e) {
+    if (e instanceof Error) {
+      console.error("Error en get schedules:", e.message)
+      throw new Error(e.message)
+    } else {
+      throw new Error("Error desconocido")
+    }
+
+  }
+
+}
+
+interface teamReturn{
+  id:string
+  name:string
+}
+export async function getTeamsUser(
+  id_user: string
+ 
+): Promise<teamReturn[]> {
+  return[{id:"1",name:"Equipo 1"},{id:"2",name:"Equipo 2"}]
+  try {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/field`,
       {
         method: "GET",
         headers: {
