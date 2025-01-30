@@ -6,6 +6,8 @@ const client = new MercadoPagoConfig({
 });
 const preference = new Preference(client);
 
+const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
+
 export async function POST(request: Request) {
   try {
     const body = await request.json();
@@ -50,9 +52,9 @@ export async function POST(request: Request) {
         },
         external_reference: `${Date.now()}`,
         back_urls: {
-          success: `${process.env.NEXT_PUBLIC_BASE_URL}/payment/success`,
-          failure: `${process.env.NEXT_PUBLIC_BASE_URL}/payment/failure`,
-          pending: `${process.env.NEXT_PUBLIC_BASE_URL}/payment/pending`,
+          success: `${baseUrl}/payment/success`,
+          failure: `${baseUrl}/payment/failure`,
+          pending: `${baseUrl}/payment/pending`,
         },
         auto_return: "approved",
         payment_methods: {

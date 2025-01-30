@@ -16,11 +16,12 @@ interface PaymentInfo {
   site_id: string;
 }
 
-export default function PendingPage() {
+export default function SuccessPage() {
   const searchParams = useSearchParams();
   const [paymentInfo, setPaymentInfo] = useState<PaymentInfo | null>(null);
 
   useEffect(() => {
+    // Extraer todos los queryParams relevantes
     const paymentData = {
       collection_id: searchParams.get("collection_id"),
       collection_status: searchParams.get("collection_status"),
@@ -34,6 +35,27 @@ export default function PendingPage() {
     };
 
     setPaymentInfo(paymentData as PaymentInfo);
+    /*
+    // Verificar estado del pago en tu backend
+    const verifyPayment = async () => {
+      try {
+        const response = await fetch(`/api/payment_gateway/verify`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(paymentData),
+        });
+        const data = await response.json();
+        console.log("Payment verified:", data);
+      } catch (error) {
+        console.error("Error verifying payment:", error);
+      }
+    };
+
+
+    verifyPayment();
+    */
   }, [searchParams]);
 
   return (
@@ -42,7 +64,7 @@ export default function PendingPage() {
         <div className="text-center">
           <div className="mb-4">
             <svg
-              className="mx-auto h-12 w-12 text-yellow-500"
+              className="mx-auto h-12 w-12 text-green-500"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -51,13 +73,13 @@ export default function PendingPage() {
                 strokeLinecap="round"
                 strokeLinejoin="round"
                 strokeWidth={2}
-                d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                d="M5 13l4 4L19 7"
               />
             </svg>
           </div>
 
-          <h1 className="text-2xl font-bold text-yellow-600 mb-4">
-            Pago en Proceso
+          <h1 className="text-2xl font-bold text-green-600 mb-4">
+            ¡Pago Exitoso!
           </h1>
 
           {paymentInfo && (
@@ -71,11 +93,7 @@ export default function PendingPage() {
 
           <div className="mt-6 space-y-4">
             <p className="text-gray-600">
-              Tu pago está siendo procesado. Te notificaremos cuando se
-              complete.
-            </p>
-            <p className="text-sm text-gray-500">
-              Este proceso puede tomar unos minutos.
+              Tu reserva ha sido confirmada exitosamente.
             </p>
 
             <div className="flex flex-col space-y-2">
@@ -85,18 +103,12 @@ export default function PendingPage() {
               >
                 Ver Mis Reservas
               </Link>
-
-              <button
-                onClick={() => window.location.reload()}
-                className="inline-flex justify-center items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
-              >
-                Actualizar Estado
-              </button>
             </div>
           </div>
 
           <div className="mt-6">
             <p className="text-xs text-gray-500">
+              Recibirás un correo electrónico con los detalles de tu reserva.
               Para cualquier consulta, contáctanos vía{" "}
               <Link
                 href="https://api.whatsapp.com/send/?phone=%2B573023242843"
