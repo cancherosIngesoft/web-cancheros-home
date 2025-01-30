@@ -1,7 +1,12 @@
 import { create } from "zustand";
 import { devtools } from "zustand/middleware";
-import { BussinessState, IGlobalState, ReservationData, ReservationState } from "./types";
-import { TGlobalStoreData,  BussinessData } from "./types";
+import {
+  BussinessState,
+  IGlobalState,
+  ReservationData,
+  ReservationState,
+} from "./types";
+import { TGlobalStoreData, BussinessData } from "./types";
 import { de } from "date-fns/locale";
 export { useShallow } from "zustand/react/shallow";
 
@@ -12,6 +17,7 @@ const initialState: IGlobalState = {
     token: null,
     email: null,
     name: null,
+    id: null,
   },
   user: {
     name: null,
@@ -60,9 +66,9 @@ export const useGlobalStore = create<TGlobalStoreData>()(
   )
 );
 
-const initialStateBussinessID:BussinessState={
-  bussinessID: null
-}
+const initialStateBussinessID: BussinessState = {
+  bussinessID: null,
+};
 export const useBussinessStore = create<BussinessData>()(
   devtools(
     (set) => ({
@@ -109,20 +115,17 @@ export const useBussinessStore = create<BussinessData>()(
       enabled: process.env.NODE_ENV === "development", // Solo activo en desarrollo
     }
   )
-)
+);
 
-
-const initialStateReservationInfo:ReservationState={
-  reservationInfo:{
+const initialStateReservationInfo: ReservationState = {
+  reservationInfo: {
     field: null,
     date: null,
     hours: null,
     inTeam: false,
-    teamId: ""
-  }
-  
-
-}
+    teamId: "",
+  },
+};
 export const useReservationStore = create<ReservationData>()(
   devtools(
     (set) => ({
@@ -151,4 +154,4 @@ export const useReservationStore = create<ReservationData>()(
       enabled: process.env.NODE_ENV === "development", // Solo activo en desarrollo
     }
   )
-)
+);

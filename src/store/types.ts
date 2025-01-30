@@ -6,6 +6,7 @@ export interface IAuthState {
   token: string | JWT | null;
   email: string | null;
   name: string | null;
+  id: string | null;
   // Puedes agregar más propiedades aquí
 }
 
@@ -45,7 +46,6 @@ export type TGlobalStoreData = IGlobalState & {
   clearStore: (slice: keyof IGlobalState) => void;
 };
 
-
 export interface BussinessState {
   bussinessID: string | null;
   // Puedes agregar más slices aquí. una slice es una parte del store.
@@ -59,18 +59,16 @@ export type BussinessData = BussinessState & {
   clearBussinessStore: (slice: keyof BussinessState) => void;
   changeBussinessID: (bussinessID: string) => void;
   clearBussinessID: () => void;
-}
+};
 
 export interface ReservationState {
   reservationInfo: {
-    field: { id_field: string, price: number } | null;
+    field: { id_field: string; price: number } | null;
     date: Date | null;
     hours: SchedulesToBook[] | null;
-    inTeam: boolean
-    teamId: string
-  }
-
-
+    inTeam: boolean;
+    teamId: string;
+  };
 }
 
 export type ReservationData = ReservationState & {
@@ -79,5 +77,4 @@ export type ReservationData = ReservationState & {
     payload: Partial<ReservationState[keyof ReservationState]>
   ) => void;
   clearReservationInfoStore: (slice: keyof ReservationState) => void;
-
-}
+};
