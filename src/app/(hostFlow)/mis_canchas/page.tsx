@@ -1,7 +1,9 @@
 "use client";
 import { IField, getFieldsById } from "@/actions/registro_host/field";
+import { GenericCard } from "@/components/field/genericCard";
 import { AddFieldModal } from "@/components/forms/fields-register/addFieldModal";
 import { Button } from "@/components/ui/button";
+import { Carousel, CarouselItem } from "@/components/ui/carousel";
 import { useGlobalStore, useShallow } from "@/store";
 import Image from "next/image";
 import { useEffect, useState } from "react";
@@ -21,7 +23,7 @@ export default function pageMisCanchas() {
   }, [auth.id]);
   return (
     <article className="flex flex-col items-center justify-center h-screen w-[90vw]   ml-[5vw] self-center">
-      <section className="flex flex-col items-center gap-4 mb-20 w-[90vw] align-center pl-[5vw]">
+      <section className="flex flex-col items-center gap-4 mb-20 max-w-[90vw] align-center pl-[5vw]">
         <div className="flex flex-row items-center gap-4 self-start">
           <Image
             src="/icons/canchaGris.svg"
@@ -44,11 +46,18 @@ export default function pageMisCanchas() {
       <AddFieldModal open={isModalOpen} onOpenChange={setIsModalOpen} />
       <article className="flex flex-col items-center gap-4 mt-10">
         {fields.length > 0 ? (
-          fields.map((field) => (
-            <div key={field.id_cancha}>
-              <h2>{field.nombre}</h2>
+          <Carousel className="w-full">
+            <div className="flex gap-4 overflow-x-auto p-2 border-2 border-gray-100 rounded-lg max-w-[80vw]">
+              {fields.map((field) => (
+                <CarouselItem
+                  key={field.id_cancha}
+                  className="flex-none w-[300px]"
+                >
+                  <GenericCard field={field} />
+                </CarouselItem>
+              ))}
             </div>
-          ))
+          </Carousel>
         ) : (
           <>
             <Image
