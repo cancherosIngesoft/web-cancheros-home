@@ -56,23 +56,25 @@ export const LateralNavBar = () => {
             </Link>
           )}
         </section>
-        <div className="flex-grow flex flex-col items-center gap-4">
-          {authUser?.userRole === "aficionado" && (
-            <>
-              {navItems.map((item, index) => (
-                <Link key={index} href={item.route}>
-                  {item.icon}
-                </Link>
-              ))}
-              <div
-                className="w-full h-10 flex flex-row justify-center cursor-pointer"
-                onClick={() => setIsOpenTeam(!isOpenTeam)}
-              >
-                <TeamShield className="h-full w-full text-white stroke-4" />
-              </div>
-            </>
-          )}
-        </div>
+
+        {authUser?.userRole === "aficionado" && (
+
+          <div className="flex-grow flex flex-col items-center gap-4">
+            {navItems.map((item, index) => (
+              <Link key={index} href={item.route}>
+                {item.icon}
+              </Link>
+            ))}
+            <div
+              className="w-full h-10 flex flex-row justify-center cursor-pointer"
+              onClick={() => setIsOpenTeam(!isOpenTeam)}
+            >
+              <TeamShield className=" text-white stroke-4" />
+            </div>
+          </div>
+
+        )}
+
 
         <div className="flex flex-col items-center gap-4 mt-auto">
           <Avatar>
@@ -88,9 +90,9 @@ export const LateralNavBar = () => {
             <LogOut className="h-6 w-6" />
           </Button>
         </div>
-      </div>
+      </div >
       <PanelClub isOpen={isOpenTeam} onClose={() => setIsOpenTeam(false)} navbarWidth={navbarWidth} />
     </>
-  ) 
+  )
 }
 

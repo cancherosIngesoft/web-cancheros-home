@@ -10,6 +10,7 @@ import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { useToast } from "@/hooks/use-toast"
 import { createClub } from "@/actions/club_management/club"
+import { useSession } from "next-auth/react"
 
 
 interface CreateClubModalProps {
@@ -20,7 +21,11 @@ interface CreateClubModalProps {
 
 
 export function CreateClubModal({ isOpen, onClose }: CreateClubModalProps) {
-const id_captain = "1" //debe ser remplazado por el autentico id del usuario
+  
+  const { data: session, status } = useSession()
+  console.log(session)
+
+  const id_captain = session?.user.id || "" //debe ser remplazado por el autentico id del usuario
   const [name, setName] = useState("")
   const [description, setDescription] = useState("")
   const [logo, setLogo] = useState<File | null>(null)
