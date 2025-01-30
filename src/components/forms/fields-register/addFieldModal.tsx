@@ -20,6 +20,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useState } from "react";
+import { useShallow } from "@/store";
 import {
   Carousel,
   CarouselContent,
@@ -55,7 +56,7 @@ export function AddFieldModal({ open, onOpenChange }: AddFieldModalProps) {
   const [displayPrice, setDisplayPrice] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const { field } = useGlobalStore();
-
+  const auth = useGlobalStore(useShallow((state) => state.auth));
   const {
     register,
     handleSubmit,
@@ -168,7 +169,18 @@ export function AddFieldModal({ open, onOpenChange }: AddFieldModalProps) {
 
       console.log("la store es: ", useGlobalStore.getState().field);
 
-      await registerField(useGlobalStore.getState().field);
+      if (auth.id) {
+        await registerField(
+          useGlobalStore.getState().field,
+          auth.id.toString()
+        );
+      } else {
+        toast({
+          title: "Error",
+          description: "No se pudo obtener el ID del usuario",
+          variant: "destructive",
+        });
+      }
 
       toast({
         title: "Éxito",
