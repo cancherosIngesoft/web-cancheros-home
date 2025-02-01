@@ -151,6 +151,7 @@ export async function getAvailableHour(
     { hora_inicio: "11:00", hora_fin: "12:00" },
   ];
   //CORREGIR ESTO
+  /*
   try {
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/api/field/?field_id=${id_field}?date=${date}`,
@@ -173,6 +174,7 @@ export async function getAvailableHour(
       throw new Error("Error desconocido");
     }
   }
+  */
 }
 
 interface teamReturn {
@@ -184,6 +186,7 @@ export async function getTeamsUser(id_user: string): Promise<teamReturn[]> {
     { id: "1", name: "Equipo 1" },
     { id: "2", name: "Equipo 2" },
   ];
+  /*
   try {
     const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/field`, {
       method: "GET",
@@ -203,4 +206,5 @@ export async function getTeamsUser(id_user: string): Promise<teamReturn[]> {
       throw new Error("Error desconocido");
     }
   }
+  */
 }

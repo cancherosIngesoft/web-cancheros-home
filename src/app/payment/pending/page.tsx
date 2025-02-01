@@ -1,7 +1,7 @@
 "use client";
 
 import { useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
 import Link from "next/link";
 
 interface PaymentInfo {
@@ -16,7 +16,7 @@ interface PaymentInfo {
   site_id: string;
 }
 
-export default function PendingPage() {
+function PaymentContent() {
   const searchParams = useSearchParams();
   const [paymentInfo, setPaymentInfo] = useState<PaymentInfo | null>(null);
 
@@ -111,5 +111,19 @@ export default function PendingPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function PendingPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen flex items-center justify-center">
+          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-gray-900"></div>
+        </div>
+      }
+    >
+      <PaymentContent />
+    </Suspense>
   );
 }
