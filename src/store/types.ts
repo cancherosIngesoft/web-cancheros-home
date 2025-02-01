@@ -1,3 +1,4 @@
+import { SchedulesToBook } from "@/actions/book_field/booking_actions";
 import { JWT } from "next-auth/jwt";
 
 export interface IAuthState {
@@ -5,6 +6,7 @@ export interface IAuthState {
   token: string | JWT | null;
   email: string | null;
   name: string | null;
+  id: string | null;
   // Puedes agregar más propiedades aquí
 }
 
@@ -44,9 +46,8 @@ export type TGlobalStoreData = IGlobalState & {
   clearStore: (slice: keyof IGlobalState) => void;
 };
 
-
 export interface BussinessState {
-  bussinessID: string | null; 
+  bussinessID: string | null;
   // Puedes agregar más slices aquí. una slice es una parte del store.
   [key: string]: any; // Allow dynamic properties
 }
@@ -58,4 +59,24 @@ export type BussinessData = BussinessState & {
   clearBussinessStore: (slice: keyof BussinessState) => void;
   changeBussinessID: (bussinessID: string) => void;
   clearBussinessID: () => void;
+};
+
+export interface ReservationState {
+  reservationInfo: {
+    field: { id_field: string; price: number } | null;
+    date: Date | null;
+    hours: SchedulesToBook[] | null;
+    inTeam: boolean;
+    teamId: string;
+    idBussiness: string;
+    price: number;
+  };
+}
+
+export type ReservationData = ReservationState & {
+  updateReservationInfoStore: (
+    slice: keyof ReservationState,
+    payload: Partial<ReservationState[keyof ReservationState]>
+  ) => void;
+  clearReservationInfoStore: (slice: keyof ReservationState) => void;
 };

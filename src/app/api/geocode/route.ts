@@ -6,7 +6,6 @@ export async function POST(request: Request) {
 
     // Validación de dirección
     if (!address) {
-      console.log("No address provided");
       return NextResponse.json(
         { error: "La dirección es requerida" },
         { status: 400 }
@@ -17,14 +16,14 @@ export async function POST(request: Request) {
 
     // Validación de API key
     if (!API_KEY) {
-      console.log("No API key configured");
+      console.error("No API key configured");
       return NextResponse.json(
         { error: "Error de configuración del servidor" },
         { status: 500 }
       );
     }
 
-    console.log("Fetching geocode for address:", address);
+    console.error("Fetching geocode for address:", address);
 
     const response = await fetch(
       `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(
@@ -33,7 +32,6 @@ export async function POST(request: Request) {
     );
 
     const data = await response.json();
-    console.log("Google Maps API response:", data);
 
     if (data.status === "OK" && data.results && data.results[0]) {
       const { lat, lng } = data.results[0].geometry.location;
