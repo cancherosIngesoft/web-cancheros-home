@@ -5,7 +5,6 @@ import { authOptions } from "@/lib/utils";
 export async function middleware(req: NextRequest) {
   const token = await getToken({ req, secret: authOptions.secret });
   const pathname = req.nextUrl.pathname;
-  console.log("token middleware", token);
 
   // Permitir acceso a rutas de autenticación
   if (
@@ -21,7 +20,6 @@ export async function middleware(req: NextRequest) {
   }
 
   const userRole = token.role as string;
-  console.log("userRole middleware", userRole);
   // Definir rutas específicas para cada rol
   const roleRoutes: Record<string, string | string[]> = {
     aficionado: "/reservar_cancha",

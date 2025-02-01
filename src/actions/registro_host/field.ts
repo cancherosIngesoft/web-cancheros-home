@@ -39,12 +39,12 @@ const formatt_data = (data: IFieldState) => {
   return formData;
 };
 
-export async function registerField(fieldData: IFieldState) {
+export async function registerField(fieldData: IFieldState, id: string) {
   try {
     const formattedData = formatt_data(fieldData);
 
     const response = await fetch(
-      process.env.NEXT_PUBLIC_API_URL + "/api/register_courts/1",
+      process.env.NEXT_PUBLIC_API_URL + `/api/register_courts/${id}`,
       {
         method: "POST",
         body: formattedData,
@@ -62,3 +62,36 @@ export async function registerField(fieldData: IFieldState) {
     throw error;
   }
 }
+
+export interface IField {
+  capacidad: number;
+  descripcion: string;
+  establecimiento: {
+    altitud: number;
+    id_establecimiento: number;
+    longitud: number;
+  };
+  id_cancha: number;
+  id_establecimiento: number;
+  imagen1: string | null;
+  imagen2: string | null;
+  imagen3: string | null;
+  imagen4: string | null;
+  imagen5: string | null;
+  nombre: string;
+  precio: number;
+  tipo: string;
+}
+
+export const getFieldsById = async (id: string) => {
+  const response = await fetch(
+    process.env.NEXT_PUBLIC_API_URL + `/api/get_courts/${id}`
+  );
+
+  const responseJson = await response.json();
+  if (responseJson.error) {
+    console.error("Error al obtener la cancha:", responseJson.error);
+    return [];
+  }
+  return ((await responseJson.courts) as IField[]) || [];
+};

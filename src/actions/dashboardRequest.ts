@@ -5,7 +5,7 @@ export const mockRequests: RequestsOwners[] = [
     email: "juan@gmail.com",
     phone: "300 721 1345",
     businessName: "La futbolera",
-    address: "Calle 77b #123-A"
+    address: "Calle 77b #123-A",
   },
   {
     id: "2",
@@ -13,7 +13,7 @@ export const mockRequests: RequestsOwners[] = [
     email: "aquintas@gmail.com",
     phone: "310 721 1245",
     businessName: "La futbolera",
-    address: "Diagonal 27 A"
+    address: "Diagonal 27 A",
   },
   {
     id: "3",
@@ -21,9 +21,9 @@ export const mockRequests: RequestsOwners[] = [
     email: "bulla@gmail.com",
     phone: "300 711 1245",
     businessName: "La futbolera",
-    address: "Calle 12 #13-A"
-  }
-]
+    address: "Calle 12 #13-A",
+  },
+];
 
 export const mockRequestsRejected: RequestsOwners[] = [
   {
@@ -32,20 +32,18 @@ export const mockRequestsRejected: RequestsOwners[] = [
     email: "juan@gmail.com",
     phone: "300 721 1345",
     businessName: "La futbolera",
-    address: "Calle 77b #123-A"
+    address: "Calle 77b #123-A",
   },
-
-]
+];
 
 export interface RequestsOwners {
-  id: string
-  name: string
-  email: string
-  phone: string
-  businessName: string
-  address: string
+  id: string;
+  name: string;
+  email: string;
+  phone: string;
+  businessName: string;
+  address: string;
 }
-
 
 export interface RequestsOwners {
   id: string;
@@ -58,19 +56,21 @@ export interface RequestsOwners {
 
 export async function fetchRequestsOwnersPending(): Promise<RequestsOwners[]> {
   try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/requests?status=pending`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/api/requests?status=pending`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
 
     if (!res.ok) {
       throw new Error("Error al obtener las solicitudes");
     }
 
     const data = await res.json();
-
 
     const formattedData: RequestsOwners[] = data.map((item: any) => ({
       id: String(item.id),
@@ -94,21 +94,22 @@ export async function fetchRequestsOwnersPending(): Promise<RequestsOwners[]> {
 
 export async function fetchRequestsOwnersRejected(): Promise<RequestsOwners[]> {
   try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/requests?status=rejected`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        "mode": "no-cors"
-        
-      },
-    });
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/api/requests?status=rejected`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          mode: "no-cors",
+        },
+      }
+    );
 
     if (!res.ok) {
       throw new Error("Error al obtener las solicitudes");
     }
 
     const data = await res.json();
-
 
     const formattedData: RequestsOwners[] = data.map((item: any) => ({
       id: String(item.id),
@@ -130,10 +131,7 @@ export async function fetchRequestsOwnersRejected(): Promise<RequestsOwners[]> {
   }
 }
 
-
-
-
-import { RequestDetail } from "../types/bussinesInformation"
+import { RequestDetail } from "../types/bussinesInformation";
 
 const mockRequestDetail: RequestDetail = {
   id: "1",
@@ -144,7 +142,7 @@ const mockRequestDetail: RequestDetail = {
     name: "Juan Alberto",
     lastName: "Espitia Granados",
     email: "juan@gmail.com",
-    phone: "(+57) 300 721 1235"
+    phone: "(+57) 300 721 1235",
   },
   businessInfo: {
     name: "La futbolera",
@@ -154,29 +152,31 @@ const mockRequestDetail: RequestDetail = {
     legalDocuments: [
       {
         name: "RUT_FUTBOLERA_DIAN20103123.pdf",
-        url: "#"
-      }
-    ]
+        url: "#",
+      },
+    ],
   },
   locationInfo: {
     locality: "Suba",
     address: "Calle 77b #123-A",
     coordinates: {
       lat: 4.6097,
-      lng: -74.0817
-    }
-  }
-}
+      lng: -74.0817,
+    },
+  },
+};
 // Simulated API calls
 export async function fetchRequestDetails(id: string): Promise<RequestDetail> {
-  console.log("se pidio la informacion de la solicitud detalles", id);
   try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/requests/${id}`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/api/requests/${id}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
 
     if (!res.ok) {
       throw new Error("Error al obtener el detalle de la solicitud");
@@ -191,7 +191,7 @@ export async function fetchRequestDetails(id: string): Promise<RequestDetail> {
         documentType: data.personalInfo.tipo_doc_duenio,
         documentNumber: data.personalInfo.doc_duenio,
         birthDate: data.personalInfo.fecha_nacimiento,
-        name: data.personalInfo.nombre_duenio.split(' ')[0], // Nombre
+        name: data.personalInfo.nombre_duenio.split(" ")[0], // Nombre
         lastName: data.personalInfo.apellido_duenio, // Apellido
         email: data.personalInfo.email_duenio,
         phone: data.personalInfo.tel_duenio,
@@ -229,18 +229,20 @@ export async function fetchRequestDetails(id: string): Promise<RequestDetail> {
   }
 }
 
-
-export async function approveRequest(id: string): Promise<{ success: boolean }> {
-  console.log("se aprobo la solicitud", id)
+export async function approveRequest(
+  id: string
+): Promise<{ success: boolean }> {
   try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/requests/${id}/approve`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        
-      },
-      body: JSON.stringify({ id }),
-    });
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/api/requests/${id}/approve`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ id }),
+      }
+    );
 
     if (!res.ok) {
       throw new Error("Error al apobar la solicitud");
@@ -255,20 +257,23 @@ export async function approveRequest(id: string): Promise<{ success: boolean }> 
       throw new Error("Error desconocido");
     }
   }
-  
 }
 
-export async function rejectRequest(id: string, reason: string): Promise<{ success: boolean }> {
-  console.log("se rechazo la solicitud", id, reason)
+export async function rejectRequest(
+  id: string,
+  reason: string
+): Promise<{ success: boolean }> {
   try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/requests/${id}/reject`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        
-      },
-      body: JSON.stringify({ reason }),
-    });
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/api/requests/${id}/reject`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ reason }),
+      }
+    );
 
     if (!res.ok) {
       throw new Error("Error al rechazar la solicitud");
@@ -283,5 +288,4 @@ export async function rejectRequest(id: string, reason: string): Promise<{ succe
       throw new Error("Error desconocido");
     }
   }
-  
 }
