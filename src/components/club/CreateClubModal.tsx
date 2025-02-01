@@ -129,12 +129,12 @@ export function CreateClubModal({ isOpen, onClose }: CreateClubModalProps) {
             </div>
             <div className="w-2/3 space-y-4">
               <div>
-                <Label htmlFor="name" className="font-bold">Nombre de tu club</Label>
+                <Label htmlFor="name" className="font-bold">Nombre de tu club<span className="text-red-600">*</span></Label>
                 <Input id="name" {...register("name")} />
                 {errors.name && <p className="text-sm text-red-500 mt-1">{errors.name.message}</p>}
               </div>
               <div>
-                <Label htmlFor="description" className="font-bold">Descripción</Label>
+                <Label htmlFor="description" className="font-bold">Descripción<span className="text-red-600">*</span></Label>
                 <Textarea id="description" {...register("description")} className="min-h-[100px]" />
                 {errors.description && <p className="text-sm text-red-500 mt-1">{errors.description.message}</p>}
               </div>

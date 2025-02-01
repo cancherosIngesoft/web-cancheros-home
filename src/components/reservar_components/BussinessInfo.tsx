@@ -23,6 +23,7 @@ const BussinessInfo = ({ id }: { id: string }) => {
         data: business,
         isLoading,
         isError,
+        failureReason,
         refetch,
     } = useQuery({
         queryKey: ["business", id],
@@ -49,7 +50,7 @@ const BussinessInfo = ({ id }: { id: string }) => {
                 >
                     Volver
                 </Button>
-                {isError && <ErrorGetInfo retry={() => refetch()} />}
+                {isError && <ErrorGetInfo retry={() => refetch()} error={failureReason} />}
 
                 {business &&
                     <>
