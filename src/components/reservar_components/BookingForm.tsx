@@ -34,7 +34,7 @@ import { TimeSlot } from "./TimeSlot";
 
 import { z } from "zod";
 import TeamIcon from "../icon/TeamIcon";
-import { useReservationStore } from "@/store";
+import { useBussinessStore, useReservationStore } from "@/store";
 import PaymentModal from "../modals/PaymentModal";
 
 const dateSchema = z.date().refine(
@@ -227,7 +227,13 @@ const BookingForm: React.FC<BookingFormProps> = ({ selectedField }) => {
         <PaymentModal
           isOpen={isModalActive}
           onClose={() => setIsModalActive(false)}
-          reservaDetails={reservationInfo}
+          reservaDetails={{
+            lugar: selectedField?.name,
+            fecha: format(selectedDate?.date!, "PPP"),
+            cancha: selectedField?.name,
+            horas: selectedHours?.length,
+            total: selectedField.price * selectedHours.length,
+          }}
         ></PaymentModal>
       )}
 

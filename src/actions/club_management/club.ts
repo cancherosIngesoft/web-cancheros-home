@@ -2,7 +2,7 @@ interface ClubAttributes {
     id_captain: string;
     name: string;
     description: string;
-    logo: string; // Logo en formato base64
+    logo?: string; // Logo en formato base64
   }
   
   // Función para procesar una imagen base64 y convertirla en un Blob
@@ -38,11 +38,14 @@ interface ClubAttributes {
       formData.append("description", description);
   
       // Procesar el logo usando la función separada
-      const logoBlob = processBase64Image(logo, "logo.jpg", "image/jpeg");
-      formData.append("logo", logoBlob, "logo.jpg");
+      if (logo) {
+        const logoBlob = processBase64Image(logo, "logo.jpg", "image/jpeg");
+        formData.append("logo", logoBlob, "logo.jpg");
+      }
+      
   
       
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/club/${id_captain}`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/create_club/${id_captain}`, {
         method: "POST",
         body: formData, 
       });

@@ -124,6 +124,8 @@ const initialStateReservationInfo: ReservationState = {
     hours: null,
     inTeam: false,
     teamId: "",
+    idBussiness: "",
+    price: 0,
   },
 };
 export const useReservationStore = create<ReservationData>()(

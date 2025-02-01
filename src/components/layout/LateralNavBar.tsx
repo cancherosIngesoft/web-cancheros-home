@@ -69,7 +69,7 @@ export const LateralNavBar = () => {
               className="w-full h-10 flex flex-row justify-center cursor-pointer"
               onClick={() => setIsOpenTeam(!isOpenTeam)}
             >
-              <TeamShield className=" text-white stroke-4" />
+              <TeamShield className=" text-tertiary stroke-4" />
             </div>
           </div>
 
