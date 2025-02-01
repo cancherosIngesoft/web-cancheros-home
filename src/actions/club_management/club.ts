@@ -34,13 +34,17 @@ interface ClubAttributes {
     try {
 
       const formData = new FormData();
-      formData.append("name", name);
-      formData.append("description", description);
+      const attributes = {
+        nombre: name,
+        descripcion: description,
+      }
+      formData.append("json", JSON.stringify(attributes));
+      
   
-      // Procesar el logo usando la función separada
+      
       if (logo) {
         const logoBlob = processBase64Image(logo, "logo.jpg", "image/jpeg");
-        formData.append("logo", logoBlob, "logo.jpg");
+        formData.append("file", logoBlob, "logo.jpg");
       }
       
   
