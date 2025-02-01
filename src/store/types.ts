@@ -68,6 +68,8 @@ export interface ReservationState {
     hours: SchedulesToBook[] | null;
     inTeam: boolean
     teamId: string
+    idBussiness: string
+    price: number
   }
 
 

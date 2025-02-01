@@ -3,6 +3,8 @@
 import { useState } from "react"
 import { useMutation } from "@tanstack/react-query"
 import { Shield, Upload, Loader2 } from "lucide-react"
+import { useForm } from "react-hook-form"
+import { zodResolver } from "@hookform/resolvers/zod"
 import { Button } from "@/components/ui/button"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
@@ -11,6 +13,17 @@ import { Textarea } from "@/components/ui/textarea"
 import { useToast } from "@/hooks/use-toast"
 import { createClub } from "@/actions/club_management/club"
 import { useSession } from "next-auth/react"
+import { z } from "zod"
+import { compressImage } from "@/utils/utils"
+
+export const createClubSchema = z.object({
+  name: z.string().min(1, "El nombre es obligatorio"),
+  description: z.string().min(1, "La descripción es obligatoria"),
+  logo: z.instanceof(File).optional(),
+})
+
+export type CreateClubInput = z.infer<typeof createClubSchema>
+
 
 
 interface CreateClubModalProps {
@@ -18,19 +31,20 @@ interface CreateClubModalProps {
   onClose: () => void
 }
 
-
-
 export function CreateClubModal({ isOpen, onClose }: CreateClubModalProps) {
-  
-  const { data: session, status } = useSession()
-  console.log(session)
-
-  const id_captain = session?.user.id || "" //debe ser remplazado por el autentico id del usuario
-  const [name, setName] = useState("")
-  const [description, setDescription] = useState("")
-  const [logo, setLogo] = useState<File | null>(null)
+  const { data: session } = useSession()
   const [previewUrl, setPreviewUrl] = useState<string>("")
   const { toast } = useToast()
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset,
+    setValue,
+  } = useForm<CreateClubInput>({
+    resolver: zodResolver(createClubSchema),
+  })
 
   const mutation = useMutation({
     mutationFn: createClub,
@@ -53,86 +67,77 @@ export function CreateClubModal({ isOpen, onClose }: CreateClubModalProps) {
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0]
     if (file) {
-      setLogo(file)
+      setValue("logo", file)
       const url = URL.createObjectURL(file)
       setPreviewUrl(url)
     }
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    if (!name.trim() || !description.trim()) {
-      toast({
-        title: "Campos requeridos",
-        description: "El nombre y la descripción son obligatorios",
-        variant: "destructive",
-      })
-      return
-    }
-
+  const onSubmit = async (data: CreateClubInput) => {
     mutation.mutate({
-      id_captain,
-      name: name.trim(),
-      description: description.trim(),
-      logo: logo? URL.createObjectURL(logo) : "",
+      id_captain: session?.user.id || "",
+      name: data.name,
+      description: data.description,
+      logo: data.logo ? await compressImage(data.logo) : undefined
     })
   }
 
   const handleClose = () => {
-    setName("")
-    setDescription("")
-    setLogo(null)
+    reset()
     setPreviewUrl("")
     onClose()
   }
 
   return (
     <Dialog open={isOpen} onOpenChange={handleClose}>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className="sm:max-w-[600px]">
         <DialogHeader>
           <DialogTitle className="text-center flex items-center justify-center gap-2">
-            <Shield className="h-6 w-6" />
+            <Shield className="h-6 w-6 text-xl" />
             Crea tu club
             <Shield className="h-6 w-6" />
           </DialogTitle>
         </DialogHeader>
-        <form onSubmit={handleSubmit} className="space-y-6">
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
           <div className="flex gap-4">
-            <div className="w-32 h-32 relative">
-              <div className="w-full h-full border-2 border-dashed rounded-lg flex items-center justify-center bg-gray-50">
-                {previewUrl ? (
-                  <img
-                    src={previewUrl || "/placeholder.svg"}
-                    alt="Preview"
-                    className="w-full h-full object-cover rounded-lg"
-                  />
-                ) : (
-                  <Upload className="w-8 h-8 text-gray-400" />
-                )}
+            <div className="w-1/3">
+              <div className="w-full aspect-square relative flex flex-col ">
+                <Label className=" text-sm text-center block font-bold">Icono</Label>
+
+                <div className="w-full h-full border-2 border-dashed rounded-lg flex items-center justify-center bg-gray-50">
+                  
+                  {previewUrl ? (
+                    <img
+                      src={previewUrl || "/placeholder.svg"}
+                      alt="Preview"
+                      className="w-full h-full object-cover rounded-lg"
+                    />
+                  ) : (
+                    <Upload className="w-8 h-8 text-gray-400" />
+                  )}
+                </div>
+
+                <Input
+                  type="file"
+                  accept="image/*"
+                  onChange={handleFileChange}
+                  className="absolute inset-0 w-full h-full opacity-0 cursor-pointer p-0"
+                  aria-label="Icono de tu club"
+                />
               </div>
-              <Input
-                type="file"
-                accept="image/*"
-                onChange={handleFileChange}
-                className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
-                aria-label="Icono de tu club"
-              />
-              <Label className="mt-2 text-sm text-center block">Icono de tu club</Label>
             </div>
-            <div className="flex-1">
-              <Label htmlFor="name">Nombre de tu club</Label>
-              <Input id="name" value={name} onChange={(e) => setName(e.target.value)} required />
+            <div className="w-2/3 space-y-4">
+              <div>
+                <Label htmlFor="name" className="font-bold">Nombre de tu club</Label>
+                <Input id="name" {...register("name")} />
+                {errors.name && <p className="text-sm text-red-500 mt-1">{errors.name.message}</p>}
+              </div>
+              <div>
+                <Label htmlFor="description" className="font-bold">Descripción</Label>
+                <Textarea id="description" {...register("description")} className="min-h-[100px]" />
+                {errors.description && <p className="text-sm text-red-500 mt-1">{errors.description.message}</p>}
+              </div>
             </div>
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="description">Descripción</Label>
-            <Textarea
-              id="description"
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              required
-              className="min-h-[100px]"
-            />
           </div>
           <Button type="submit" className="w-full bg-[#4CAF50] hover:bg-[#45a049]" disabled={mutation.isPending}>
             {mutation.isPending ? (
@@ -150,3 +155,4 @@ export function CreateClubModal({ isOpen, onClose }: CreateClubModalProps) {
   )
 }
 
+  

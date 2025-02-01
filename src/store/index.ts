@@ -118,7 +118,10 @@ const initialStateReservationInfo:ReservationState={
     date: null,
     hours: null,
     inTeam: false,
-    teamId: ""
+    teamId: "",
+    idBussiness: "",
+    price:0
+
   }
   
 

@@ -15,7 +15,7 @@ import { TimeSlot } from "./TimeSlot"
 
 import { z } from "zod"
 import TeamIcon from "../icon/TeamIcon"
-import {useReservationStore } from "@/store"
+import {useBussinessStore, useReservationStore } from "@/store"
 
 const dateSchema = z.date().refine(
     (value) => {
@@ -40,6 +40,7 @@ const BookingForm: React.FC<BookingFormProps> = ({ selectedField }) => {
     const [errorDate, setErrorDate] = useState<string>("")
     const [bookingModality, setBookingModality] = useState<"individual" | "team" | "">("")
     const [selectedTeam, setSelectedTeam] = useState<{nameTeam:string,id:string} | null>(null)
+    const idBussiness = useBussinessStore((state) => state.idBussiness)
 
     const {
         data: availableHours,
@@ -85,18 +86,15 @@ const BookingForm: React.FC<BookingFormProps> = ({ selectedField }) => {
             date:selectedDate?.date,
             hours:selectedHours,
             inTeam:bookingModality==="team",
-            teamId:selectedTeam?.id
+            teamId:selectedTeam?.id,
+            idBussiness:idBussiness,
+            price: selectedField ? (selectedField.price * (selectedHours?.length || 0)) / 2 : 0
         }
         console.log("formData",formData)
         updateReservationInfo("reservationInfo",formData)
 
-        // console.log("Reservar", {
-        //     selectedField,
-        //     selectedDate?.date,
-        //     selectedHours,
-        //     bookingModality==="team" ?? false,
-        //     selectedTeam.id,
-        // })
+
+    
     }
 
     return (
