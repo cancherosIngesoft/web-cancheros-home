@@ -167,8 +167,6 @@ export function AddFieldModal({ open, onOpenChange }: AddFieldModalProps) {
         field_images: images.map((img) => img.base64),
       });
 
-      console.log("la store es: ", useGlobalStore.getState().field);
-
       if (auth.id) {
         await registerField(
           useGlobalStore.getState().field,

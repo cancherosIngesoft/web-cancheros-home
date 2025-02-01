@@ -99,6 +99,8 @@ const BookingForm: React.FC<BookingFormProps> = ({ selectedField }) => {
     enabled: bookingModality === "team",
   });
 
+  const reservationInfo = useReservationStore((state) => state.reservationInfo);
+  const businessStore = useBussinessStore((state) => state.bussinessID);
   const handleHourToggle = (franja: SchedulesToBook) => {
     setSelectedHours((prev) =>
       prev?.includes(franja)
@@ -130,10 +132,12 @@ const BookingForm: React.FC<BookingFormProps> = ({ selectedField }) => {
       hours: selectedHours,
       inTeam: bookingModality === "team",
       teamId: selectedTeam?.id,
+      price: selectedField
+        ? (selectedField.price * (selectedHours?.length || 0)) / 2
+        : 0,
     };
-    console.log("formData", formData);
     updateReservationInfo("reservationInfo", formData);
-
+    setIsModalActive(true);
     // console.log("Reservar", {
     //     selectedField,
     //     selectedDate?.date,
@@ -228,11 +232,12 @@ const BookingForm: React.FC<BookingFormProps> = ({ selectedField }) => {
           isOpen={isModalActive}
           onClose={() => setIsModalActive(false)}
           reservaDetails={{
-            lugar: selectedField?.name,
-            fecha: format(selectedDate?.date!, "PPP"),
-            cancha: selectedField?.name,
-            horas: selectedHours?.length,
-            total: selectedField.price * selectedHours.length,
+            lugar: "Negocio: " + businessStore,
+            fecha: format(reservationInfo.date!, "PPP"),
+            cancha: ("Cancha #" + reservationInfo.field?.id_field) as string,
+            horas: reservationInfo.hours?.length ?? 0,
+            total:
+              parseInt(Number(reservationInfo?.price ?? "0").toString()) + 1000,
           }}
         ></PaymentModal>
       )}

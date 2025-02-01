@@ -47,7 +47,6 @@ export default function SuccessPage() {
           body: JSON.stringify(paymentData),
         });
         const data = await response.json();
-        console.log("Payment verified:", data);
       } catch (error) {
         console.error("Error verifying payment:", error);
       }

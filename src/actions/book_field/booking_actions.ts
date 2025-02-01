@@ -1,53 +1,38 @@
 export interface bussinessInfo {
-  id: string
-  name: string
+  id: string;
+  name: string;
   geoReference: {
-    lat: string
-    lon: string
-  }
-  calification: number
-  priceRange: string[]
+    lat: string;
+    lon: string;
+  };
+  calification: number;
+  priceRange: string[];
 }
 
-
-
-export async function getBussiness(
-
-): Promise<bussinessInfo[]> {
-
+export async function getBussiness(): Promise<bussinessInfo[]> {
   try {
-
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/business`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        }
-      }
-    )
-
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/business`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
 
     if (!res.ok) {
-      throw new Error("Error al obtener las los negocios")
-
+      throw new Error("Error al obtener las los negocios");
     }
-    const data = await res.json()
+    const data = await res.json();
 
-
-    return data
+    return data;
   } catch (e) {
     if (e instanceof Error) {
-      console.error("Error en get Bussines:", e.message)
-      throw new Error(e.message)
+      console.error("Error en get Bussines:", e.message);
+      throw new Error(e.message);
     } else {
-      throw new Error("Error desconocido")
+      throw new Error("Error desconocido");
     }
-
   }
-
-
 }
-
 
 export async function getBussinessFilters(
   location: string,
@@ -57,18 +42,23 @@ export async function getBussinessFilters(
 ): Promise<bussinessInfo[]> {
   try {
     // Construcción de la URL con los parámetros´
-    let urlConstruct: { min_price?: string; max_price?: string; location?: string, field_type?: string } = {}
+    let urlConstruct: {
+      min_price?: string;
+      max_price?: string;
+      location?: string;
+      field_type?: string;
+    } = {};
     if (minPrice !== undefined) {
-      urlConstruct["min_price"] = minPrice.toString()
+      urlConstruct["min_price"] = minPrice.toString();
     }
     if (maxPrice !== undefined) {
-      urlConstruct["max_price"] = maxPrice.toString()
+      urlConstruct["max_price"] = maxPrice.toString();
     }
     if (location !== "") {
-      urlConstruct["location"] = location
+      urlConstruct["location"] = location;
     }
     if (fieldType !== "") {
-      urlConstruct["field_type"] = fieldType
+      urlConstruct["field_type"] = fieldType;
     }
     const queryParams = new URLSearchParams(urlConstruct).toString();
 
@@ -123,99 +113,94 @@ export interface bussinessID {
   name: string;
 }
 
-
-export async function getBussinessByID(
-  id: string
-): Promise<bussinessID> {
+export async function getBussinessByID(id: string): Promise<bussinessID> {
   try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/business/${id}`,
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/api/business/${id}`,
       {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
-        }
+        },
       }
-    )
+    );
     if (!res.ok) {
-      throw new Error("Error al obtener el negocio")
+      throw new Error("Error al obtener el negocio");
     }
-    return await res.json()
+    return await res.json();
   } catch (e) {
     if (e instanceof Error) {
-      console.error("Error en get Bussines:", e.message)
-      throw new Error(e.message)
+      console.error("Error en get Bussines:", e.message);
+      throw new Error(e.message);
     } else {
-      throw new Error("Error desconocido")
+      throw new Error("Error desconocido");
     }
-
   }
-
 }
 export interface SchedulesToBook {
-  hora_inicio:string
-  hora_fin:string
+  hora_inicio: string;
+  hora_fin: string;
 }
 
 export async function getAvailableHour(
   id_field: string,
   date: Date
 ): Promise<SchedulesToBook[]> {
-  return [{hora_inicio:"10:00",hora_fin:"11:00"},{hora_inicio:"11:00",hora_fin:"12:00"}]
+  return [
+    { hora_inicio: "10:00", hora_fin: "11:00" },
+    { hora_inicio: "11:00", hora_fin: "12:00" },
+  ];
+  //CORREGIR ESTO
   try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/field/?field_id=${id_field}?date=${date}`,
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/api/field/?field_id=${id_field}?date=${date}`,
       {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
-        }
+        },
       }
-    )
+    );
     if (!res.ok) {
-      throw new Error("Error al obtener el los horarios")
+      throw new Error("Error al obtener el los horarios");
     }
-    return await res.json()
+    return await res.json();
   } catch (e) {
     if (e instanceof Error) {
-      console.error("Error en get schedules:", e.message)
-      throw new Error(e.message)
+      console.error("Error en get schedules:", e.message);
+      throw new Error(e.message);
     } else {
-      throw new Error("Error desconocido")
+      throw new Error("Error desconocido");
     }
-
   }
-
 }
 
-interface teamReturn{
-  id:string
-  name:string
+interface teamReturn {
+  id: string;
+  name: string;
 }
-export async function getTeamsUser(
-  id_user: string
- 
-): Promise<teamReturn[]> {
-  return[{id:"1",name:"Equipo 1"},{id:"2",name:"Equipo 2"}]
+export async function getTeamsUser(id_user: string): Promise<teamReturn[]> {
+  return [
+    { id: "1", name: "Equipo 1" },
+    { id: "2", name: "Equipo 2" },
+  ];
   try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/field`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        }
-      }
-    )
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/field`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
     if (!res.ok) {
-      throw new Error("Error al obtener el los horarios")
+      throw new Error("Error al obtener el los horarios");
     }
-    return await res.json()
+    return await res.json();
   } catch (e) {
     if (e instanceof Error) {
-      console.error("Error en get schedules:", e.message)
-      throw new Error(e.message)
+      console.error("Error en get schedules:", e.message);
+      throw new Error(e.message);
     } else {
-      throw new Error("Error desconocido")
+      throw new Error("Error desconocido");
     }
-
   }
-
 }

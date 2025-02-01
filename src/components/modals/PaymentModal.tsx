@@ -40,9 +40,6 @@ export default function PaymentModal({
           reservaDetails,
         }),
       });
-      console.log("response", response);
-      console.log("data", data);
-      console.log("reservaDetails", reservaDetails);
 
       const result = await response.json();
 

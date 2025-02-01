@@ -24,8 +24,7 @@ export async function POST(request: Request) {
       },
     } = body;
 
-    console.log("body", body);
-    const price = parseFloat(reservaDetails.total);
+    const price = parseInt(reservaDetails.total);
     if (isNaN(price) || price <= 0) {
       return NextResponse.json({ message: "Invalid price" }, { status: 400 });
     }
