@@ -79,7 +79,7 @@ const BookingForm: React.FC<BookingFormProps> = ({ selectedField }) => {
     data: availableHours,
     isLoading: isLoadingHours,
     isError: isErrorHours,
-        failureReason:failureReasonHours,
+    failureReason:failureReasonHours,
     refetch: refetchHours,
   } = useQuery({
     queryKey: ["availableHours", selectedField?.id_field, selectedDate],
@@ -140,14 +140,15 @@ const BookingForm: React.FC<BookingFormProps> = ({ selectedField }) => {
     };
     updateReservationInfo("reservationInfo", formData);
     setIsModalActive(true);
-    // console.log("Reservar", {
-    //     selectedField,
-    //     selectedDate?.date,
-    //     selectedHours,
-    //     bookingModality==="team" ?? false,
-    //     selectedTeam.id,
-    // })
+    
   };
+  useEffect(() => {
+    const formatHours = availableHours?.map(schedule => ({
+        hora_inicio: schedule.hora_inicio.slice(0, -3),
+        hora_fin: schedule.hora_fin.slice(0, -3)
+      }));
+    setFormatHours(formatHours)
+}, [availableHours])
 
   return (
     <div className="space-y-4 mt-4">
@@ -211,10 +212,10 @@ const BookingForm: React.FC<BookingFormProps> = ({ selectedField }) => {
               ))}
             </div>
           ) : isErrorHours ? (
-            <ErrorGetInfo retry={() => refetchHours()} />
+            <ErrorGetInfo retry={() => refetchHours()} error={failureReasonHours} />
           ) : (
             <div className="flex flex-row flex-wrap gap-2">
-              {availableHours?.map((franja) => (
+              {formatHours?.map((franja) => (
                 <TimeSlot
                   key={franja.hora_inicio}
                   time={franja}
@@ -288,7 +289,7 @@ const BookingForm: React.FC<BookingFormProps> = ({ selectedField }) => {
                     {isLoadingTeams ? (
                       <div className="h-10 bg-gray-300 animate-pulse rounded-md" />
                     ) : isErrorTeams ? (
-                      <ErrorGetInfo retry={() => {}} />
+                      <ErrorGetInfo retry={() => {}} error={failureReasonTeams} />
                     ) : userTeams && userTeams.length > 0 ? (
                       <Select
                         onValueChange={(value) => {
@@ -370,7 +371,8 @@ const BookingForm: React.FC<BookingFormProps> = ({ selectedField }) => {
               <p className="font-bold text-lg text-tertiary-30">
                 Total:{" "}
                 <span className="text-black ">
-                  {selectedField.price * selectedHours.length}
+                    {new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP',maximumFractionDigits: 0 }).format(selectedField.price * selectedHours.length)}
+                  
                 </span>
               </p>
             </div>
@@ -379,7 +381,8 @@ const BookingForm: React.FC<BookingFormProps> = ({ selectedField }) => {
               <p className="font-bold text-xl text-primary-70">
                 Total a pagar para reservar:{" "}
                 <span className="text-black ">
-                  {(selectedField.price * selectedHours.length) / 2}
+                    {new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP',maximumFractionDigits: 0 }).format((selectedField.price * selectedHours.length) / 2)}
+                  
                 </span>
               </p>
             </div>
