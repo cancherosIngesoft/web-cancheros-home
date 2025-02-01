@@ -146,24 +146,21 @@ export async function getAvailableHour(
   id_field: string,
   date: Date
 ): Promise<SchedulesToBook[]> {
-  return [
-    { hora_inicio: "10:00", hora_fin: "11:00" },
-    { hora_inicio: "11:00", hora_fin: "12:00" },
-  ];
-  //CORREGIR ESTO
-  /*
+  //return [{hora_inicio:"10:00",hora_fin:"11:00"},{hora_inicio:"11:00",hora_fin:"12:00"}]
   try {
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/field/?field_id=${id_field}?date=${date}`,
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/available/court/${id_field}`,
       {
-        method: "GET",
+        method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
+        body: JSON.stringify({ date: date.toISOString().split('T')[0] })
       }
     );
     if (!res.ok) {
-      throw new Error("Error al obtener el los horarios");
+
+      const errorData = await res.json().catch(() => null)
+      throw new Error(errorData.message)
     }
     return await res.json();
   } catch (e) {
@@ -174,7 +171,7 @@ export async function getAvailableHour(
       throw new Error("Error desconocido");
     }
   }
-  */
+  
 }
 
 interface teamReturn {

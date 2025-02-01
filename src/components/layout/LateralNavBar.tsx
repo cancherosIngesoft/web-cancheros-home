@@ -57,7 +57,7 @@ export const LateralNavBar = () => {
           )}
         </section>
 
-        {authUser?.userRole === "aficionado" && (
+        {authUser?.userRole === "jugador" && (
 
           <div className="flex-grow flex flex-col items-center gap-4">
             {navItems.map((item, index) => (

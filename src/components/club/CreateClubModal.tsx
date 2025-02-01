@@ -15,6 +15,7 @@ import { createClub } from "@/actions/club_management/club"
 import { useSession } from "next-auth/react"
 import { z } from "zod"
 import { compressImage } from "@/utils/utils"
+import CustomShield from "../icon/CustomShield"
 
 export const createClubSchema = z.object({
   name: z.string().min(1, "El nombre es obligatorio"),
@@ -92,10 +93,10 @@ export function CreateClubModal({ isOpen, onClose }: CreateClubModalProps) {
     <Dialog open={isOpen} onOpenChange={handleClose}>
       <DialogContent className="sm:max-w-[600px]">
         <DialogHeader>
-          <DialogTitle className="text-center flex items-center justify-center gap-2">
-            <Shield className="h-6 w-6 text-xl" />
+          <DialogTitle className="text-center flex items-center text-2xl justify-center gap-2">
+            <CustomShield className="h-10 w-10" />
             Crea tu club
-            <Shield className="h-6 w-6" />
+            <CustomShield className="h-10 w-10" />
           </DialogTitle>
         </DialogHeader>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
@@ -128,12 +129,12 @@ export function CreateClubModal({ isOpen, onClose }: CreateClubModalProps) {
             </div>
             <div className="w-2/3 space-y-4">
               <div>
-                <Label htmlFor="name" className="font-bold">Nombre de tu club</Label>
+                <Label htmlFor="name" className="font-bold">Nombre de tu club<span className="text-red-600">*</span></Label>
                 <Input id="name" {...register("name")} />
                 {errors.name && <p className="text-sm text-red-500 mt-1">{errors.name.message}</p>}
               </div>
               <div>
-                <Label htmlFor="description" className="font-bold">Descripción</Label>
+                <Label htmlFor="description" className="font-bold">Descripción<span className="text-red-600">*</span></Label>
                 <Textarea id="description" {...register("description")} className="min-h-[100px]" />
                 {errors.description && <p className="text-sm text-red-500 mt-1">{errors.description.message}</p>}
               </div>

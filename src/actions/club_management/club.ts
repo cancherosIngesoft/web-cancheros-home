@@ -34,19 +34,27 @@ interface ClubAttributes {
     try {
 
       const formData = new FormData();
-      formData.append("name", name);
-      formData.append("description", description);
+      const attributes = {
+        nombre: name,
+        descripcion: description,
+      }
+      formData.append("json", JSON.stringify(attributes));
+      
   
-      // Procesar el logo usando la función separada
+      
       if (logo) {
         const logoBlob = processBase64Image(logo, "logo.jpg", "image/jpeg");
-        formData.append("logo", logoBlob, "logo.jpg");
+        formData.append("file", logoBlob, "logo.jpg");
+      }else{
+        formData.append("file",  new File([], "empty.jpg", { type: "image/jpeg" })); // no funciona como deberia
+
       }
       
   
       
       const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/create_club/${id_captain}`, {
         method: "POST",
+        
         body: formData, 
       });
   
