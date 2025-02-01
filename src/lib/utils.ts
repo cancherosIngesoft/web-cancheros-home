@@ -60,14 +60,21 @@ export const authOptions: NextAuthOptions = {
         try {
           const response = await userManagement(user.email!, user.name!);
           if (response && response.rol) {
+            let rol=""
             const idKey = Object.keys(response).find((key) => key.startsWith("id"))?? "id_usuario";
-            token.role = response.rol;
+            if(response.rol === "capitan" || response.rol ==="aficionado" || response.rol ==="jugador"){
+              rol = "jugador";
+            }else{
+              rol = response.rol;
+            }
+            token.role = rol;
             token.id = response[idKey]; // Guardar el ID del usuario
           }
         } catch (error) { }
       }
       if (account) {
         token.accessToken = account.access_token;
+        console.log("account", token);
       }
       return token;
     },

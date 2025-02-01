@@ -46,7 +46,7 @@ interface ClubAttributes {
         const logoBlob = processBase64Image(logo, "logo.jpg", "image/jpeg");
         formData.append("file", logoBlob, "logo.jpg");
       }else{
-        formData.append("file", "");
+        formData.append("file",  new File([], "empty.jpg", { type: "image/jpeg" })); // no funciona como deberia
 
       }
       
@@ -54,6 +54,7 @@ interface ClubAttributes {
       
       const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/create_club/${id_captain}`, {
         method: "POST",
+        
         body: formData, 
       });
   
