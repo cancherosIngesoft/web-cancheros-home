@@ -45,6 +45,9 @@ interface ClubAttributes {
       if (logo) {
         const logoBlob = processBase64Image(logo, "logo.jpg", "image/jpeg");
         formData.append("file", logoBlob, "logo.jpg");
+      }else{
+        formData.append("file", "");
+
       }
       
   
