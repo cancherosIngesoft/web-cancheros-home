@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { format } from "date-fns"
 import { CalendarIcon, CalendarDays, Clock, CircleDollarSign } from "lucide-react"
 import { motion } from "framer-motion"
@@ -41,11 +41,12 @@ const BookingForm: React.FC<BookingFormProps> = ({ selectedField }) => {
     const [bookingModality, setBookingModality] = useState<"individual" | "team" | "">("")
     const [selectedTeam, setSelectedTeam] = useState<{nameTeam:string,id:string} | null>(null)
     const idBussiness = useBussinessStore((state) => state.idBussiness)
-
+    const [formatHours, setFormatHours] = useState<SchedulesToBook[] | undefined>(undefined)
     const {
         data: availableHours,
         isLoading: isLoadingHours,
         isError: isErrorHours,
+        failureReason:failureReasonHours,
         refetch: refetchHours,
     } = useQuery({
         queryKey: ["availableHours", selectedField?.id_field, selectedDate],
@@ -58,6 +59,7 @@ const BookingForm: React.FC<BookingFormProps> = ({ selectedField }) => {
         data: userTeams,
         isLoading: isLoadingTeams,
         isError: isErrorTeams,
+        failureReason:failureReasonTeams,
     } = useQuery({
         queryKey: ["userTeams", "1"],//quemado el id del usuario
         queryFn: () => getTeamsUser("1"),
@@ -92,10 +94,15 @@ const BookingForm: React.FC<BookingFormProps> = ({ selectedField }) => {
         }
         console.log("formData",formData)
         updateReservationInfo("reservationInfo",formData)
-
-
     
     }
+    useEffect(() => {
+        const formatHours = availableHours?.map(schedule => ({
+            hora_inicio: schedule.hora_inicio.slice(0, -3),
+            hora_fin: schedule.hora_fin.slice(0, -3)
+          }));
+        setFormatHours(formatHours)
+    }, [availableHours])
 
     return (
         <div className="space-y-4 mt-4">
@@ -138,10 +145,10 @@ const BookingForm: React.FC<BookingFormProps> = ({ selectedField }) => {
                             ))}
                         </div>
                     ) : isErrorHours ? (
-                        <ErrorGetInfo retry={() => refetchHours()} />
+                        <ErrorGetInfo retry={() => refetchHours()} error={failureReasonHours} />
                     ) : (
                         <div className="flex flex-row flex-wrap gap-2">
-                            {availableHours?.map((franja) => (
+                            {formatHours?.map((franja) => (
                                 <TimeSlot
                                     key={franja.hora_inicio}
                                     time={franja}
@@ -177,7 +184,7 @@ const BookingForm: React.FC<BookingFormProps> = ({ selectedField }) => {
                                     {isLoadingTeams ? (
                                         <div className="h-10 bg-gray-300 animate-pulse rounded-md" />
                                     ) : isErrorTeams ? (
-                                        <ErrorGetInfo retry={() => { }} />
+                                        <ErrorGetInfo retry={() => { }} error={failureReasonTeams}/>
                                     ) : userTeams && userTeams.length > 0 ? (
                                         <Select onValueChange={(value) => {
                                             const team = userTeams.find((team) => team.id === value);
