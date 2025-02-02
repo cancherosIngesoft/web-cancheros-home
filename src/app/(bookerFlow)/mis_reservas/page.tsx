@@ -38,7 +38,7 @@ function MisReservasContent() {
   })
 
   return (
-    <div className="container mx-auto py-8 space-y-8">
+    <div className="space-y-8">
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div className="flex-1">
           <h1 className="text-3xl text-primary-40 font-bold">Tus Reservas</h1>

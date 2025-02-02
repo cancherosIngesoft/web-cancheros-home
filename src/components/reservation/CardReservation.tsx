@@ -54,7 +54,11 @@ export default function CardReservation({
                 <h2 className="font-bold text-lg text-primary">{bussinesName}</h2>
                 <div className="flex items-center gap-2">
                     <DollarSign className="w-5 h-5 text-green-600" />
-                    <span className="font-semibold text-green-600">{totalPrice}</span>
+                    <span className="font-semibold text-green-600">{new Intl.NumberFormat("es-CO", {
+              style: "currency",
+              currency: "COP",
+              maximumFractionDigits: 0,
+            }).format(totalPrice)}</span>
                 </div>
             </div>
             <div className="flex items-start gap-4 w-full">
@@ -98,7 +102,7 @@ export default function CardReservation({
                     </div>
 
 
-                    {(isBooker || isActive) && (
+                    {(isBooker && isActive) && (
                         <div className="flex justify-center items-center flex-1 gap-2">
                             <div className="flex-1">
                                 <TooltipProvider>
