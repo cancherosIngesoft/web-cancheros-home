@@ -342,7 +342,7 @@ export function AddFieldModal({ open, onOpenChange }: AddFieldModalProps) {
                     {...register("precioHora", {
                       required: "El precio es requerido",
                       min: {
-                        value: 1000,
+                        value: 2000,
                         message: "El precio debe ser mayor a 1000",
                       },
                       validate: {
