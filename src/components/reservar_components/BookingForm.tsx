@@ -317,7 +317,7 @@ const BookingForm: React.FC<BookingFormProps> = ({ selectedField }) => {
                         }}
                       >
                         <SelectTrigger className="w-full">
-                          <SelectValue placeholder="Selecciona un equipo" />
+                          <SelectValue placeholder="Selecciona un club" />
                         </SelectTrigger>
                         <SelectContent>
                           {userTeams.map((team) => (
