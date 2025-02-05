@@ -92,7 +92,10 @@ export default function CardReservation({
                             </div>
                             <div className="flex items-center gap-2 text-sm text-muted-foreground">
                                 <Clock className="w-4 h-4" />
-                                <span>{hours.horaInicio +" - "+ hours.horaFin}</span>
+                                <span>{new Date(hours.horaInicio).toISOString().split("T")[1].substring(0, 5)  
+
+                                +" - "+ 
+                                new Date(hours.horaFin).toISOString().split("T")[1].substring(0, 5)}</span>
                             </div>
                             <div className="flex items-center gap-2 text-sm text-muted-foreground">
                                 <Users className="w-4 h-4" />
