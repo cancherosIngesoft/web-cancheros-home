@@ -1,3 +1,4 @@
+import { is } from 'date-fns/locale';
 export interface bussinessInfo {
   id: string;
   name: string;
@@ -177,31 +178,42 @@ export async function getAvailableHour(
 interface teamReturn {
   id: string;
   name: string;
+  icon: string;
+  description:string
 }
 export async function getTeamsUser(id_user: string): Promise<teamReturn[]> {
-  return [
-    { id: "1", name: "Equipo 1" },
-    { id: "2", name: "Equipo 2" },
-  ];
-  /*
+  
+  
   try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/field`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/get_captain/${id_user}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
       },
     });
     if (!res.ok) {
-      throw new Error("Error al obtener el los horarios");
+      throw new Error("Error al obtener el los Clubs del usuario");
     }
-    return await res.json();
+
+    const data = await res.json()
+    const club = data.clubes
+    
+    const teams:teamReturn[] = club.map((team:any) => { 
+      return { 
+        id: team.id_equipo,
+        name: team.nombre, 
+        icon: team.imagen, 
+        description:team.descripcion 
+      } })
+
+      return teams
   } catch (e) {
     if (e instanceof Error) {
-      console.error("Error en get schedules:", e.message);
+      console.error("Error en get Clubs:", e.message);
       throw new Error(e.message);
     } else {
       throw new Error("Error desconocido");
     }
   }
-  */
+  
 }

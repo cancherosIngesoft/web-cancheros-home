@@ -37,6 +37,7 @@ import TeamIcon from "../icon/TeamIcon";
 import { useBussinessStore, useReservationStore } from "@/store";
 import PaymentModal from "../modals/PaymentModal";
 import ReservationSummary from "./ReservationSummary";
+import { useSession } from "next-auth/react";
 
 const dateSchema = z.date().refine(
     (value) => {
@@ -59,6 +60,8 @@ interface BookingFormProps {
 }
 
 const BookingForm: React.FC<BookingFormProps> = ({ selectedField }) => {
+    const {data:session} = useSession();
+    const idUser = session?.user?.id;
     const [selectedDate, setSelectedDate] = useState<{
         date: Date | undefined;
         valid: boolean;
@@ -97,9 +100,9 @@ const BookingForm: React.FC<BookingFormProps> = ({ selectedField }) => {
         isError: isErrorTeams,
         failureReason: failureReasonTeams,
     } = useQuery({
-        queryKey: ["userTeams", "1"],//quemado el id del usuario
-        queryFn: () => getTeamsUser("1"),
-        enabled: bookingModality === "team",
+        queryKey: ["userTeams", idUser],
+        queryFn: () => getTeamsUser(idUser?? "0"),
+        enabled: bookingModality === "team" && !!idUser
     })
 
     const reservationInfo = useReservationStore((state) => state.reservationInfo);
@@ -310,7 +313,7 @@ const BookingForm: React.FC<BookingFormProps> = ({ selectedField }) => {
                                                 }}
                                             >
                                                 <SelectTrigger className="w-full">
-                                                    <SelectValue placeholder="Selecciona un equipo" />
+                                                    <SelectValue placeholder="Seleccione un club" />
                                                 </SelectTrigger>
                                                 <SelectContent>
                                                     {userTeams.map((team) => (
