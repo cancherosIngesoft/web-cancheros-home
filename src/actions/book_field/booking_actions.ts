@@ -149,19 +149,19 @@ export async function getAvailableHour(
 ): Promise<SchedulesToBook[]> {
   //return [{hora_inicio:"10:00",hora_fin:"11:00"},{hora_inicio:"11:00",hora_fin:"12:00"}]
   try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/available/court/${id_field}`,
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/api/available/court/${id_field}`,
       {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ date: date.toISOString().split('T')[0] })
+        body: JSON.stringify({ date: date.toISOString().split("T")[0] }),
       }
     );
     if (!res.ok) {
-
-      const errorData = await res.json().catch(() => null)
-      throw new Error(errorData.message)
+      const errorData = await res.json().catch(() => null);
+      throw new Error(errorData.message);
     }
     return await res.json();
   } catch (e) {
@@ -172,7 +172,6 @@ export async function getAvailableHour(
       throw new Error("Error desconocido");
     }
   }
-  
 }
 
 interface teamReturn {
@@ -216,4 +215,108 @@ export async function getTeamsUser(id_user: string): Promise<teamReturn[]> {
     }
   }
   
+}
+
+export interface Booking {
+  hora_inicio: string;
+  hora_fin: string;
+  id_cancha: number;
+  id_reservante: number;
+  isTeam: boolean;
+}
+
+export interface BookingResponse {
+  hora_fin: string;
+  hora_inicio: string;
+  id_reserva: number;
+  partido: null;
+  reservante: {
+    id_reservante: number;
+    tipo_reservante: string;
+  };
+}
+
+export async function createBooking(
+  booking: Booking
+): Promise<BookingResponse> {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/booking`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(booking),
+  });
+
+  const data = await res.json();
+
+  if (data.error) {
+    throw new Error(data.error || "Error al crear la reserva");
+  }
+
+  return data;
+}
+
+export async function initiatePayment(data: any): Promise<any> {
+  const response = await fetch("/api/payment_gateway", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      ...data,
+    }),
+  });
+  if (!response.ok) {
+    throw new Error("Error al iniciar el pago");
+  }
+  return await response.json();
+}
+
+export interface PaymentFormData {
+  nombres: string;
+  apellidos: string;
+  cedula: string;
+  correo: string;
+}
+
+export interface ReservaDetails {
+  fecha: string;
+  horaInicio: string;
+  horaFin: string;
+  lugar: string;
+  cancha: string;
+  horas: number;
+  total: number;
+}
+
+export async function handleBookingAndPayment(
+  formData: PaymentFormData,
+  reservaDetails: ReservaDetails,
+  userId: number
+) {
+  // 1. Crear la reserva
+  const booking = await createBooking({
+    hora_inicio: `${reservaDetails.fecha} ${reservaDetails.horaInicio}`,
+    hora_fin: `${reservaDetails.fecha} ${reservaDetails.horaFin}`,
+    id_cancha: Number(reservaDetails.cancha),
+    id_reservante: userId,
+    isTeam: false,
+  });
+
+  // 2. Iniciar el pago
+  const paymentResult = await initiatePayment({
+    nombres: formData.nombres,
+    apellidos: formData.apellidos,
+    cedula: formData.cedula,
+    correo: formData.correo,
+    reservaDetails: {
+      id: booking.id_reserva,
+      lugar: reservaDetails.lugar,
+      cancha: reservaDetails.cancha,
+      horas: reservaDetails.horas,
+      total: reservaDetails.total,
+    },
+  });
+
+  return paymentResult;
 }

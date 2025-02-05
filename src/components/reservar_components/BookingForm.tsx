@@ -245,9 +245,11 @@ const BookingForm: React.FC<BookingFormProps> = ({ selectedField }) => {
           onClose={() => setIsModalActive(false)}
           reservaDetails={{
             lugar: "Negocio: " + businessStore,
-            fecha: format(reservationInfo.date!, "PPP"),
-            cancha: ("Cancha #" + reservationInfo.field?.id_field) as string,
+            fecha: reservationInfo.date?.toISOString() ?? "",
+            cancha: reservationInfo.field?.id_field as string,
             horas: reservationInfo.hours?.length ?? 0,
+            horaInicio: reservationInfo.hours?.[0].hora_inicio ?? "",
+            horaFin: reservationInfo.hours?.[0].hora_fin ?? "",
             total:
               parseInt(Number(reservationInfo?.price ?? "0").toString()) + 1000,
           }}
