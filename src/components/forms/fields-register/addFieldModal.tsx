@@ -343,7 +343,7 @@ export function AddFieldModal({ open, onOpenChange }: AddFieldModalProps) {
                       required: "El precio es requerido",
                       min: {
                         value: 2000,
-                        message: "El precio debe ser mayor a 1000",
+                        message: "El precio debe ser mayor a 2000",
                       },
                       validate: {
                         isNumber: (value) =>

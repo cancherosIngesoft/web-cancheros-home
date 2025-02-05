@@ -17,6 +17,7 @@ export async function POST(request: Request) {
       cedula = "",
       correo = "",
       reservaDetails = {
+        id: 0,
         lugar: "prueba",
         cancha: "prueba",
         horas: 1,
@@ -33,7 +34,7 @@ export async function POST(request: Request) {
       body: {
         items: [
           {
-            id: `reserva-${Date.now()}`,
+            id: reservaDetails.id,
             title: `Reserva ${reservaDetails.lugar} - ${reservaDetails.cancha}`,
             unit_price: parseFloat(reservaDetails.total),
             quantity: 1,
