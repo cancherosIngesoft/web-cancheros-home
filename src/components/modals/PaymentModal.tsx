@@ -1,18 +1,19 @@
 import { Dialog } from "@headlessui/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Input } from "../ui/input";
-
+import { format } from "date-fns";
+import { handleBookingAndPayment } from "@/actions/book_field/booking_actions";
+import { useGlobalStore } from "@/store";
+import { useToast } from "@/hooks/use-toast";
+import {
+  PaymentFormData,
+  ReservaDetails,
+} from "@/actions/book_field/booking_actions";
 interface PaymentModalProps {
   isOpen: boolean;
   onClose: () => void;
-  reservaDetails: {
-    lugar: string;
-    fecha: string;
-    cancha: string;
-    horas: number;
-    total: number;
-  };
+  reservaDetails: ReservaDetails;
 }
 
 export default function PaymentModal({
@@ -25,35 +26,51 @@ export default function PaymentModal({
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm();
+  } = useForm<PaymentFormData>();
+  const { toast } = useToast();
+  const [currentStep, setCurrentStep] = useState<
+    "Cargando" | "Reservando" | "Pagando"
+  >("Cargando");
 
-  const onSubmit = async (data: any) => {
+  const auth = useGlobalStore((state) => state.auth);
+
+  const onSubmit = async (data: PaymentFormData) => {
     setIsLoading(true);
     try {
-      const response = await fetch("/api/payment_gateway", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          ...data,
-          reservaDetails,
-        }),
+      setCurrentStep("Reservando");
+
+      const result = await handleBookingAndPayment(
+        data,
+        reservaDetails,
+        Number(auth?.id)
+      );
+
+      setCurrentStep("Pagando");
+      toast({
+        title: "Reserva creada",
+        description: "Ahora puedes pagar la reserva",
       });
 
-      const result = await response.json();
-
       if (result.init_point) {
-        // Redirigir a Mercado Pago
         window.location.href = result.init_point;
       }
-    } catch (error) {
-      console.error("Error:", error);
-      alert("Hubo un error al procesar el pago");
+    } catch (error: any) {
+      toast({
+        title: "Error",
+        description: error.message,
+      });
     } finally {
       setIsLoading(false);
+      setCurrentStep("Cargando");
     }
   };
+
+  useEffect(() => {
+    toast({
+      title: "Progreso",
+      description: currentStep,
+    });
+  }, [currentStep]);
 
   return (
     <Dialog open={isOpen} onClose={onClose} className="relative z-50 ">
@@ -70,10 +87,10 @@ export default function PaymentModal({
               <strong>Lugar:</strong> {reservaDetails.lugar}
             </p>
             <p>
-              <strong>Fecha:</strong> {reservaDetails.fecha}
+              <strong>Fecha:</strong> {format(reservaDetails.fecha, "PPP")}
             </p>
             <p>
-              <strong>Cancha:</strong> {reservaDetails.cancha}
+              <strong>Cancha:</strong> #{reservaDetails.cancha}
             </p>
             <p>
               <strong>Horas:</strong> {reservaDetails.horas}

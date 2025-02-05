@@ -17,6 +17,7 @@ export async function POST(request: Request) {
       cedula = "",
       correo = "",
       reservaDetails = {
+        id: 0,
         lugar: "prueba",
         cancha: "prueba",
         horas: 1,
