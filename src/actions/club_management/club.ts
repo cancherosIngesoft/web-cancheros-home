@@ -78,14 +78,14 @@ interface ClubAttributes {
 const mockClubs: ReturnClub[] = [
     {
       idTeam: "team_001",
-      idCaptain: "captain_101",
+      idCaptain: "15",
       numberPlayers: 11,
       name: "Los Titanes",
       icon: "https://example.com/icons/titanes.png"
     },
     {
       idTeam: "team_002",
-      idCaptain: "captain_102",
+      idCaptain: "15",
       numberPlayers: 8,
       name: "Fuerza Azul",
       icon: "https://example.com/icons/fuerza_azul.png"

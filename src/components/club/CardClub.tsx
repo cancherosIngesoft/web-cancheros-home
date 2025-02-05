@@ -4,9 +4,14 @@ import { Footprints, User } from "lucide-react"
 import SoccerShoe from "../icon/SoccerShoe"
 import PlayerWithBall from "../icon/PlaterWithBall"
 
-const CardClub = ({ club }: { club: ReturnClub }) => {
+interface CardClubProps {
+    club: ReturnClub
+    idUser: string
+}
+
+const CardClub = ({ club,idUser }:CardClubProps) => {
     return (
-        <div className="flex items-center bg-[#4CAF50] rounded-lg text-white w-full h-[5.5rem] shadow-md ">
+        <div className="flex items-center bg-primary rounded-lg text-white w-full h-[5.5rem] shadow-lg ">
             {/* Icon Container */}
             <div className="w-2/5 h-full relative overflow-hidden flex items-center justify-center rounded-l-lg">
                 <div className="w-28 h-28 absolute -left-[2.1rem]  bg-white rounded-full flex items-center justify-end p-4 flex-shrink-0 z-10 ">
@@ -23,8 +28,14 @@ const CardClub = ({ club }: { club: ReturnClub }) => {
             <div className="flex flex-col gap-1 w-full">
                 {/* Club Name Section */}
                 <div className="flex flex-1 items-center gap-2  border-b-4 border-white w-full px-2" >
-                    <span className="font-semibold text-lg">{club.name}</span>
-                    <SoccerShoe className="w-8 h-8" />
+                    <span className="font-semibold text-md">{club.name}</span>
+                    {idUser == club.idCaptain ?
+                    
+                    (<p className="font-bold text-lg text-tertiary-30">Cap</p>
+                    )
+                    :(<SoccerShoe className="w-8 h-8" />
+                    )}
+                    
                 </div>
 
                 {/* Players Section */}

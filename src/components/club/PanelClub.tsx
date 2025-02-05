@@ -94,7 +94,7 @@ export function PanelClub({ isOpen, onClose, navbarWidth }: ClubsPanelProps) {
             ) : (
               <div className="space-y-3 w-full">
                 {clubs.map((club) => (
-                  <CardClub key={club.idTeam} club={club} />
+                  <CardClub key={club.idTeam} club={club} idUser={userId} />
                 ))}
               </div>
             )}
