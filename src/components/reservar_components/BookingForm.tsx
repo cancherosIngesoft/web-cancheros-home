@@ -37,6 +37,7 @@ import TeamIcon from "../icon/TeamIcon";
 import { useBussinessStore, useReservationStore } from "@/store";
 import PaymentModal from "../modals/PaymentModal";
 import ReservationSummary from "./ReservationSummary";
+import { useSession } from "next-auth/react";
 
 const dateSchema = z.date().refine(
   (value) => {
@@ -59,50 +60,50 @@ interface BookingFormProps {
 }
 
 const BookingForm: React.FC<BookingFormProps> = ({ selectedField }) => {
-  const [selectedDate, setSelectedDate] = useState<{
-    date: Date | undefined;
-    valid: boolean;
-  }>();
-  const [selectedHours, setSelectedHours] = useState<SchedulesToBook[] | null>(
-    []
-  );
-  const [errorDate, setErrorDate] = useState<string>("");
-  const [bookingModality, setBookingModality] = useState<
-    "individual" | "team" | ""
-  >("");
-  const [selectedTeam, setSelectedTeam] = useState<{
-    nameTeam: string;
-    id: string;
-  } | null>(null);
-  const [isModalActive, setIsModalActive] = useState(false);
-  const [formatHours, setFormatHours] = useState<SchedulesToBook[] | undefined>(
-    undefined
-  );
-  const {
-    data: availableHours,
-    isLoading: isLoadingHours,
-    isError: isErrorHours,
-    failureReason: failureReasonHours,
-    refetch: refetchHours,
-  } = useQuery({
-    queryKey: ["availableHours", selectedField?.id_field, selectedDate],
-    queryFn: () =>
-      getAvailableHour(selectedField!.id_field, selectedDate!.date!),
-    enabled:
-      !!selectedField?.id_field && !!selectedDate?.date && selectedDate?.valid,
-    staleTime: 1000 * 60 * 5,
-  });
+    const {data:session} = useSession();
+    const idUser = session?.user?.id;
+    const [selectedDate, setSelectedDate] = useState<{
+        date: Date | undefined;
+        valid: boolean;
+    }>();
+    const [selectedHours, setSelectedHours] = useState<SchedulesToBook[] | null>(
+        []
+    );
+    const [errorDate, setErrorDate] = useState<string>("");
+    const [bookingModality, setBookingModality] = useState<
+        "individual" | "team" | ""
+    >("");
+    const [selectedTeam, setSelectedTeam] = useState<{
+        nameTeam: string;
+        id: string;
+    } | null>(null);
+    const [isModalActive, setIsModalActive] = useState(false);
+    const [formatHours, setFormatHours] = useState<SchedulesToBook[] | undefined>(undefined)
+    const {
+        data: availableHours,
+        isLoading: isLoadingHours,
+        isError: isErrorHours,
+        failureReason: failureReasonHours,
+        refetch: refetchHours,
+    } = useQuery({
+        queryKey: ["availableHours", selectedField?.id_field, selectedDate],
+        queryFn: () =>
+            getAvailableHour(selectedField!.id_field, selectedDate!.date!),
+        enabled:
+            !!selectedField?.id_field && !!selectedDate?.date && selectedDate?.valid,
+        staleTime: 1000 * 60 * 5,
+    });
 
-  const {
-    data: userTeams,
-    isLoading: isLoadingTeams,
-    isError: isErrorTeams,
-    failureReason: failureReasonTeams,
-  } = useQuery({
-    queryKey: ["userTeams", "1"], //quemado el id del usuario
-    queryFn: () => getTeamsUser("1"),
-    enabled: bookingModality === "team",
-  });
+    const {
+        data: userTeams,
+        isLoading: isLoadingTeams,
+        isError: isErrorTeams,
+        failureReason: failureReasonTeams,
+    } = useQuery({
+        queryKey: ["userTeams", idUser],
+        queryFn: () => getTeamsUser(idUser?? "0"),
+        enabled: bookingModality === "team" && !!idUser
+    })
 
   const reservationInfo = useReservationStore((state) => state.reservationInfo);
   const businessStore = useBussinessStore((state) => state.bussinessID);
@@ -318,7 +319,7 @@ const BookingForm: React.FC<BookingFormProps> = ({ selectedField }) => {
                         }}
                       >
                         <SelectTrigger className="w-full">
-                          <SelectValue placeholder="Selecciona un equipo" />
+                          <SelectValue placeholder="Selecciona un club" />
                         </SelectTrigger>
                         <SelectContent>
                           {userTeams.map((team) => (

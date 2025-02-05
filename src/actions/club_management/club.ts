@@ -73,4 +73,77 @@ interface ClubAttributes {
       }
     }
   }
+
+
+const mockClubs: ReturnClub[] = [
+    {
+      idTeam: "team_001",
+      idCaptain: "15",
+      numberPlayers: 11,
+      name: "Los Titanes",
+      icon: "https://example.com/icons/titanes.png"
+    },
+    {
+      idTeam: "team_002",
+      idCaptain: "15",
+      numberPlayers: 8,
+      name: "Fuerza Azul",
+      icon: "https://example.com/icons/fuerza_azul.png"
+    },
+    {
+      idTeam: "team_003",
+      idCaptain: "captain_103",
+      numberPlayers: 5,
+      name: "Rápidos y Furiosos"
+    },
+    {
+      idTeam: "team_004",
+      idCaptain: "captain_104",
+      numberPlayers: 7,
+      name: "Los Halcones",
+      icon: "https://example.com/icons/halcones.png"
+    },
+    
+    
+  ];
+
+  
+export interface ReturnClub{
+  idTeam: string;
+  idCaptain: string;
+  numberPlayers: number;
+  name: string;
+  icon?:string;
+}
+  export async function getClubs(
+    id_user:string):Promise<ReturnClub[]> {
+    console.log("id_user getClubs",id_user)
+
+    return mockClubs;
+    // try {
+
+    //   const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/clubs/${id_user}`, {
+    //     method: "GET",
+    //     headers: {
+    //       "Content-Type": "application/json",
+    //     },
+    //   });
+  
+    //   if (!res.ok) {
+    //     const data = await res.json();
+    //     throw new Error(data.message);
+    //   }
+  
+    //   // Devolver la respuesta del servidor
+    //   return await res.json();
+    // } catch (e) {
+    //   if (e instanceof Error) {
+    //     console.error("Error en obtener Clubes:", e.message);
+    //     throw new Error(e.message);
+    //   } else {
+    //     throw new Error("Error desconocido");
+    //   }
+    // }
+  }
+  
   
