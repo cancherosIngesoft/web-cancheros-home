@@ -12,21 +12,19 @@ import { NextRequest } from "next/server";
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
-interface ExtendedToken extends JWT {
-  accessToken?: string;
-  isNewUser?: boolean;
-}
 
 // Extender el token JWT para incluir el rol y el accessToken
 interface ExtendedToken extends JWT {
   accessToken?: string;
   role?: string;
+  id?: string;
 }
 
 // Extender la sesión para incluir el rol y el accessToken
 interface ExtendedSession extends Session {
   user: {
     role?: string;
+    id?: string;
     name?: string | null;
     email?: string | null;
     image?: string | null;
@@ -56,17 +54,27 @@ export const authOptions: NextAuthOptions = {
       token: ExtendedToken;
       account?: any;
       user?: User;
+      id?: string;
     }): Promise<ExtendedToken> {
-      if (user && !token.role) {
+      if (user && !token.role && !token.id) {
         try {
           const response = await userManagement(user.email!, user.name!);
           if (response && response.rol) {
-            token.role = response.rol;
+            let rol=""
+            const idKey = Object.keys(response).find((key) => key.startsWith("id"))?? "id_usuario";
+            if(response.rol === "capitan" || response.rol ==="aficionado" || response.rol ==="jugador"){
+              rol = "jugador";
+            }else{
+              rol = response.rol;
+            }
+            token.role = rol;
+            token.id = response[idKey]; // Guardar el ID del usuario
           }
-        } catch (error) {}
+        } catch (error) { }
       }
       if (account) {
         token.accessToken = account.access_token;
+        console.log("account", token);
       }
       return token;
     },
@@ -85,6 +93,9 @@ export const authOptions: NextAuthOptions = {
       trigger: "update";
     }): Promise<Session> {
       (session.user as ExtendedSession["user"]).role = token.role as
+        | string
+        | undefined;
+      (session.user as ExtendedSession["user"]).id = token.id as
         | string
         | undefined;
       (session as ExtendedSession).accessToken = token.accessToken as

@@ -1,37 +1,39 @@
-"use client";
+import { getBussiness } from "@/actions/book_field/booking_actions";
+import Loading from "@/app/(bookerFlow)/reservar_cancha/loading";
+import SelectBussiness from "@/components/reservar_components/SelectBussiness";
+import { Suspense } from "react";
 
-import { signOut, useSession } from "next-auth/react";
-import { useEffect } from "react";
-import { useRouter } from "next/navigation";
-import { signIn } from "next-auth/react";
-import { Button } from "@/components/ui/button";
+export default async function reservar_cancha() {
+  let allTheBussiness;
 
-export default function reservar_cancha() {
-  const { data: session, status } = useSession();
-  const router = useRouter();
+  try {
+    allTheBussiness = await getBussiness();
+  } catch (error) {
+    console.error("Error fetching pending requests:", error);
+    // Opcionalmente, puedes retornar contenido alternativo aquí
+    return (
+      <div>
+        <h1>Error</h1>
+        <p>Hubo un problema al cargar los negocios.</p>
+      </div>
+    );
+  }
 
   return (
-    <div className="flex  flex-col items-center justify-center p-24">
-      <h1 className="text-4xl font-bold mb-4">Reservar Cancha</h1>
-      {session && (
-        <p>Bienvenido, {session.user?.name || session.user?.email}</p>
-      )}
-      {/* Aquí puedes agregar el formulario de reserva de cancha */}
-      <p>
-        Esto está en trabajo de ser desarrollado. Mientras, puedes cerrar sesión
-        o escuchar esta canción:
-      </p>
-      <iframe
-        width="560"
-        height="315"
-        src="https://www.youtube.com/embed/97hwNY3ni10"
-        title="YouTube video player"
-        frameBorder="0"
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-        allowFullScreen
-        className="my-4"
-      ></iframe>
-      <Button onClick={() => signOut()}>cerrar sesion</Button>
+    <div className="flex  flex-col items-center justify-center ">
+     
+        <div className="flex flex-col align-start w-full mb-10">
+          <h1 className="text-3xl text-primary-40 font-bold">Seleciona el negocio donde deseas hacer tus reservas</h1>
+          <p className="text-gray-500 mt-2">Utiliza los filtros para encontar la cancha que responda atus necesidades. Luego seleciona uno de nuestro establecimientos para ver mas de sus detalles</p>
+        </div>
+      
+        <div className="px-6 w-full">
+          <SelectBussiness initialBusinesses={allTheBussiness}/>
+        </div>
+      
+
+
+
     </div>
   );
 }

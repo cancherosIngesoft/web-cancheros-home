@@ -1,6 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // Tu configuración aquí
+  images: {
+    domains: ['storage.googleapis.com']
+  }
 };
 
 module.exports = nextConfig;
