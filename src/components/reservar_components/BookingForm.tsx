@@ -60,50 +60,52 @@ interface BookingFormProps {
 }
 
 const BookingForm: React.FC<BookingFormProps> = ({ selectedField }) => {
-    const {data:session} = useSession();
-    const idUser = session?.user?.id;
-    const [selectedDate, setSelectedDate] = useState<{
-        date: Date | undefined;
-        valid: boolean;
-    }>();
-    const [selectedHours, setSelectedHours] = useState<SchedulesToBook[] | null>(
-        []
-    );
-    const [errorDate, setErrorDate] = useState<string>("");
-    const [bookingModality, setBookingModality] = useState<
-        "individual" | "team" | ""
-    >("");
-    const [selectedTeam, setSelectedTeam] = useState<{
-        nameTeam: string;
-        id: string;
-    } | null>(null);
-    const [isModalActive, setIsModalActive] = useState(false);
-    const [formatHours, setFormatHours] = useState<SchedulesToBook[] | undefined>(undefined)
-    const {
-        data: availableHours,
-        isLoading: isLoadingHours,
-        isError: isErrorHours,
-        failureReason: failureReasonHours,
-        refetch: refetchHours,
-    } = useQuery({
-        queryKey: ["availableHours", selectedField?.id_field, selectedDate],
-        queryFn: () =>
-            getAvailableHour(selectedField!.id_field, selectedDate!.date!),
-        enabled:
-            !!selectedField?.id_field && !!selectedDate?.date && selectedDate?.valid,
-        staleTime: 1000 * 60 * 5,
-    });
+  const { data: session } = useSession();
+  const idUser = session?.user?.id;
+  const [selectedDate, setSelectedDate] = useState<{
+    date: Date | undefined;
+    valid: boolean;
+  }>();
+  const [selectedHours, setSelectedHours] = useState<SchedulesToBook[] | null>(
+    []
+  );
+  const [errorDate, setErrorDate] = useState<string>("");
+  const [bookingModality, setBookingModality] = useState<
+    "individual" | "team" | ""
+  >("");
+  const [selectedTeam, setSelectedTeam] = useState<{
+    nameTeam: string;
+    id: string;
+  } | null>(null);
+  const [isModalActive, setIsModalActive] = useState(false);
+  const [formatHours, setFormatHours] = useState<SchedulesToBook[] | undefined>(
+    undefined
+  );
+  const {
+    data: availableHours,
+    isLoading: isLoadingHours,
+    isError: isErrorHours,
+    failureReason: failureReasonHours,
+    refetch: refetchHours,
+  } = useQuery({
+    queryKey: ["availableHours", selectedField?.id_field, selectedDate],
+    queryFn: () =>
+      getAvailableHour(selectedField!.id_field, selectedDate!.date!),
+    enabled:
+      !!selectedField?.id_field && !!selectedDate?.date && selectedDate?.valid,
+    staleTime: 1000 * 60 * 5,
+  });
 
-    const {
-        data: userTeams,
-        isLoading: isLoadingTeams,
-        isError: isErrorTeams,
-        failureReason: failureReasonTeams,
-    } = useQuery({
-        queryKey: ["userTeams", idUser],
-        queryFn: () => getTeamsUser(idUser?? "0"),
-        enabled: bookingModality === "team" && !!idUser
-    })
+  const {
+    data: userTeams,
+    isLoading: isLoadingTeams,
+    isError: isErrorTeams,
+    failureReason: failureReasonTeams,
+  } = useQuery({
+    queryKey: ["userTeams", idUser],
+    queryFn: () => getTeamsUser(idUser ?? "0"),
+    enabled: bookingModality === "team" && !!idUser,
+  });
 
   const reservationInfo = useReservationStore((state) => state.reservationInfo);
   const businessStore = useBussinessStore((state) => state.bussinessID);
@@ -250,8 +252,7 @@ const BookingForm: React.FC<BookingFormProps> = ({ selectedField }) => {
             horas: reservationInfo.hours?.length ?? 0,
             horaInicio: reservationInfo.hours?.[0].hora_inicio ?? "",
             horaFin: reservationInfo.hours?.[0].hora_fin ?? "",
-            total:
-              parseInt(Number(reservationInfo?.price ?? "0").toString()) + 1000,
+            total: parseInt(Number(reservationInfo?.price ?? "0").toString()),
           }}
         ></PaymentModal>
       )}

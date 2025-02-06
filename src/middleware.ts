@@ -22,9 +22,9 @@ export async function middleware(req: NextRequest) {
   const userRole = token.role as string;
   // Definir rutas específicas para cada rol
   const roleRoutes: Record<string, string | string[]> = {
-    aficionado: "/reservar_cancha",
+    aficionado: ["/reservar_cancha", "/mis_reservas"],
     admin: "/panel_solicitudes",
-    duenio: ["/panel_negocio", "/mis_canchas"],
+    duenio: ["/panel_negocio", "/mis_canchas", "/reservas_negocio"],
   };
 
   if (userRole) {
@@ -59,6 +59,8 @@ export const config = {
     "/panel_solicitudes",
     "/panel_negocio",
     "/mis_canchas",
+    "/reservas_negocio",
+    "/mis_reservas",
     // "/((?!api/auth|_next/static|_next/image|favicon.ico|/|public).*)", no esta permitiendo cargar las imagenes de la home, toca corregir el comportamiento
   ],
 };

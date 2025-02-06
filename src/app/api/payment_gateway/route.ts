@@ -11,19 +11,7 @@ const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const {
-      nombres = "",
-      apellidos = "",
-      cedula = "",
-      correo = "",
-      reservaDetails = {
-        id: 0,
-        lugar: "prueba",
-        cancha: "prueba",
-        horas: 1,
-        total: 1000,
-      },
-    } = body;
+    const { nombres, apellidos, cedula, correo, reservaDetails } = body;
 
     const price = parseInt(reservaDetails.total);
     if (isNaN(price) || price <= 0) {
