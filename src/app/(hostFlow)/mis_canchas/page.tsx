@@ -7,16 +7,19 @@ import { Carousel, CarouselItem } from "@/components/ui/carousel";
 import { useGlobalStore, useShallow } from "@/store";
 import Image from "next/image";
 import { useEffect, useState } from "react";
-
+import { Loader2 } from "lucide-react";
 export default function pageMisCanchas() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [fields, setFields] = useState<IField[]>([]);
   const auth = useGlobalStore(useShallow((state) => state.auth));
+  const [isLoading, setIsLoading] = useState(false);
   useEffect(() => {
     const fetchFields = async () => {
       if (auth.id) {
+        setIsLoading(true);
         const fields = await getFieldsById(auth.id.toString());
         setFields(fields);
+        setIsLoading(false);
       }
     };
     fetchFields();
@@ -45,7 +48,11 @@ export default function pageMisCanchas() {
       </section>
       <AddFieldModal open={isModalOpen} onOpenChange={setIsModalOpen} />
       <article className="flex flex-col items-center gap-4 mt-10">
-        {fields.length > 0 ? (
+        {isLoading ? (
+          <div className="flex items-center justify-center h-screen">
+            <Loader2 className="w-10 h-10 animate-spin" />
+          </div>
+        ) : fields.length > 0 ? (
           <Carousel className="w-full">
             <div className="flex gap-4 overflow-x-auto p-2 border-2 border-gray-100 rounded-lg max-w-[80vw]">
               {fields.map((field) => (
@@ -66,7 +73,7 @@ export default function pageMisCanchas() {
               width={150}
               height={150}
             />
-            <p className="text-center text-sm text-gray-500 p-20  pt-10 pb-0 w-[40vw]">
+            <p className="text-center text-sm text-gray-500 p-20 pt-10 pb-0 w-[40vw]">
               Actualmente no tienes canchas, agrega las canchas de tu complejo
               deportivo para empezar a recibir reservas y conectar con más
               clientes. Es rápido y sencillo. ¡Haz clic en el botón y comienza

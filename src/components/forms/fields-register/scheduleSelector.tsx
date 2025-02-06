@@ -9,8 +9,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
-import { useGlobalStore } from "@/store";
-import { useState } from "react";
+import { useGlobalStore, useShallow } from "@/store";
+import { useState, useEffect } from "react";
 import { addHours, isWithinInterval, parse } from "date-fns";
 import { es } from "date-fns/locale";
 import { ScheduleCalendar } from "./scheduleCalendar";
@@ -24,7 +24,10 @@ interface TimeSlot {
 
 export function ScheduleSelector() {
   const { toast } = useToast();
-  const [schedules, setSchedules] = useState<TimeSlot[]>([]);
+  const field = useGlobalStore(useShallow((state) => state.field));
+  const [schedules, setSchedules] = useState<TimeSlot[]>(
+    field.field_schedule || []
+  );
   const [selectedDay, setSelectedDay] = useState<string>("");
   const [selectedStartTime, setSelectedStartTime] = useState<string>("");
   const [selectedRange, setSelectedRange] = useState<string>("2");
@@ -43,6 +46,13 @@ export function ScheduleSelector() {
     const hour = i.toString().padStart(2, "0");
     return `${hour}:00`;
   });
+
+  // Mantener sincronizado con el estado global
+  useEffect(() => {
+    if (field.field_schedule) {
+      setSchedules(field.field_schedule);
+    }
+  }, [field.field_schedule]);
 
   // Validar superposición de horarios
   const hasOverlap = (newSchedule: TimeSlot) => {
@@ -65,11 +75,14 @@ export function ScheduleSelector() {
     });
   };
 
-  const handleAddSchedule = () => {
+  const handleAddSchedule = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+
     if (!selectedDay || !selectedStartTime || !selectedRange) {
       toast({
         title: "Error",
-        description: "Por favor completa todos los campos",
+        description: "Por favor completa todos los campos del horario",
         variant: "destructive",
       });
       return;
@@ -94,13 +107,33 @@ export function ScheduleSelector() {
       return;
     }
 
-    setSchedules([...schedules, newSchedule]);
+    const newSchedules = [...schedules, newSchedule];
+    setSchedules(newSchedules);
+
+    // Actualizar el estado global manteniendo los demás campos
     useGlobalStore.getState().updateStore("field", {
-      field_schedule: [...schedules, newSchedule],
+      ...field, // Mantener todos los campos existentes
+      field_schedule: newSchedules,
     });
+
+    setSelectedDay("");
+    setSelectedStartTime("");
+    setSelectedRange("2");
+
     toast({
       title: "Horario agregado correctamente",
       variant: "default",
+    });
+  };
+
+  const handleDeleteSchedule = (index: number) => {
+    const newSchedules = schedules.filter((_, i) => i !== index);
+    setSchedules(newSchedules);
+
+    // Actualizar el estado global manteniendo los demás campos
+    useGlobalStore.getState().updateStore("field", {
+      ...field, // Mantener todos los campos existentes
+      field_schedule: newSchedules,
     });
   };
 
@@ -109,7 +142,7 @@ export function ScheduleSelector() {
       <div className="grid grid-cols-3 gap-4">
         <div className="space-y-2">
           <Label>Día</Label>
-          <Select onValueChange={setSelectedDay}>
+          <Select value={selectedDay} onValueChange={setSelectedDay}>
             <SelectTrigger>
               <SelectValue placeholder="Selecciona un día" />
             </SelectTrigger>
@@ -125,7 +158,10 @@ export function ScheduleSelector() {
 
         <div className="space-y-2">
           <Label>Hora de inicio</Label>
-          <Select onValueChange={setSelectedStartTime}>
+          <Select
+            value={selectedStartTime}
+            onValueChange={setSelectedStartTime}
+          >
             <SelectTrigger>
               <SelectValue placeholder="Hora inicio" />
             </SelectTrigger>
@@ -141,10 +177,7 @@ export function ScheduleSelector() {
 
         <div className="space-y-2">
           <Label>Rango (horas)</Label>
-          <Select
-            defaultValue="2"
-            onValueChange={(value) => setSelectedRange(value)}
-          >
+          <Select value={selectedRange} onValueChange={setSelectedRange}>
             <SelectTrigger>
               <SelectValue placeholder="Duración" />
             </SelectTrigger>
@@ -162,6 +195,7 @@ export function ScheduleSelector() {
       <div className="grid grid-cols-2 gap-4">
         <div className="space-y-4">
           <Button
+            type="button"
             onClick={handleAddSchedule}
             className="w-full bg-[#46C556] text-white"
           >
@@ -183,15 +217,7 @@ export function ScheduleSelector() {
                     <Button
                       variant="ghost"
                       size="sm"
-                      onClick={() => {
-                        const newSchedules = schedules.filter(
-                          (_, i) => i !== index
-                        );
-                        setSchedules(newSchedules);
-                        useGlobalStore.getState().updateStore("field", {
-                          field_schedule: newSchedules,
-                        });
-                      }}
+                      onClick={() => handleDeleteSchedule(index)}
                     >
                       ✕
                     </Button>

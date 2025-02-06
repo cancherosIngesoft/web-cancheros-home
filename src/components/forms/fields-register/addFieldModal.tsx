@@ -19,7 +19,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useShallow } from "@/store";
 import {
   Carousel,
@@ -35,6 +35,7 @@ import { ScheduleSelector } from "./scheduleSelector";
 import { toast } from "@/hooks/use-toast";
 import { formatCOP, parseCOP } from "@/utils/utils";
 import { registerField } from "@/actions/registro_host/field";
+
 interface FieldFormData {
   nombre: string;
   tipo: string;
@@ -55,7 +56,7 @@ export function AddFieldModal({ open, onOpenChange }: AddFieldModalProps) {
   );
   const [displayPrice, setDisplayPrice] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const { field } = useGlobalStore();
+  const field = useGlobalStore(useShallow((state) => state.field));
   const auth = useGlobalStore(useShallow((state) => state.auth));
   const {
     register,
@@ -64,6 +65,29 @@ export function AddFieldModal({ open, onOpenChange }: AddFieldModalProps) {
     reset,
     formState: { errors },
   } = useForm<FieldFormData>();
+
+  // Efecto para sincronizar el formulario con el estado global
+  useEffect(() => {
+    if (field) {
+      // Asegurarnos de que el tipo se mantenga
+      if (field.field_type) {
+        setValue("tipo", field.field_type);
+      }
+      if (field.field_name) {
+        setValue("nombre", field.field_name);
+      }
+      if (field.field_description) {
+        setValue("descripcion", field.field_description);
+      }
+      if (field.field_capacity) {
+        setValue("capacidad", field.field_capacity);
+      }
+      if (field.field_price) {
+        setValue("precioHora", field.field_price);
+        setDisplayPrice(formatCOP(field.field_price));
+      }
+    }
+  }, [field, setValue]);
 
   // Función para limpiar todos los estados
   const clearForm = () => {
@@ -127,6 +151,16 @@ export function AddFieldModal({ open, onOpenChange }: AddFieldModalProps) {
     const formattedValue = formatCOP(rawValue);
     setDisplayPrice(formattedValue);
     setValue("precioHora", rawValue);
+  };
+
+  // Manejar el cambio de tipo específicamente
+  const handleTypeChange = (value: string) => {
+    setValue("tipo", value);
+    const currentState = useGlobalStore.getState().field;
+    useGlobalStore.getState().updateStore("field", {
+      ...field,
+      field_type: value,
+    });
   };
 
   const onSubmit = handleSubmit(async (data) => {
@@ -205,181 +239,190 @@ export function AddFieldModal({ open, onOpenChange }: AddFieldModalProps) {
             Agregar Nueva Cancha
           </DialogTitle>
         </DialogHeader>
-        <Tabs defaultValue="info" className="w-full">
-          <TabsList className="grid w-full grid-cols-2">
-            <TabsTrigger
-              value="info"
-              className="data-[state=active]:bg-[#46C556] data-[state=active]:text-white"
-            >
-              Información de la Cancha
-            </TabsTrigger>
-            <TabsTrigger
-              value="schedule"
-              className="data-[state=active]:bg-[#46C556] data-[state=active]:text-white"
-            >
-              Horarios de la Cancha
-            </TabsTrigger>
-          </TabsList>
-
-          <TabsContent value="info">
-            <div className="space-y-4 py-4">
-              <div className="space-y-2">
-                <Label
-                  htmlFor="imagenes"
-                  className="text-center text-xl text-[#1A6B51] font-bold"
-                >
-                  AGREGA IMÁGENES DE TU CANCHAS ({images.length}/5)
-                </Label>
-                {images.length < 5 && (
-                  <div className="border-2 border-dashed border-gray-300 rounded-lg p-4">
-                    <Input
-                      id="imagenes"
-                      type="file"
-                      multiple
-                      accept="image/*"
-                      className="hidden"
-                      {...register("imagenes")}
-                      onChange={handleImageChange}
-                    />
-                    <Label
-                      htmlFor="imagenes"
-                      className="flex flex-col items-center justify-center cursor-pointer"
-                    >
-                      <div className="w-full h-64 bg-gray-100 rounded-lg mb-4" />
-                      <p className="text-center text-sm text-gray-500">
-                        Arrastra y suelta las imágenes aquí o haz clic para
-                        seleccionar
-                      </p>
-                    </Label>
-                  </div>
-                )}
-
-                {images.length > 0 && (
-                  <Carousel className="w-full">
-                    <CarouselContent>
-                      {images.map((image, index) => (
-                        <CarouselItem
-                          key={index}
-                          className="basis-1/3 relative"
-                        >
-                          <Button
-                            variant="ghost"
-                            size="icon"
-                            className="absolute top-2 right-2 bg-black/50 hover:bg-black/70 rounded-full"
-                            onClick={() => handleDeleteImage(index)}
-                          >
-                            <X className="h-4 w-4 text-white" />
-                          </Button>
-                          <img
-                            src={image.preview}
-                            alt={`Cancha ${index + 1}`}
-                            className="w-full h-32 object-cover rounded-lg"
-                          />
-                        </CarouselItem>
-                      ))}
-                    </CarouselContent>
-                    <CarouselPrevious />
-                    <CarouselNext />
-                  </Carousel>
-                )}
-              </div>
-
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label htmlFor="nombre">Nombre de la cancha</Label>
-                  <Input
-                    id="nombre"
-                    {...register("nombre", {
-                      required: "El nombre es requerido",
-                    })}
-                  />
-                  {errors.nombre && (
-                    <p className="text-sm text-red-500">
-                      {errors.nombre.message}
-                    </p>
-                  )}
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="tipo">Tipo de cancha</Label>
-                  <Select
-                    onValueChange={(value) =>
-                      setValue("tipo", value, {
-                        shouldValidate: true,
-                      })
-                    }
-                  >
-                    <SelectTrigger>
-                      <SelectValue placeholder="Selecciona el tipo" />
-                    </SelectTrigger>
-                    <SelectContent className="bg-white">
-                      <SelectItem value="futbol5">Fútbol 5</SelectItem>
-                      <SelectItem value="futbol7">Fútbol 7</SelectItem>
-                      <SelectItem value="futbol11">Fútbol 11</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="capacidad">Capacidad de jugadores</Label>
-                  <Input
-                    id="capacidad"
-                    type="number"
-                    {...register("capacidad", {
-                      required: "La capacidad es requerida",
-                      min: { value: 1, message: "Mínimo 1 jugador" },
-                    })}
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="precioHora">Precio por hora</Label>
-                  <Input
-                    id="precioHora"
-                    type="text"
-                    value={displayPrice}
-                    placeholder="0"
-                    {...register("precioHora", {
-                      required: "El precio es requerido",
-                      min: {
-                        value: 2000,
-                        message: "El precio debe ser mayor a 2000",
-                      },
-                      validate: {
-                        isNumber: (value) =>
-                          !isNaN(parseCOP(value.toString())) ||
-                          "Debe ser un número válido",
-                      },
-                      onChange: handlePriceChange,
-                    })}
-                  />
-                  {errors.precioHora && (
-                    <p className="text-sm text-red-500">
-                      {errors.precioHora.message}
-                    </p>
-                  )}
-                </div>
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="descripcion">Descripción</Label>
-                <Textarea
-                  id="descripcion"
-                  {...register("descripcion", {
-                    required: "La descripción es requerida",
-                  })}
-                />
-              </div>
-            </div>
-          </TabsContent>
-
-          <TabsContent value="schedule">
-            <ScheduleSelector />
-          </TabsContent>
-        </Tabs>
 
         <form onSubmit={onSubmit}>
-          <div className="flex justify-end gap-4">
+          <Tabs defaultValue="info" className="w-full">
+            <TabsList className="grid w-full grid-cols-2">
+              <TabsTrigger
+                value="info"
+                className="data-[state=active]:bg-[#46C556] data-[state=active]:text-white"
+              >
+                Información de la Cancha
+              </TabsTrigger>
+              <TabsTrigger
+                value="schedule"
+                className="data-[state=active]:bg-[#46C556] data-[state=active]:text-white"
+              >
+                Horarios de la Cancha
+              </TabsTrigger>
+            </TabsList>
+
+            <TabsContent value="info">
+              <div className="space-y-4 py-4">
+                <div className="space-y-2">
+                  <Label
+                    htmlFor="imagenes"
+                    className="text-center text-xl text-[#1A6B51] font-bold"
+                  >
+                    AGREGA IMÁGENES DE TU CANCHAS ({images.length}/5)
+                  </Label>
+                  {images.length < 5 && (
+                    <div className="border-2 border-dashed border-gray-300 rounded-lg p-4">
+                      <Input
+                        id="imagenes"
+                        type="file"
+                        multiple
+                        accept="image/*"
+                        className="hidden"
+                        {...register("imagenes")}
+                        onChange={handleImageChange}
+                      />
+                      <Label
+                        htmlFor="imagenes"
+                        className="flex flex-col items-center justify-center cursor-pointer"
+                      >
+                        <div className="w-full h-64 bg-gray-100 rounded-lg mb-4" />
+                        <p className="text-center text-sm text-gray-500">
+                          Arrastra y suelta las imágenes aquí o haz clic para
+                          seleccionar
+                        </p>
+                      </Label>
+                    </div>
+                  )}
+
+                  {images.length > 0 && (
+                    <Carousel className="w-full">
+                      <CarouselContent>
+                        {images.map((image, index) => (
+                          <CarouselItem
+                            key={index}
+                            className="basis-1/3 relative"
+                          >
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              className="absolute top-2 right-2 bg-black/50 hover:bg-black/70 rounded-full"
+                              onClick={() => handleDeleteImage(index)}
+                            >
+                              <X className="h-4 w-4 text-white" />
+                            </Button>
+                            <img
+                              src={image.preview}
+                              alt={`Cancha ${index + 1}`}
+                              className="w-full h-32 object-cover rounded-lg"
+                            />
+                          </CarouselItem>
+                        ))}
+                      </CarouselContent>
+                      <CarouselPrevious />
+                      <CarouselNext />
+                    </Carousel>
+                  )}
+                </div>
+
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="nombre">Nombre de la cancha</Label>
+                    <Input
+                      id="nombre"
+                      {...register("nombre", {
+                        required: "El nombre es requerido",
+                      })}
+                    />
+                    {errors.nombre && (
+                      <p className="text-sm text-red-500">
+                        {errors.nombre.message}
+                      </p>
+                    )}
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="tipo">Tipo de cancha</Label>
+                    <Select
+                      value={field.field_type}
+                      onValueChange={handleTypeChange}
+                    >
+                      <SelectTrigger>
+                        <SelectValue placeholder="Selecciona el tipo" />
+                      </SelectTrigger>
+                      <SelectContent className="bg-white">
+                        <SelectItem value="futbol5">Fútbol 5</SelectItem>
+                        <SelectItem value="futbol7">Fútbol 7</SelectItem>
+                        <SelectItem value="futbol11">Fútbol 11</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    {errors.tipo && (
+                      <p className="text-sm text-red-500">
+                        {errors.tipo.message}
+                      </p>
+                    )}
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="capacidad">Capacidad de jugadores</Label>
+                    <Input
+                      id="capacidad"
+                      type="number"
+                      {...register("capacidad", {
+                        required: "La capacidad es requerida",
+                        min: { value: 1, message: "Mínimo 1 jugador" },
+                      })}
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="precioHora">Precio por hora</Label>
+                    <Input
+                      id="precioHora"
+                      type="text"
+                      value={displayPrice}
+                      placeholder="0"
+                      {...register("precioHora", {
+                        required: "El precio es requerido",
+                        validate: {
+                          minValue: (value) => {
+                            const numValue = parseCOP(value.toString());
+                            return (
+                              numValue >= 2000 ||
+                              "El precio debe ser mayor a 2000"
+                            );
+                          },
+                          isNumber: (value) =>
+                            !isNaN(parseCOP(value.toString())) ||
+                            "Debe ser un número válido",
+                        },
+                      })}
+                      onChange={(e) => {
+                        handlePriceChange(e);
+                        register("precioHora").onChange(e); // Mantener la sincronización con react-hook-form
+                      }}
+                    />
+                    {errors.precioHora && (
+                      <p className="text-sm text-red-500">
+                        {errors.precioHora.message}
+                      </p>
+                    )}
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="descripcion">Descripción</Label>
+                  <Textarea
+                    id="descripcion"
+                    {...register("descripcion", {
+                      required: "La descripción es requerida",
+                    })}
+                  />
+                </div>
+              </div>
+            </TabsContent>
+
+            <TabsContent value="schedule">
+              <ScheduleSelector />
+            </TabsContent>
+          </Tabs>
+
+          <div className="flex justify-end gap-4 mt-4">
             <Button
               type="button"
               variant="outline"
