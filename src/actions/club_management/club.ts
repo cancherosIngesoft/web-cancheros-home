@@ -80,28 +80,36 @@ const mockClubs: ReturnClub[] = [
       idTeam: "team_001",
       idCaptain: "15",
       numberPlayers: 11,
-      name: "Los Titanes",
-      icon: "https://example.com/icons/titanes.png"
+      teamName: "Los Titanes",
+      icon: "https://example.com/icons/titanes.png",
+      nameCapitan: "",
+      description: ""
     },
     {
       idTeam: "team_002",
       idCaptain: "15",
       numberPlayers: 8,
-      name: "Fuerza Azul",
-      icon: "https://example.com/icons/fuerza_azul.png"
+      teamName: "Fuerza Azul",
+      icon: "https://example.com/icons/fuerza_azul.png",
+      nameCapitan: "",
+      description: ""
     },
     {
       idTeam: "team_003",
       idCaptain: "captain_103",
       numberPlayers: 5,
-      name: "Rápidos y Furiosos"
+      teamName: "Rápidos y Furiosos",
+      nameCapitan: "",
+      description: ""
     },
     {
       idTeam: "team_004",
       idCaptain: "captain_104",
       numberPlayers: 7,
-      name: "Los Halcones",
-      icon: "https://example.com/icons/halcones.png"
+      teamName: "Los Halcones",
+      icon: "https://example.com/icons/halcones.png",
+      nameCapitan: "",
+      description: ""
     },
     
     
@@ -111,8 +119,10 @@ const mockClubs: ReturnClub[] = [
 export interface ReturnClub{
   idTeam: string;
   idCaptain: string;
+  nameCapitan:string;
+  description:string;
   numberPlayers: number;
-  name: string;
+  teamName: string;
   icon?:string;
 }
   export async function getClubs(
