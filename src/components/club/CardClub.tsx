@@ -2,7 +2,7 @@ import type { ReturnClub } from "@/actions/club_management/club"
 import CustomShield from "../icon/CustomShield"
 
 import SoccerShoe from "../icon/SoccerShoe"
-import PlayerWithBall from "../icon/PlaterWithBall"
+import PlayerWithBall from "../icon/PlayerWithBall"
 import { useTeamDataStore } from "@/store"
  import { useRouter } from 'next/navigation'
 import { set } from "date-fns"
@@ -17,8 +17,10 @@ interface CardClubProps {
 const CardClub = ({ club,idUser , onClosePanel}:CardClubProps) => {
 
     const setDataTeam = useTeamDataStore((state) => state.updateTeamData)
+    const clearDataTeam = useTeamDataStore((state) => state.clearTeamData)
     const router = useRouter()
     const handleTeamSelected = () => {
+        clearDataTeam()
         setDataTeam(club )
         router.push("/club")
         onClosePanel()
