@@ -1,3 +1,5 @@
+import type { Reserva } from "@/components/hostBooking/model";
+
 export const compressImage = (file: File): Promise<string> => {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
@@ -53,3 +55,56 @@ export const parseCOP = (value: string) => {
   // Elimina cualquier caracter que no sea número
   return parseInt(value.replace(/\D/g, "")) || 0;
 };
+
+export function groupReservasByWeek(
+  reservas: Reserva[]
+): Record<string, Record<string, Reserva[]>> {
+  const grouped: Record<string, Record<string, Reserva[]>> = {};
+
+  reservas.forEach((reserva) => {
+    const date = new Date(reserva.fecha);
+    const weekStart = getWeekStart(date).toISOString().split("T")[0];
+    const dateString = date.toISOString().split("T")[0];
+
+    if (!grouped[weekStart]) {
+      grouped[weekStart] = {};
+    }
+    if (!grouped[weekStart][dateString]) {
+      grouped[weekStart][dateString] = [];
+    }
+    grouped[weekStart][dateString].push(reserva);
+  });
+
+  // Ordenar las semanas y los días dentro de cada semana
+  const sortedGrouped: Record<string, Record<string, Reserva[]>> = {};
+  Object.keys(grouped)
+    .sort()
+    .forEach((weekStart) => {
+      sortedGrouped[weekStart] = {};
+      Object.keys(grouped[weekStart])
+        .sort()
+        .forEach((date) => {
+          sortedGrouped[weekStart][date] = grouped[weekStart][date];
+        });
+    });
+
+  return sortedGrouped;
+}
+
+function getWeekStart(date: Date): Date {
+  const d = new Date(date);
+  const day = d.getDay();
+  const diff = d.getDate() - day + (day === 0 ? -6 : 1); // adjust when day is sunday
+  return new Date(d.setDate(diff));
+}
+
+export function getCanchasId(canchas: {
+  courts: { id_cancha: string; precio: number }[];
+}): { canchas_id: string; valor_hora: number }[] {
+  return canchas.courts.map((cancha) => {
+    return {
+      canchas_id: cancha.id_cancha,
+      valor_hora: cancha.precio,
+    };
+  });
+}

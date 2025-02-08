@@ -32,8 +32,12 @@ const initialState: IGlobalState = {
     field_schedule: [],
     field_type: "",
     field_capacity: 0,
+    canchas_id: [],
   },
-  // Otros slices iniciales aquí. Un slice es una parte del store. Como una mini store.
+  hostReservation: {
+    reservas: [],
+    canchas: [],
+  },
 };
 
 export const useGlobalStore = create<TGlobalStoreData>()(
