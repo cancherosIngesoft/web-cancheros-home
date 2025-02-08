@@ -7,7 +7,7 @@ import { Card, CardContent } from "@/components/ui/card"
 import UpcomingMatch from "@/components/club/UpcomingMatch"
 
 const TeamPage = () => {
-    const { teamName } = useTeamDataStore()
+    const { teamName,idTeam } = useTeamDataStore()
 
     const NoTeamSelected = () => (
         <Card className="border-0 shadow-none">
@@ -29,7 +29,7 @@ const TeamPage = () => {
                     <>
                         <TabsContent value="mi-club" className="space-y-6">
                             <TeamInfo />
-                            <UpcomingMatch />
+                            <UpcomingMatch idTeam={idTeam} />
                         </TabsContent>
 
                         <TabsContent value="partidos-pasados">
