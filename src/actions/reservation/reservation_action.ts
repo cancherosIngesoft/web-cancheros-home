@@ -69,7 +69,7 @@ export async function getPastReservation(id_user: string): Promise<ReservationAc
     }
 }
 
-interface TeamReservationReturn {
+export interface TeamReservationReturn {
     idReservation: string,
     dateReservation: string
     hours: { horaInicio: string, horaFin: string }

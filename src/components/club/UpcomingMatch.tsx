@@ -1,60 +1,48 @@
 "use client"
+import { AlertCircle } from "lucide-react"
+import { useQuery } from "@tanstack/react-query"
+import { getTeamActiveReservation } from "@/actions/reservation/reservation_action"
+import CardUpcomingMatch from "./CardUpcomingMatch"
+import { Skeleton } from "@/components/ui/skeleton"
 
-import { Card, CardContent } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { MapPin, Clock, Timer } from "lucide-react"
-import Link from "next/link"
 
-export default function UpcomingMatch() {
+interface UpcomingMatchProps {
+  idUser: string
+  idTeam: string
+}
+
+export default function UpcomingMatch({ idUser, idTeam }: UpcomingMatchProps) {
+  const { data, isLoading, isError, error } = useQuery({
+    queryKey: ["upcomingMatch", idTeam, idUser],
+    queryFn: () => getTeamActiveReservation(idTeam, idUser),
+    enabled: true,
+    retry: 1,
+  })
+
   return (
-    <div className=" rounded-lg flex flex-col gap-2">
-      <h2 className="text-2xl font-bold">Próximos partidos</h2>
-      <div className="bg-white p-6 rounded-md">
-      <Card >
-        <CardContent className="p-6">
-          <div className="grid gap-6 md:grid-cols-[240px_1fr]">
-            <img
-              src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-5iJJ3gl0vu6h7cb0KssOZMySIxxwHT.png"
-              alt="Campo de fútbol"
-              className="w-full aspect-video object-cover rounded-lg"
-            />
-            <div className="space-y-4">
-              <div className="flex justify-between items-start">
-                <div>
-                  <h3 className="text-xl font-semibold">Revancha</h3>
-                  <div className="text-2xl font-bold text-green-600">$ 200.000</div>
-                </div>
-              </div>
-              <div className="space-y-2 text-sm text-muted-foreground">
-                <div className="flex items-center gap-2">
-                  <MapPin className="w-4 h-4" />
-                  <Link href="#" className="hover:underline">
-                    https://www.maps...
-                  </Link>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Clock className="w-4 h-4" />
-                  <span>12pm-2pm</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Timer className="w-4 h-4" />
-                  <span>2 horas</span>
-                </div>
-              </div>
-              <Button className="w-full sm:w-auto">
-                Más detalles
-                <span className="sr-only">sobre el partido</span>
-              </Button>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
-      </div>
-      
+    <div className="w-full rounded-lg flex flex-col gap-2 p-4 md:p-6">
+      <h2 className="text-xl md:text-2xl font-bold">Próximos partidos</h2>
+      {isLoading ? (
+        <Skeleton className="w-full h-32 md:h-40 rounded-md" />
+      ) : isError ? (
+        <>
 
+          <AlertCircle className="h-4 w-4" />
+
+          {error instanceof Error ? error.message : "An error occurred while fetching the data."}
+
+        </>
+
+      ) : (
+        <div className="bg-white p-4 md:p-6 rounded-md shadow-sm">
+          {data && data.length > 0 ? (
+            data.map((reservation) => <CardUpcomingMatch key={reservation.idReservation} {...reservation} />)
+          ) : (
+            <p className="text-center text-gray-500">No hay partidos próximos.</p>
+          )}
+        </div>
+      )}
     </div>
-
-
   )
 }
 
