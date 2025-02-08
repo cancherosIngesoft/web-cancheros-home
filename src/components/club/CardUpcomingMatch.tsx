@@ -104,6 +104,7 @@ const CardUpcomingMatch = (reservation: TeamReservationReturn) => {
                 isOpen={isModalOpen}
                 onClose={() => setIsModalOpen(false)}
                 reservation={reservation}
+                
             />
         </>
     )

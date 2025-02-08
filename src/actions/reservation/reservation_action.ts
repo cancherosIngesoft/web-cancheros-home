@@ -141,6 +141,7 @@ export interface TeamReservationReturn {
 }
 
 export async function getTeamActiveReservation(id_team: string, id_user:string): Promise<TeamReservationReturn[]> {
+    console.log("active reservartions", id_user, id_team)
 return teamReservationsMock;
     // try {
     //     const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/reservations/team/active${id_user}`, {
