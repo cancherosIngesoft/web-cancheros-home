@@ -228,7 +228,7 @@ const teamReservationsMock: TeamReservationReturn[] = [
     }
   ];
   
-  console.log(teamReservationsMock);
+  
   
 export interface TeamReservationReturn {
     idReservation: string,
