@@ -1,17 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import type { Reserva } from "@/components/hostBooking/model";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
 import { ChevronDown, ChevronUp, Search } from "lucide-react";
 import {
   Popover,
@@ -74,7 +65,7 @@ export default function ReservasPorCancha({ canchas }: ReservasPorCanchaProps) {
             onClick={() => toggleCancha(cancha)}
             className="w-full justify-between"
           >
-            {cancha}
+            {canchasStore.find((c) => c.canchas_id === cancha)?.nombre_cancha}
             {expandedCancha === cancha ? (
               <ChevronUp className="h-4 w-4" />
             ) : (

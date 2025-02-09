@@ -1,6 +1,4 @@
-import type { Reserva } from "@/components/hostBooking/model";
-import { useGlobalStore } from "@/store";
-import { getCanchasId } from "@/utils/utils";
+import { fetchWithRetry } from "@/utils/utils";
 
 export interface ReservationActiveReturn {
   idReservation: string;
@@ -145,7 +143,7 @@ export async function getCanchas(
   if (!id_user) return [];
 
   try {
-    const res = await fetch(
+    const res = await fetchWithRetry(
       `${process.env.NEXT_PUBLIC_API_URL}/api/get_courts/${id_user}`,
       {
         method: "GET",
@@ -154,10 +152,6 @@ export async function getCanchas(
         },
       }
     );
-
-    if (!res.ok) {
-      throw new Error("Error fetching courts");
-    }
 
     const data = await res.json();
     return data.courts.map((court: any) => ({
