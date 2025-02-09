@@ -62,16 +62,14 @@ export default function ModalInfoReservation({
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="max-w-4xl p-0 gap-0">
         {/* Header */}
-        <DialogHeader className="p-4 flex flex-row items-center justify-between border-b">
+        <DialogHeader className="p-4 flex flex-row items-center justify-between border-b bg-primary rounded-md">
           <div className="flex items-center gap-4">
             <DialogTitle className="text-xl font-bold">
               {reservation.TeamA.teamName} vs {reservation.TeamB.teamName}
             </DialogTitle>
             
           </div>
-          <Button variant="ghost" size="icon" onClick={onClose}>
-            <X className="h-4 w-4" />
-          </Button>
+          
         </DialogHeader>
 
         {/* Content */}
@@ -164,41 +162,7 @@ export default function ModalInfoReservation({
         </div>
 
         {/* Footer - Conditional Buttons */}
-        {isBooker && (
-          <div className="border-t p-4">
-            <div className="flex gap-4">
-              <TooltipProvider>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <div className="flex-1">
-                      <Button variant="outline" onClick={handleReschedule} disabled={disabled} className="w-full">
-                        Reprogramar Reserva
-                      </Button>
-                    </div>
-                  </TooltipTrigger>
-                  {disabled && (
-                    <TooltipContent className="bg-surface shadow-md max-w-48 mb-2">{tooltipMessage}</TooltipContent>
-                  )}
-                </Tooltip>
-              </TooltipProvider>
-
-              <TooltipProvider>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <div className="flex-1">
-                      <Button variant="destructive" onClick={handleCancel} disabled={disabled} className="w-full">
-                        Cancelar Reserva
-                      </Button>
-                    </div>
-                  </TooltipTrigger>
-                  {disabled && (
-                    <TooltipContent className="bg-surface shadow-md max-w-48 mb-2">{tooltipMessage}</TooltipContent>
-                  )}
-                </Tooltip>
-              </TooltipProvider>
-            </div>
-          </div>
-        )}
+        
       </DialogContent>
     </Dialog>
   )

@@ -76,7 +76,7 @@ const teamReservationsMock: TeamReservationReturn[] = [
       idReservation: "res_001",
       dateReservation: "2025-02-15",
       hours: { horaInicio: "18:00", horaFin: "20:00" },
-      idBooker: "user_123",
+      idBooker: "66",
       bussinesName: "Cancha Fútbol 5 Bogotá",
       FieldType: "Fútbol 5",
       capacity: 10,
