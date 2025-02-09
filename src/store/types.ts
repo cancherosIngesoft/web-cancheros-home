@@ -22,6 +22,27 @@ export interface IFieldState {
     startTime: string;
     endTime: string;
   }[];
+  canchas_id: string[];
+}
+
+export interface HostReservationState {
+  reservas: {
+    estado_procesado: boolean;
+    hora_fin: string;
+    hora_inicio: string;
+    id_reserva: number;
+    partido: string | null;
+    reservante: {
+      id_reservante: number;
+      nombre: string;
+      tipo_reservante: string;
+    };
+  }[];
+  canchas: {
+    canchas_id: string;
+    valor_hora: number;
+    nombre_cancha: string;
+  }[];
 }
 
 export interface IUserState {
@@ -35,6 +56,7 @@ export interface IGlobalState {
   auth: IAuthState;
   user: IUserState;
   field: IFieldState;
+  hostReservation: HostReservationState;
   // Puedes agregar más slices aquí. una slice es una parte del store.
 }
 //Funciones para actualizar y borrar el store

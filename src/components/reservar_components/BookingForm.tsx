@@ -252,7 +252,9 @@ const BookingForm: React.FC<BookingFormProps> = ({ selectedField }) => {
             horas: reservationInfo.hours?.length ?? 0,
             horaInicio: reservationInfo.hours?.[0].hora_inicio ?? "",
             horaFin: reservationInfo.hours?.[0].hora_fin ?? "",
-            total: parseInt(Number(reservationInfo?.price ?? "0").toString()),
+            total: parseInt(
+              (Number(reservationInfo?.price ?? "0") / 2).toString()
+            ),
           }}
         ></PaymentModal>
       )}
