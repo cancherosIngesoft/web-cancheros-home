@@ -33,7 +33,7 @@ export default function TeamsInformation({
                   {teams.TeamA.members.map((member: string, index: number) => (
                     <div
                       key={index}
-                      className="text-sm text-center p-2 flex flex-row items-center gap-2 bg-blue-600/60 text-white font-semibold rounded"
+                      className="text-sm text-center p-2 flex flex-row items-center gap-2 bg-blue-600/80 text-white font-semibold rounded"
                     >
                       <div className="rounded-full bg-white w-4 h-4"></div>
                       {member}
@@ -41,7 +41,7 @@ export default function TeamsInformation({
                   ))}
                 </div>
                 <Button
-                  className="mt-4 w-full border-blue-500 border-2 bg-transparent hover:bg-blue-400 font-bold text-white"
+                  className="mt-4 w-full border-blue-500 border-2 bg-transparent hover:bg-blue-700 font-bold text-white bg-blue-500"
                   variant="outline"
                   onClick={() => onJoinTeam(teams.TeamA.idTeam, teams.TeamA.teamName)}
                   disabled={isLoading || userTeam !== null}
@@ -80,7 +80,7 @@ export default function TeamsInformation({
                   {teams.TeamB.members.map((member, index) => (
                     <div
                       key={index}
-                      className="text-sm text-center p-2 flex flex-row items-center gap-2 bg-orange-400/60 text-white font-semibold rounded"
+                      className="text-sm text-center p-2 flex flex-row items-center gap-2 bg-orange-400/80 text-white font-semibold rounded"
                     >
                       <div className="rounded-full bg-white w-4 h-4" />
                       {member}
@@ -88,7 +88,7 @@ export default function TeamsInformation({
                   ))}
                 </div>
                 <Button
-                  className="mt-4 w-full border-orange-500 border-2 bg-transparent hover:bg-orange-600 hover:text-white font-bold"
+                  className="mt-4 w-full border-orange-500 border-2 bg-transparent hover:bg-orange-600 hover:text-white font-bold text-white bg-orange-300"
                   variant="outline"
                   onClick={() => onJoinTeam(teams.TeamB.idTeam, teams.TeamB.teamName)}
                   disabled={isLoading || userTeam !== null}
@@ -100,10 +100,10 @@ export default function TeamsInformation({
           </div>
         </div>
       </div>
-      <div className="w-full h-20 flex justify-center">
+      <div className="w-full h-20 flex justify-center  rounded-b-lg">
         <Button
-          variant="ghost"
-          className="w-full mx-4 my-2 bg-gray-200 hover:bg-gray-300"
+          variant="outline"
+          className="w-full border-2 border-primary-50 mx-4 my-2 bg-primary-90 hover:bg-primary-60 font-bold hover:text-white"
           onClick={onLeaveTeam}
           disabled={isLoading || userTeam === null}
         >
