@@ -21,19 +21,20 @@ export default async function reservar_cancha() {
 
   return (
     <div className="flex  flex-col items-center justify-center ">
-     
-        <div className="flex flex-col align-start w-full mb-10">
-          <h1 className="text-3xl text-primary-40 font-bold">Seleciona el negocio donde deseas hacer tus reservas</h1>
-          <p className="text-gray-500 mt-2">Utiliza los filtros para encontar la cancha que responda atus necesidades. Luego seleciona uno de nuestro establecimientos para ver mas de sus detalles</p>
-        </div>
-      
-        <div className="px-6 w-full">
-          <SelectBussiness initialBusinesses={allTheBussiness}/>
-        </div>
-      
+      <div className="flex flex-col align-start w-full mb-10">
+        <h1 className="text-3xl text-primary-40 font-bold">
+          Seleciona el negocio donde deseas hacer tus reservas
+        </h1>
+        <p className="text-gray-500 mt-2">
+          Utiliza los filtros para encontrar la cancha que responda a tus
+          necesidades. Luego selecciona uno de nuestros establecimientos para
+          ver más de sus detalles
+        </p>
+      </div>
 
-
-
+      <div className="px-6 w-full">
+        <SelectBussiness initialBusinesses={allTheBussiness} />
+      </div>
     </div>
   );
 }
