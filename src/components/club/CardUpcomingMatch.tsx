@@ -6,7 +6,7 @@ import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import type { TeamReservationReturn } from "@/actions/reservation/reservation_action"
 import { useState } from "react"
-import ModalInfoReservation from "./ModalInfoReservation"
+import ModalInfoReservation from "./ModalInfoReservation/ModalInfoReservation"
 import Image from 'next/image'
 
 const CardUpcomingMatch = (reservation: TeamReservationReturn) => {

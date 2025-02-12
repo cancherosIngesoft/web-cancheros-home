@@ -218,12 +218,12 @@ const teamReservationsMock: TeamReservationReturn[] = [
       TeamA: { 
         idTeam: "team_201", 
         teamName: "Leones del Norte", 
-        members: ["David Herrera", "Santiago López", "Pedro Castillo"] 
+        members: ["David Herrera", "Santiago López", "Pedro Castillo", "Pedro Castillo","David Herrera", "Santiago López", "Pedro Castillo", "Pedro Castillo", "Pedro Castillo","David Herrera", "Santiago López",] 
       },
       TeamB: { 
         idTeam: "team_202", 
         teamName: "Dragones Rojos", 
-        members: ["Ricardo Medina", "Jorge Ríos", "Oscar Martínez"] 
+        members: ["David Herrera", "Santiago López", "Pedro Castillo", "Pedro Castillo","David Herrera", "Santiago López", "Pedro Castillo", "Pedro Castillo", "Pedro Castillo","David Herrera", "Santiago López",] 
       }
     }
   ];
