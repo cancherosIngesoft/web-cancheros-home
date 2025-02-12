@@ -1,10 +1,11 @@
 "use client"
 import { AlertCircle } from "lucide-react"
 import { useQuery } from "@tanstack/react-query"
-import { getTeamActiveReservation } from "@/actions/reservation/reservation_action"
+
 import CardUpcomingMatch from "./CardUpcomingMatch"
 import { Skeleton } from "@/components/ui/skeleton"
 import { useGlobalStore, useShallow } from "@/store"
+import { getTeamActiveReservation } from "@/actions/reservation/club_reservation_action"
 
 
 interface UpcomingMatchProps {

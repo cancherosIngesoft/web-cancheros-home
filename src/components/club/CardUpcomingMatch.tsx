@@ -3,11 +3,12 @@
 import { Clock, MapPin, Timer, ChevronRight, Circle, ImageOff } from 'lucide-react'
 import { Card, CardContent } from "@/components/ui/card"
 import Link from "next/link"
-import { Button } from "@/components/ui/button"
-import type { TeamReservationReturn } from "@/actions/reservation/reservation_action"
+
 import { useState } from "react"
 import ModalInfoReservation from "./ModalInfoReservation/ModalInfoReservation"
 import Image from 'next/image'
+import { TeamReservationReturn } from '@/actions/reservation/club_reservation_action'
+import { Button } from '../ui/button'
 
 const CardUpcomingMatch = (reservation: TeamReservationReturn) => {
     const [isModalOpen, setIsModalOpen] = useState(false)
@@ -50,7 +51,7 @@ const CardUpcomingMatch = (reservation: TeamReservationReturn) => {
                             {/* Encabezado con título y precio */}
                             <div className="flex justify-between items-start flex-wrap gap-2">
                                 <h3 className="text-xl font-semibold">
-                                    {reservation.TeamA.teamName} vs {reservation.TeamB.teamName}
+                                    {reservation.teamAName} vs {reservation.teamBName}
                                 </h3>
 
                             </div>

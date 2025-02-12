@@ -1,16 +1,20 @@
 "use client"
 
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
-import type { TeamReservationReturn } from "@/actions/reservation/reservation_action"
 import { useState, useEffect } from "react"
 import { useGlobalStore, useShallow } from "@/store"
 import MatchInformation from "./MatchInformation"
 import TeamsInformation from "./TeamsInformation"
-import { useMutation, useQueryClient } from "@tanstack/react-query"
-
-
-import { desJoinTeam, joinTeam } from "@/actions/reservation/club_reservation_action"
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
+import {
+  desJoinTeam,
+  getTeams,
+  joinTeam,
+  type TeamReservationReturn,
+} from "@/actions/reservation/club_reservation_action"
 import { useToast } from "@/hooks/use-toast"
+import { Skeleton } from "@/components/ui/skeleton"
+import { XCircle } from "lucide-react"
 
 interface ModalInfoReservationProps {
   isOpen: boolean
@@ -21,6 +25,7 @@ interface ModalInfoReservationProps {
 export default function ModalInfoReservation({ isOpen, onClose, reservation }: ModalInfoReservationProps) {
   const [disabled, setDisabled] = useState(false)
   const [tooltipMessage, setTooltipMessage] = useState("")
+  const [userTeam, setUserTeam] = useState<string | null>(null)
   const auth = useGlobalStore(useShallow((state) => state.auth))
   const queryClient = useQueryClient()
   const { toast } = useToast()
@@ -45,20 +50,43 @@ export default function ModalInfoReservation({ isOpen, onClose, reservation }: M
     checkTimeConstraint()
   }, [reservation])
 
+  const {
+    data: teams,
+    isLoading,
+    isError,
+    error,
+  } = useQuery({
+    queryKey: ["teams", reservation.idReservation],
+    queryFn: () => getTeams(reservation.idReservation),
+    enabled: !!reservation.idReservation,
+    retry: 1,
+  })
+
+  useEffect(() => {
+    if (auth.name && teams && teams.TeamA.members.includes(auth.name)) {
+      setUserTeam(teams.TeamA.idTeam)
+    } else if (auth.name && teams && teams.TeamB.members.includes(auth.name)) {
+      setUserTeam(teams.TeamB.idTeam)
+    } else {
+      setUserTeam(null)
+    }
+  }, [teams, auth.name])
+
   const joinTeamMutation = useMutation({
     mutationFn: (id_team: string) => {
       if (!auth.id) {
-        throw new Error("User ID is null");
+        throw new Error("User ID is null")
       }
-      return joinTeam(reservation.idReservation, id_team, auth.id);
+      return joinTeam(reservation.idReservation, id_team, auth.id)
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["reservation", reservation.idReservation] });
+    onSuccess: (_, id_team) => {
+      queryClient.invalidateQueries({ queryKey: ["teams", reservation.idReservation] })
+      setUserTeam(id_team)
       toast({
         title: "Éxito",
         description: "Te has unido al equipo correctamente.",
         variant: "default",
-      });
+      })
     },
     onError: (error: Error) => {
       toast({
@@ -66,25 +94,26 @@ export default function ModalInfoReservation({ isOpen, onClose, reservation }: M
         description: error.message || "No se pudo unir al equipo. Por favor, intenta de nuevo.",
         variant: "destructive",
         duration: 3000,
-      });
+      })
     },
-  });
+  })
 
   const leaveTeamMutation = useMutation({
     mutationFn: () => {
       if (!auth.id) {
-        throw new Error("User ID is null");
+        throw new Error("User ID is null")
       }
-      return desJoinTeam(reservation.idReservation, auth.id);
+      return desJoinTeam(reservation.idReservation, auth.id)
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["reservation", reservation.idReservation] });
+      queryClient.invalidateQueries({ queryKey: ["teams", reservation.idReservation] })
+      setUserTeam(null)
       toast({
         title: "Éxito",
         description: "Has salido del equipo correctamente.",
         variant: "default",
         duration: 3000,
-      });
+      })
     },
     onError: (error: Error) => {
       toast({
@@ -92,9 +121,9 @@ export default function ModalInfoReservation({ isOpen, onClose, reservation }: M
         description: error.message || "No se pudo salir del equipo. Por favor, intenta de nuevo.",
         variant: "destructive",
         duration: 3000,
-      });
+      })
     },
-  });
+  })
 
   const handleReschedule = () => {
     console.log("Reprogramar")
@@ -117,7 +146,7 @@ export default function ModalInfoReservation({ isOpen, onClose, reservation }: M
       <DialogContent className="w-[95vw] max-w-5xl p-0 gap-0 max-h-[90vh] overflow-y-auto md:overflow-hidden">
         <DialogHeader className="p-4 m-0 flex flex-row items-center justify-between border-b max-h-16 bg-primary-70 rounded-t-md">
           <DialogTitle className="text-lg sm:text-xl md:text-2xl font-bold text-white">
-            {reservation.TeamA.teamName} vs {reservation.TeamB.teamName}
+            {teams ? `${teams.TeamA.teamName} vs ${teams.TeamB.teamName}` : "Cargando equipos..."}
           </DialogTitle>
         </DialogHeader>
 
@@ -132,14 +161,34 @@ export default function ModalInfoReservation({ isOpen, onClose, reservation }: M
               onCancel={handleCancel}
             />
           </div>
-          <div className="w-full md:w-1/2 h-full">
-            <TeamsInformation
-              reservation={reservation}
-              onJoinTeam={handleJoinTeam}
-              onLeaveTeam={handleLeaveTeam}
-              isLoading={joinTeamMutation.status === 'pending' || leaveTeamMutation.status === 'pending'}
-            />
-          </div>
+          {isLoading ? (
+            <div className="w-full md:w-1/2 h-full p-4">
+              <div className="flex flex-col md:flex-row gap-4">
+                <Skeleton className="w-full md:w-1/2 h-64 rounded-lg" />
+                <Skeleton className="w-full md:w-1/2 h-64 rounded-lg" />
+              </div>
+            </div>
+          ) : isError ? (
+            <div className="w-full md:w-1/2 h-full p-4 flex flex-col items-center justify-center text-center">
+              <XCircle className="w-12 h-12 text-red-500 mb-4" />
+              <h3 className="text-lg font-semibold mb-2">Algo ha fallado</h3>
+              <p className="text-sm text-gray-600">
+                {error instanceof Error
+                  ? error.message
+                  : "No se pudieron cargar los equipos. Por favor, intenta de nuevo."}
+              </p>
+            </div>
+          ) : teams ? (
+            <div className="w-full md:w-1/2 h-full">
+              <TeamsInformation
+                teams={teams}
+                onJoinTeam={handleJoinTeam}
+                onLeaveTeam={handleLeaveTeam}
+                isLoading={joinTeamMutation.status === "pending" || leaveTeamMutation.status === "pending"}
+                userTeam={userTeam}
+              />
+            </div>
+          ) : null}
         </div>
       </DialogContent>
     </Dialog>
