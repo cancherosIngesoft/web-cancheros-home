@@ -1,4 +1,4 @@
-export async function joinTeam(id_reservation: string, id_team:string, id_user:string): Promise<void> {
+export async function joinTeam(id_reservation: string, id_subTeam:string, id_user:string): Promise<void> {
      console.log("joinTeam", id_reservation)
     // try {
     //     const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/reservations/team/join_team}`, {
@@ -32,7 +32,7 @@ export async function desJoinTeam(id_reservation: string, id_user:string): Promi
 //             headers: {
 //                 "Content-Type": "application/json",
 //             },
-//             body: JSON.stringify({id_reservation, id_user}),
+//             body: JSON.stringify({id_reservation,id_team}),
 //         });
 
 //         if (!res.ok) {
@@ -149,7 +149,7 @@ const teamsMock: TeamsReturn = {
       TeamB: { 
         idTeam: "team_202", 
         teamName: "Dragones Rojos", 
-        members: ["David Herrera", "Santiago López", "Pedro Castillo", "Pedro Castillo","David Herrera", "Santiago López", "Pedro Castillo", "Pedro Castillo", "Pedro Castillo","David Herrera", "Santiago López",] 
+        members: ["David Herrera Palacios feo muy largo", "Santiago López", "Pedro Castillo", "Pedro Castillo","David Herrera", "Santiago López", "Pedro Castillo", "Pedro Castillo", "Pedro Castillo","David Herrera", "Santiago López",] 
       }
 }
 export async function getTeams(id_reservation: string, ): Promise<TeamsReturn> {

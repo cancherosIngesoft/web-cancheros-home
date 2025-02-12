@@ -22,21 +22,24 @@ export default function TeamsInformation({
 }: TeamsInformationProps) {
   return (
     <div className="flex-1 flex flex-col md:border-l-2 md:border-gray-200 h-full">
-      <div className="overflow-hidden md:h-[80%] relative">
+      <div className="overflow-hidden md:h-[90%] relative">
         <div className="flex flex-col md:grid md:grid-cols-2 h-full w-full">
           {/* Team A */}
           <div className=" bg-[url(/CampinAzul.jpg)] bg-cover  md:h-full">
-            <div className=" p-4 w-full h-full  flex flex-col items-center rounded-lg md:h-full">
-              <h3 className="text-lg sm:text-xl font-bold text-blue-600 mb-4">Equipo A</h3>
+            <div className=" p-4 w-full h-full gap-2 flex flex-col items-center rounded-lg md:h-full">
+              <div className=" w-4/5 bg-blue-200/70 rounded-lg p-2  flex justify-center text-center h-contain">
+                <h3 className="text-lg sm:text-lg font-bold text-blue-600 ">{teams.TeamA.teamName}</h3>
+              </div>
+
               <div className="flex-1 flex flex-col w-full space-y-1 bg-blue-600/30 rounded-lg p-2 justify-between border-2 border-blue-600">
                 <div className="flex flex-col gap-1 overflow-y-auto max-h-80 ">
                   {teams.TeamA.members.map((member: string, index: number) => (
                     <div
                       key={index}
-                      className="text-sm text-center p-2 flex flex-row items-center gap-2 bg-blue-600/80 text-white font-semibold rounded"
+                      className="text-xs text-center p-2 flex flex-row items-center gap-2 bg-blue-600/80 text-white font-semibold rounded"
                     >
-                      <div className="rounded-full bg-white w-4 h-4"></div>
-                      {member}
+                      <div className="rounded-full bg-white min-h-2 min-w-2 max-w-2 max-h-2 " />
+                      <span className="truncate">{member}</span>
                     </div>
                   ))}
                 </div>
@@ -55,7 +58,7 @@ export default function TeamsInformation({
 
           {/* VS for mobile */}
           <div className="flex md:hidden justify-center items-center h-16 my-4">
-            <div className="rounded-full bg-white bg-opacity-70 ">
+            <div className="rounded-full bg-white/70 ">
               <h1 className="font-bold text-3xl bg-gradient-to-t from-green-900 to-green-500 bg-opacity-70  text-transparent bg-clip-text p-2 rounded-full">
                 VS
               </h1>
@@ -64,7 +67,7 @@ export default function TeamsInformation({
 
           {/* VS for desktop */}
           <div className="hidden md:flex absolute inset-0 items-center justify-center pointer-events-none ">
-            <div className="rounded-full bg-white bg-opacity-70 ">
+            <div className="rounded-full bg-white/70 ">
               <h1 className="font-bold text-3xl bg-gradient-to-t from-green-900 to-green-500 bg-opacity-70  text-transparent bg-clip-text p-2 rounded-full">
                 VS
               </h1>
@@ -73,17 +76,19 @@ export default function TeamsInformation({
 
           {/* Team B */}
           <div className=" bg-[url(/CampinRojo.jpg)] bg-cover  md:h-full">
-            <div className=" p-4 w-full h-full  flex flex-col items-center rounded-lg md:h-full">
-              <h3 className="text-lg sm:text-xl font-bold text-orange-600 mb-4">Equipo B</h3>
+            <div className=" gap-2 p-4 w-full h-full  flex flex-col items-center rounded-lg md:h-full">
+              <div className=" w-4/5 bg-orange-200/70 rounded-lg p-2  flex justify-center text-center h-contain">
+                <h3 className="text-lg sm:text-lg font-bold text-orange-600 ">{teams.TeamB.teamName}</h3>
+              </div>
               <div className="flex-1 flex flex-col w-full space-y-1 bg-orange-600/30 rounded-lg p-2 justify-between border-2 border-orange-600">
                 <div className="flex flex-col gap-1 overflow-y-auto max-h-80">
                   {teams.TeamB.members.map((member, index) => (
                     <div
                       key={index}
-                      className="text-sm text-center p-2 flex flex-row items-center gap-2 bg-orange-400/80 text-white font-semibold rounded"
+                      className="text-xs text-center p-2 flex flex-row items-center gap-2 bg-orange-400/80 text-white font-semibold rounded"
                     >
-                      <div className="rounded-full bg-white w-4 h-4" />
-                      {member}
+                      <div className="rounded-full bg-white min-h-2 min-w-2 max-w-2 max-h-2 " />
+                      <span className="truncate">{member}</span>
                     </div>
                   ))}
                 </div>
@@ -100,7 +105,7 @@ export default function TeamsInformation({
           </div>
         </div>
       </div>
-      <div className="w-full h-20 flex justify-center  rounded-b-lg">
+      <div className="w-full flex-1 flex justify-center items-center rounded-b-lg">
         <Button
           variant="outline"
           className="w-full border-2 border-primary-50 mx-4 my-2 bg-primary-90 hover:bg-primary-60 font-bold hover:text-white"

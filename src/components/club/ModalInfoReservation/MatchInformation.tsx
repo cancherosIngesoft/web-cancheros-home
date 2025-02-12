@@ -3,9 +3,9 @@
 import { Button } from "@/components/ui/button"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 import { MapPin, Clock, Timer, Users } from "lucide-react"
-import type { TeamReservationReturn } from "@/actions/reservation/reservation_action"
 import PlayerWithBall from "@/components/icon/PlayerWithBall"
 import CustomMap from "@/components/georeference/map"
+import { TeamReservationReturn } from "@/actions/reservation/club_reservation_action"
 
 
 interface MatchInformationProps {
@@ -111,7 +111,7 @@ export default function MatchInformation({
           <MapPin className="h-6 w-6 text-tertiary" />
           <span className="font-semibold">Ubicación:</span>
         </div>
-        <div className="w-full h-[200px] sm:h-[250px] md:h-[300px]">
+        <div className="w-full h-[200px] sm:h-[250px] md:h-fit">
           <CustomMap
             center={{
               lat: reservation.geoGraphicalLocation.lat,
@@ -129,6 +129,14 @@ export default function MatchInformation({
             gestureHandling="auto"
           />
         </div>
+        <a
+          href={`https://www.google.com/maps/search/?api=1&query=${reservation.geoGraphicalLocation.lat},${reservation.geoGraphicalLocation.long}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-blue-600 hover:text-blue-800 font-semibold text-sm underline"
+        >
+          📍 Mira cómo llegar en Google Maps
+        </a>
       </div>
     </div>
   )
