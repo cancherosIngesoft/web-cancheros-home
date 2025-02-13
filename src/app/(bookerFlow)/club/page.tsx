@@ -5,6 +5,9 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs"
 import { useTeamDataStore } from "@/store"
 import { Card, CardContent } from "@/components/ui/card"
 import UpcomingMatch from "@/components/club/UpcomingMatch"
+import { useQuery } from "@tanstack/react-query"
+import { getClubPlayers } from "@/actions/club_management/club_players_actions"
+import ClubPlayers from "@/components/club/members/ClubPlayers"
 
 const TeamPage = () => {
     const { teamName,idTeam } = useTeamDataStore()
@@ -16,6 +19,8 @@ const TeamPage = () => {
             </CardContent>
         </Card>
     )
+
+    
 
     return (
         <div className="w-full h-full">
@@ -40,10 +45,7 @@ const TeamPage = () => {
                         </TabsContent>
 
                         <TabsContent value="participantes">
-                            <div className="p-6">
-                                <h2 className="text-2xl font-bold">Participantes</h2>
-                                {/* Contenido de participantes */}
-                            </div>
+                            <ClubPlayers idTeam={idTeam} teamName={teamName}/>
                         </TabsContent>
                     </> :
                     <NoTeamSelected />
