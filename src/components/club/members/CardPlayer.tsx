@@ -11,13 +11,10 @@ const CardPlayer = ({ player }: { player: ReturnPlayersClub }) => {
                 <span className="text-md font-medium">{player.name}</span>
                 {player.isCaptain ===true ? (
                     
-                        <span className="text-sm font-bold text-tertiary">Capitan</span>
-                    
+                        <span className="text-sm font-bold text-tertiary">Capitan</span> 
                 
                 ):(
-                    
-                        <SoccerShoe className="w-8 h-8 text -tertiary" />
-                    
+                        <SoccerShoe className="w-8 h-8 text-tertiary" />
                 )}
             </div>
             <div>

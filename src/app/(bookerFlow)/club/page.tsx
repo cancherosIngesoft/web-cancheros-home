@@ -28,7 +28,7 @@ const TeamPage = () => {
                 <TabsList className="w-full justify-start mb-0">
                     <TabsTrigger value="mi-club">Mi club</TabsTrigger>
                     <TabsTrigger value="partidos-pasados">Partidos pasados</TabsTrigger>
-                    <TabsTrigger value="participantes">Participantes</TabsTrigger>
+                    <TabsTrigger value="jugadores">Jugadores</TabsTrigger>
                 </TabsList>
                 {teamName ?
                     <>
@@ -44,7 +44,7 @@ const TeamPage = () => {
                             </div>
                         </TabsContent>
 
-                        <TabsContent value="participantes">
+                        <TabsContent value="jugadores">
                             <ClubPlayers idTeam={idTeam} teamName={teamName}/>
                         </TabsContent>
                     </> :

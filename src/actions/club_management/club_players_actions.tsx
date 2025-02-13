@@ -16,7 +16,7 @@
     idTeam:string):Promise<ReturnPlayersClub[]> {
 
     console.log("get club members",idTeam)
-return mockPlayersClub
+    return mockPlayersClub
 
     // try {
 
@@ -37,6 +37,39 @@ return mockPlayersClub
     // } catch (e) {
     //   if (e instanceof Error) {
     //     console.error("Error en obtener Clubes:", e.message);
+    //     throw new Error(e.message);
+    //   } else {
+    //     throw new Error("Error desconocido");
+    //   }
+    // }
+  }
+
+  export async function LeaveClub(
+    idTeam:string, idUser:string):Promise<void> {
+
+    console.log("leave",idTeam)
+
+
+    // try {
+
+    //   const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/clubs/leave/`, {
+    //     method: "POST",
+    //     headers: {
+    //       "Content-Type": "application/json",
+    //     },
+    //     body: JSON.stringify({idTeam, idUser})
+    //   });
+  
+    //   if (!res.ok) {
+    //     const data = await res.json();
+    //     throw new Error(data.message);
+    //   }
+  
+    //   // Devolver la respuesta del servidor
+    //   return await res.json();
+    // } catch (e) {
+    //   if (e instanceof Error) {
+    //     console.error("Error en al salir del equipo:", e.message);
     //     throw new Error(e.message);
     //   } else {
     //     throw new Error("Error desconocido");
