@@ -102,3 +102,21 @@ export type ReservationData = ReservationState & {
   ) => void;
   clearReservationInfoStore: (slice: keyof ReservationState) => void;
 };
+
+export interface TeamState {
+  idTeam: string;
+  idCaptain: string;
+  nameCapitan:string;
+  description:string;
+  numberPlayers: number;
+  teamName: string;
+  icon?:string;
+  
+}
+
+export type TeamData = TeamState & {
+  updateTeamData: (
+    payload: Partial<TeamState>
+  ) => void;
+  clearTeamData: () => void;
+};

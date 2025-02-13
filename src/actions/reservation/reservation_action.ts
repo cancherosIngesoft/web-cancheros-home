@@ -176,3 +176,6 @@ export async function reprogramarReserva(id: string): Promise<void> {
   console.log(`Reprogramando reserva ${id}`);
   // Aquí iría la lógica para reprogramar la reserva en el backend
 }
+
+
+
