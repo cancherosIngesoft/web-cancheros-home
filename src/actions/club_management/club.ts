@@ -78,7 +78,7 @@ interface ClubAttributes {
   const mockClubs:ReturnClub[] = [
     {
       idTeam: "team_001",
-      idCaptain: "15",
+      idCaptain: "66",
       numberPlayers: 11,
       teamName: "Los Titanes",
       icon: "/soccer_photo.png",

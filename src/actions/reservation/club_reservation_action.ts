@@ -112,7 +112,7 @@ export async function getTeamActiveReservation(id_team: string, id_user:string):
     console.log("active reservations", id_user, id_team)
 return teamReservationsMock;
     // try {
-    //     const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/reservations/team/active${id_user}`, {
+    //     const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/reservations/team/active${id_team}`, {
     //         method: "GET",
     //         headers: {
     //             "Content-Type": "application/json",
@@ -128,7 +128,7 @@ return teamReservationsMock;
     //     return data;
     // } catch (e) {
     //     if (e instanceof Error) {
-    //         console.error("Error en get Past Reservations:", e.message);
+    //         console.error("Error en get active Reservations:", e.message);
     //         throw new Error(e.message);
     //     } else {
     //         throw new Error("Error desconocido");
@@ -159,7 +159,7 @@ export async function getTeams(id_reservation: string, ): Promise<TeamsReturn> {
     console.log("teams", id_reservation,)
     return teamsMock;
     // try {
-    //     const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/reservations/team/active${id_user}`, {
+    //     const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/reservations/team/active${id_reservation}`, {
     //         method: "GET",
     //         headers: {
     //             "Content-Type": "application/json",
@@ -175,7 +175,7 @@ export async function getTeams(id_reservation: string, ): Promise<TeamsReturn> {
     //     return data;
     // } catch (e) {
     //     if (e instanceof Error) {
-    //         console.error("Error en get Past Reservations:", e.message);
+    //         console.error("Error en get teams:", e.message);
     //         throw new Error(e.message);
     //     } else {
     //         throw new Error("Error desconocido");
