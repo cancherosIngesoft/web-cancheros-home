@@ -54,7 +54,7 @@ const teamReservationsMock: TeamReservationReturn[] = [
     {
       idReservation: "res_001",
       dateReservation: "2025-02-15",
-      hours: { horaInicio: "18:00", horaFin: "20:00" },
+      hours: { startHour: "18:00", endHour: "20:00" },
       idBooker: "66",
       bussinesName: "Cancha Fútbol 5 Bogotá",
       FieldType: "Fútbol 5",
@@ -71,7 +71,7 @@ const teamReservationsMock: TeamReservationReturn[] = [
     {
       idReservation: "res_002",
       dateReservation: "2025-02-16",
-      hours: { horaInicio: "20:30", horaFin: "22:30" },
+      hours: { startHour: "20:30", endHour: "22:30" },
       idBooker: "user_456",
       bussinesName: "Complejo Deportivo El Campín",
       FieldType: "Fútbol 8",
@@ -91,7 +91,7 @@ const teamReservationsMock: TeamReservationReturn[] = [
 export interface TeamReservationReturn {
     idReservation: string,
     dateReservation: string
-    hours: { horaInicio: string, horaFin: string }
+    hours: { startHour: string, endHour: string }
     idBooker: string
     bussinesName: string
     FieldType: string
@@ -104,11 +104,12 @@ export interface TeamReservationReturn {
     teamAName:string,
     teamBName:string
     
+    
 }
 
 
 export async function getTeamActiveReservation(id_team: string, id_user:string): Promise<TeamReservationReturn[]> {
-    console.log("active reservartions", id_user, id_team)
+    console.log("active reservations", id_user, id_team)
 return teamReservationsMock;
     // try {
     //     const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/reservations/team/active${id_user}`, {
@@ -136,20 +137,22 @@ return teamReservationsMock;
 }
 
 export interface TeamsReturn{
-    TeamA: { idTeam: string, teamName: string, members: string[] }
-    TeamB: { idTeam: string, teamName: string, members: string[] }
+    TeamA: { idTeam: string, teamName: string, members: string[],score?:number }
+    TeamB: { idTeam: string, teamName: string, members: string[],score?:number }
 }
 
 const teamsMock: TeamsReturn = {
     TeamA: { 
         idTeam: "team_201", 
         teamName: "Leones del Norte", 
-        members: ["David Herrera", "Santiago López", "Pedro Castillo"] 
+        members: ["David Herrera", "Santiago López", "Pedro Castillo"],
+        score:2
       },
       TeamB: { 
         idTeam: "team_202", 
         teamName: "Dragones Rojos", 
-        members: ["David Herrera Palacios feo muy largo", "Santiago López", "Pedro Castillo", "Pedro Castillo","David Herrera", "Santiago López", "Pedro Castillo", "Pedro Castillo", "Pedro Castillo","David Herrera", "Santiago López",] 
+        members: ["David Herrera Palacios feo muy largo", "Santiago López", "Pedro Castillo", "Pedro Castillo","David Herrera", "Santiago López", "Pedro Castillo", "Pedro Castillo", "Pedro Castillo","David Herrera", "Santiago López",] ,
+        score:3
       }
 }
 export async function getTeams(id_reservation: string, ): Promise<TeamsReturn> {

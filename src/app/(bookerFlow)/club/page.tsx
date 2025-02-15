@@ -8,6 +8,7 @@ import UpcomingMatch from "@/components/club/UpcomingMatch"
 import { useQuery } from "@tanstack/react-query"
 import { getClubPlayers } from "@/actions/club_management/club_players_actions"
 import ClubPlayers from "@/components/club/members/ClubPlayers"
+import PastMatchesPanel from "@/components/club/pastMatches/PastMatchesPanel"
 
 const TeamPage = () => {
     const { teamName,idTeam } = useTeamDataStore()
@@ -38,10 +39,7 @@ const TeamPage = () => {
                         </TabsContent>
 
                         <TabsContent value="partidos-pasados">
-                            <div className="p-6">
-                                <h2 className="text-2xl font-bold">Partidos Pasados</h2>
-                                {/* Contenido de partidos pasados */}
-                            </div>
+                            <PastMatchesPanel idTeam={idTeam} />
                         </TabsContent>
 
                         <TabsContent value="jugadores">
