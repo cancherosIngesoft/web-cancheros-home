@@ -111,4 +111,36 @@
   }
   
 
+  export async function addPlayersTeam(
+    idTeam:string, emailsToAdd:string[], idUserWhoAdd:string):Promise<void> {
+
+    console.log("add",idTeam, emailsToAdd, idUserWhoAdd) 
+
+
+    // try {
+
+    //   const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/clubs/add`, {
+    //     method: "POST",
+    //     headers: {
+    //       "Content-Type": "application/json",
+    //     },
+    //     body: JSON.stringify({idTeam, emailsToAdd, idUserWhoAdd})
+    //   });
+  
+    //   if (!res.ok) {
+    //     const data = await res.json();
+    //     throw new Error(data.message);
+    //   }
+  
+    //   // Devolver la respuesta del servidor
+    //   return await res.json();
+    // } catch (e) {
+    //   if (e instanceof Error) {
+    //     console.error("No se ha podido realizar los fichajes, intentenlo mas tarde", e.message);
+    //     throw new Error(e.message+ " intentenlo mas tarde");
+    //   } else {
+    //     throw new Error("Error desconocido");
+    //   }
+    // }
+  }
   
