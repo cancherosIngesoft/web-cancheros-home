@@ -21,7 +21,7 @@ const PastMatchesPanel = ({ idTeam }: PastMatchesPanelProps) => {
             <hr className="w-full border-2 border-gray-300 rounded-full my-2"/>
             <div className="flex flex-col gap-2 mt-4">
                 {pastMatches?.map((match) => (
-                    <CardPastMatch key={match.idMatch} {...match} />
+                    <CardPastMatch key={match.idReservation} {...match} />
                 ))}
             </div>
 

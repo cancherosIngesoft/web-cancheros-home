@@ -1,59 +1,119 @@
-export interface ReturnPastMatches{
-    idMatch:string;
-    date:string;
-    hour:{startHour:string,endHour:string};
-    bussinesName:string
-    score: {teamName:string,teamId:string, score:number |undefined}[];
+export interface ReturnPastMatches {
+    idReservation: string,
+    dateReservation: string
+    hours: { startHour: string, endHour: string }
+    idBooker: string
+    bussinesName: string
+    FieldType: string
+    capacity: number
+    bussinessDirection: string,
+    fieldImg?: string
+    totalPrice: number
+    geoGraphicalLocation: { lat: number, long: number }
+    isParticipating: boolean,
+    teamAName:string,
+    teamBName:string,
+    score?: {teamName:string,teamId:string, score:number |undefined}[];
+    
 }
-const mockPastMatches: ReturnPastMatches[] = [
+
+const pastMatchesMock: ReturnPastMatches[] = [
     {
-        idMatch: "1",
-        date: "2023-10-01",
-        hour: { startHour: "15:00", endHour: "16:30" },
-        bussinesName: "Cancha Los Pinos",
+        idReservation: "1",
+        dateReservation: "2023-10-01",
+        hours: { startHour: "14:00", endHour: "16:00" },
+        idBooker: "booker123",
+        bussinesName: "Soccer World",
+        FieldType: "Grass",
+        capacity: 10,
+        bussinessDirection: "123 Main St, Springfield",
+        fieldImg: "/soccer_photo.png",
+        totalPrice: 200,
+        geoGraphicalLocation: { lat: 34.0522, long: -118.2437 },
+        isParticipating: true,
+        teamAName: "Team Alpha",
+        teamBName: "Team Beta",
         score: [
-            { teamName: "Equipo A", teamId: "A1", score: 2 },
-            { teamName: "Equipo B", teamId: "B1", score: 1 }
+            { teamName: "Team Alpha", teamId: "team1", score: 3 },
+            { teamName: "Team Beta", teamId: "team2", score: 2 }
         ]
     },
     {
-        idMatch: "2",
-        date: "2023-10-02",
-        hour: { startHour: "18:30", endHour: "20:00" },
-        bussinesName: "Estadio Central",
+        idReservation: "2",
+        dateReservation: "2023-10-02",
+        hours: { startHour: "16:00", endHour: "18:00" },
+        idBooker: "booker456",
+        bussinesName: "Goal Arena",
+        FieldType: "Artificial Turf",
+        capacity: 8,
+        bussinessDirection: "456 Elm St, Shelbyville",
+        totalPrice: 180,
+        geoGraphicalLocation: { lat: 34.0522, long: -118.2437 },
+        isParticipating: false,
+        teamAName: "Team Gamma",
+        teamBName: "Team Delta",
         score: [
-            { teamName: "Equipo C", teamId: "C1", score: 3 },
-            { teamName: "Equipo D", teamId: "D1", score: 3 }
+            { teamName: "Team Gamma", teamId: "team3", score: 1 },
+            { teamName: "Team Delta", teamId: "team4", score: 1 }
         ]
     },
     {
-        idMatch: "3",
-        date: "2023-10-03",
-        hour: { startHour: "20:00", endHour: "21:30" },
-        bussinesName: "Polideportivo San Juan",
+        idReservation: "3",
+        dateReservation: "2023-10-03",
+        hours: { startHour: "18:00", endHour: "20:00" },
+        idBooker: "booker789",
+        bussinesName: "Champion Fields",
+        FieldType: "Indoor",
+        capacity: 6,
+        bussinessDirection: "789 Oak St, Capital City",
+        fieldImg: "/soccer_photo.png",
+        totalPrice: 220,
+        geoGraphicalLocation: { lat: 34.0522, long: -118.2437 },
+        isParticipating: true,
+        teamAName: "Team Epsilon",
+        teamBName: "Team Zeta",
         score: [
-            { teamName: "Equipo E", teamId: "E1", score: 1 },
-            { teamName: "Equipo F", teamId: "F1", score: 0 }
+            { teamName: "Team Epsilon", teamId: "team5", score: 4 },
+            { teamName: "Team Zeta", teamId: "team6", score: 4 }
         ]
     },
     {
-        idMatch: "4",
-        date: "2023-10-04",
-        hour: { startHour: "12:00", endHour: "13:30" },
-        bussinesName: "Cancha El Trébol",
+        idReservation: "4",
+        dateReservation: "2023-10-04",
+        hours: { startHour: "20:00", endHour: "22:00" },
+        idBooker: "booker101",
+        bussinesName: "Victory Park",
+        FieldType: "Grass",
+        capacity: 12,
+        bussinessDirection: "101 Pine St, Metropolis",
+        totalPrice: 250,
+        geoGraphicalLocation: { lat: 34.0522, long: -118.2437 },
+        isParticipating: true,
+        teamAName: "Team Eta",
+        teamBName: "Team Theta",
         score: [
-            { teamName: "Equipo G", teamId: "G1", score: 4 },
-            { teamName: "Equipo H", teamId: "H1", score: 2 }
+            { teamName: "Team Eta", teamId: "team7", score: 2 },
+            { teamName: "Team Theta", teamId: "team8", score: 3 }
         ]
     },
     {
-        idMatch: "5",
-        date: "2023-10-05",
-        hour: { startHour: "14:45", endHour: "16:15" },
-        bussinesName: "Estadio La Fortaleza",
+        idReservation: "5",
+        dateReservation: "2023-10-05",
+        hours: { startHour: "22:00", endHour: "00:00" },
+        idBooker: "booker112",
+        bussinesName: "Final Whistle",
+        FieldType: "Artificial Turf",
+        capacity: 10,
+        bussinessDirection: "112 Maple St, Gotham",
+        fieldImg: "/soccer_photo.png",
+        totalPrice: 210,
+        geoGraphicalLocation: { lat: 34.0522, long: -118.2437 },
+        isParticipating: false,
+        teamAName: "Team Iota",
+        teamBName: "Team Kappa",
         score: [
-            { teamName: "Equipo I", teamId: "I1", score: undefined },
-            { teamName: "Equipo J", teamId: "J1", score: undefined }
+            { teamName: "Team Iota", teamId: "team9", score: 5 },
+            { teamName: "Team Kappa", teamId: "team10", score: 2 }
         ]
     }
 ];
@@ -62,7 +122,7 @@ export async function getPastMatches(
     idTeam:string):Promise<ReturnPastMatches[]> {
 
     console.log("get pastMatches",idTeam)
-    return mockPastMatches
+    return pastMatchesMock
 
     // try {
 

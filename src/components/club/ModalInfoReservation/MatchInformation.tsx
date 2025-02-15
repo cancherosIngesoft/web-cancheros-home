@@ -15,6 +15,7 @@ interface MatchInformationProps {
   tooltipMessage: string
   onReschedule: () => void
   onCancel: () => void
+  isPastReservation: boolean
 }
 
 export default function MatchInformation({
@@ -24,10 +25,11 @@ export default function MatchInformation({
   tooltipMessage,
   onReschedule,
   onCancel,
+  isPastReservation
 }: MatchInformationProps) {
   return (
     <div className="flex flex-col w-full  space-y-4 p-4 px-6">
-      {isBooker && (
+      {isBooker && !isPastReservation && (
         <div className="flex flex-col sm:flex-row w-full gap-4">
           <div className="flex-1">
             <TooltipProvider>
@@ -96,7 +98,7 @@ export default function MatchInformation({
             <div className="flex items-center gap-2">
               <Clock className="h-6 w-6 text-tertiary" />
               <span className="font-semibold">Hora</span>
-              {reservation.hours.horaInicio} - {reservation.hours.horaFin}
+              {reservation.hours.startHour} - {reservation.hours.endHour}
             </div>
             <div className="flex items-center gap-2">
               <Timer className="h-6 w-6 text-tertiary" />

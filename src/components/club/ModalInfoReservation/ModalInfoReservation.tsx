@@ -20,9 +20,10 @@ interface ModalInfoReservationProps {
   isOpen: boolean
   onClose: () => void
   reservation: TeamReservationReturn
+  isPastReservation?: boolean
 }
 
-export default function ModalInfoReservation({ isOpen, onClose, reservation }: ModalInfoReservationProps) {
+export default function ModalInfoReservation({ isOpen, onClose, reservation, isPastReservation=false }: ModalInfoReservationProps) {
   const [disabled, setDisabled] = useState(false)
   const [tooltipMessage, setTooltipMessage] = useState("")
   const [userTeam, setUserTeam] = useState<string | null>(null)
@@ -34,7 +35,7 @@ export default function ModalInfoReservation({ isOpen, onClose, reservation }: M
 
   useEffect(() => {
     const checkTimeConstraint = () => {
-      const reservationDate = new Date(`${reservation.dateReservation} ${reservation.hours.horaInicio}`)
+      const reservationDate = new Date(`${reservation.dateReservation} ${reservation.hours.startHour}`)
       const now = new Date()
       const diffHours = (reservationDate.getTime() - now.getTime()) / (1000 * 60 * 60)
 
@@ -77,8 +78,12 @@ export default function ModalInfoReservation({ isOpen, onClose, reservation }: M
       if (!auth.id) {
         throw new Error("User ID is null")
       }
+      if(isPastReservation){
+        throw new Error("No se puede unir a un equipo en una reserva pasada")
+      }
       return joinTeam(reservation.idReservation, id_team, auth.id)
     },
+   
     onSuccess: (_, id_team) => {
       queryClient.invalidateQueries({ queryKey: ["teams", reservation.idReservation] })
       setUserTeam(id_team)
@@ -96,12 +101,16 @@ export default function ModalInfoReservation({ isOpen, onClose, reservation }: M
         duration: 3000,
       })
     },
+   
   })
 
   const leaveTeamMutation = useMutation({
     mutationFn: () => {
       if (!auth.id) {
         throw new Error("User ID is null")
+      }
+      if(isPastReservation){
+        throw new Error("No se puede desunir a un equipo en una reserva pasada")
       }
       return desJoinTeam(reservation.idReservation, auth.id)
     },
@@ -126,10 +135,22 @@ export default function ModalInfoReservation({ isOpen, onClose, reservation }: M
   })
 
   const handleReschedule = () => {
+    if(isPastReservation){
+      toast({
+        title: "Error",
+        description: "No se puede reprogramar una reserva pasada.",
+        variant: "destructive",
+        duration: 3000,
+      })
+      return
+    }
     console.log("Reprogramar")
   }
 
   const handleCancel = () => {
+    if(isPastReservation){
+      throw new Error("No se puede unir a un equipo en una reserva pasada")
+    }
     console.log("Cancelar")
   }
 
@@ -146,7 +167,7 @@ export default function ModalInfoReservation({ isOpen, onClose, reservation }: M
       <DialogContent className="w-[95vw] max-w-5xl p-0 gap-0 max-h-[90vh] overflow-y-auto md:overflow-hidden">
         <DialogHeader className="p-4 m-0 flex flex-row items-center justify-between border-b max-h-16 bg-primary-70 rounded-t-md">
           <DialogTitle className="text-lg sm:text-xl md:text-2xl font-bold text-white">
-            {teams ? `${teams.TeamA.teamName} vs ${teams.TeamB.teamName}` : "Cargando equipos..."}
+            { `${reservation.teamAName} vs ${reservation.teamBName}` }
           </DialogTitle>
         </DialogHeader>
 
@@ -159,6 +180,7 @@ export default function ModalInfoReservation({ isOpen, onClose, reservation }: M
               tooltipMessage={tooltipMessage}
               onReschedule={handleReschedule}
               onCancel={handleCancel}
+              isPastReservation={isPastReservation}
             />
           </div>
           {isLoading ? (
@@ -186,6 +208,7 @@ export default function ModalInfoReservation({ isOpen, onClose, reservation }: M
                 onLeaveTeam={handleLeaveTeam}
                 isLoading={joinTeamMutation.status === "pending" || leaveTeamMutation.status === "pending"}
                 userTeam={userTeam}
+                isPastReservation={isPastReservation}
               />
             </div>
           ) : null}

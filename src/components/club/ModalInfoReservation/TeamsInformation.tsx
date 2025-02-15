@@ -3,6 +3,7 @@
 
 import { TeamsReturn } from "@/actions/reservation/club_reservation_action"
 import { Button } from "@/components/ui/button"
+import { isPast } from "date-fns"
 
 
 interface TeamsInformationProps {
@@ -11,6 +12,7 @@ interface TeamsInformationProps {
   onLeaveTeam: () => void
   isLoading: boolean
   userTeam: string | null
+  isPastReservation: boolean
 }
 
 export default function TeamsInformation({
@@ -19,6 +21,7 @@ export default function TeamsInformation({
   onLeaveTeam,
   isLoading,
   userTeam,
+  isPastReservation
 }: TeamsInformationProps) {
   return (
     <div className="flex-1 flex flex-col md:border-l-2 md:border-gray-200 h-full">
@@ -43,14 +46,17 @@ export default function TeamsInformation({
                     </div>
                   ))}
                 </div>
-                <Button
-                  className="mt-4 w-full border-blue-500 border-2 bg-transparent hover:bg-blue-700 font-bold text-white bg-blue-500"
-                  variant="outline"
-                  onClick={() => onJoinTeam(teams.TeamA.idTeam, teams.TeamA.teamName)}
-                  disabled={isLoading || userTeam !== null}
-                >
-                  {isLoading ? "Cargando..." : userTeam === teams.TeamA.idTeam ? "Unido" : "Unirme"}
-                </Button>
+                {!isPastReservation &&
+                  <Button
+                    className="mt-4 w-full border-blue-500 border-2 bg-transparent hover:bg-blue-700 font-bold text-white bg-blue-500"
+                    variant="outline"
+                    onClick={() => onJoinTeam(teams.TeamA.idTeam, teams.TeamA.teamName)}
+                    disabled={isLoading || userTeam !== null}
+                  >
+                    {isLoading ? "Cargando..." : userTeam === teams.TeamA.idTeam ? "Unido" : "Unirme"}
+                  </Button>
+                }
+
               </div>
             </div>
 
@@ -92,29 +98,38 @@ export default function TeamsInformation({
                     </div>
                   ))}
                 </div>
-                <Button
-                  className="mt-4 w-full border-orange-500 border-2 bg-transparent hover:bg-orange-600 hover:text-white font-bold text-white bg-orange-300"
-                  variant="outline"
-                  onClick={() => onJoinTeam(teams.TeamB.idTeam, teams.TeamB.teamName)}
-                  disabled={isLoading || userTeam !== null}
-                >
-                  {isLoading ? "Cargando..." : userTeam === teams.TeamB.idTeam ? "Unido" : "Unirme"}
-                </Button>
+                {!isPastReservation &&
+                  <Button
+                    className="mt-4 w-full border-orange-500 border-2 bg-transparent hover:bg-orange-600 hover:text-white font-bold text-white bg-orange-300"
+                    variant="outline"
+                    onClick={() => onJoinTeam(teams.TeamB.idTeam, teams.TeamB.teamName)}
+                    disabled={isLoading || userTeam !== null}
+                  >
+                    {isLoading ? "Cargando..." : userTeam === teams.TeamB.idTeam ? "Unido" : "Unirme"}
+                  </Button>
+                }
+
               </div>
             </div>
           </div>
         </div>
       </div>
-      <div className="w-full flex-1 flex justify-center items-center rounded-b-lg">
-        <Button
-          variant="outline"
-          className="w-full border-2 border-primary-50 mx-4 my-2 bg-primary-90 hover:bg-primary-60 font-bold hover:text-white"
-          onClick={onLeaveTeam}
-          disabled={isLoading || userTeam === null}
-        >
-          {isLoading ? "Cargando..." : "Quitar selección"}
-        </Button>
-      </div>
+      {!isPastReservation &&
+        <div className="w-full flex-1 flex justify-center items-center rounded-b-lg">
+
+
+          <Button
+            variant="outline"
+            className="w-full border-2 border-primary-50 mx-4 my-2 bg-primary-90 hover:bg-primary-60 font-bold hover:text-white"
+            onClick={onLeaveTeam}
+            disabled={isLoading || userTeam === null}
+          >
+            {isLoading ? "Cargando..." : "Quitar selección"}
+          </Button>
+
+
+        </div>
+      }
     </div>
   )
 }
