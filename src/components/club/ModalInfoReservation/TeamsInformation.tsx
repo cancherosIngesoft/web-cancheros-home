@@ -3,7 +3,7 @@
 
 import { TeamsReturn } from "@/actions/reservation/club_reservation_action"
 import { Button } from "@/components/ui/button"
-import { isPast } from "date-fns"
+
 
 
 interface TeamsInformationProps {
@@ -32,7 +32,7 @@ export default function TeamsInformation({
           {/* Team A */}
           <div className=" bg-[url(/CampinAzul.jpg)] bg-cover  md:h-full">
             <div className=" p-4 w-full h-full gap-2 flex flex-col items-center rounded-lg md:h-full">
-              <div className=" w-4/5 bg-blue-200/70 rounded-lg p-2  flex flex-row gap-4 items-center justify-center text-center h-contain text-lg sm:text-lg font-bold text-blue-600 ">
+              <div className=" w-4/5 bg-blue-200/70 rounded-lg p-2  flex flex-col md:flex-row gap-4 items-center justify-center text-center h-contain text-lg sm:text-lg font-bold text-blue-600 ">
                 <h3 >{teams.TeamA.teamName}</h3>
                 {teams.TeamA.score && teams.TeamB.score &&
                   <div className="w-8 h-8 bg-white/50 rounded-md flex justify-center items-center">
@@ -90,7 +90,7 @@ export default function TeamsInformation({
           {/* Team B */}
           <div className=" bg-[url(/CampinRojo.jpg)] bg-cover  md:h-full">
             <div className=" gap-2 p-4 w-full h-full  flex flex-col items-center rounded-lg md:h-full">
-              <div className=" w-4/5 bg-orange-200/70 rounded-lg p-2  flex flex-row gap-4 items-center justify-center text-center h-contain text-lg sm:text-lg font-bold text-orange-600 ">
+              <div className=" w-4/5 bg-orange-200/70 rounded-lg p-2  flex flex-col-reverse md:flex-row gap-4 items-center justify-center text-center h-contain text-lg sm:text-lg font-bold text-orange-600 ">
                 {teams.TeamA.score && teams.TeamB.score &&
                   <div className="w-8 h-8 bg-white/50 rounded-md flex justify-center items-center">
                     <span className={`text-xl ${teams.TeamA.score == teams.TeamB.score ? "text-yellow-500" : teams.TeamA.score < teams.TeamB.score ? "text-primary" : "text-destructive"}`}>{teams.TeamB.score} </span>

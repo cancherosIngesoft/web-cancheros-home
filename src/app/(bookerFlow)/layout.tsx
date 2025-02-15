@@ -13,7 +13,7 @@ export default function BookerLayout({
             </nav>
 
             {/* Contenido principal */}
-            <main className="flex-1 ml-8 h-full overflow-auto p-12 ">
+            <main className="flex-1 ml-2 md:ml-8 h-full overflow-auto p-4 md:p-12 ">
                 {children}
             </main>
         </div>
