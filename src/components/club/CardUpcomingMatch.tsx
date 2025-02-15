@@ -12,8 +12,8 @@ import { Button } from '../ui/button'
 
 const CardUpcomingMatch = (reservation: TeamReservationReturn) => {
     const [isModalOpen, setIsModalOpen] = useState(false)
-    const startDate = new Date(`${reservation.dateReservation}T${reservation.hours.horaInicio}:00`);
-    const endDate = new Date(`${reservation.dateReservation}T${reservation.hours.horaFin}:00`);
+    const startDate = new Date(`${reservation.dateReservation}T${reservation.hours.startHour}:00`);
+    const endDate = new Date(`${reservation.dateReservation}T${reservation.hours.endHour}:00`);
     const diferenceHours = (endDate.getTime() - startDate.getTime()) / (1000 * 3600);
 
     return (
@@ -71,7 +71,7 @@ const CardUpcomingMatch = (reservation: TeamReservationReturn) => {
                                 <div className="flex items-center gap-2">
                                     <Clock className="w-4 h-4 flex-shrink-0" />
                                     <span>
-                                        {reservation.hours.horaInicio} - {reservation.hours.horaFin}
+                                        {reservation.hours.startHour} - {reservation.hours.endHour}
                                     </span>
                                 </div>
                                 <div className="flex items-center gap-2">

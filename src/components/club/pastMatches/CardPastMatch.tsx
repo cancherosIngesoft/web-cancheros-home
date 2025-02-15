@@ -10,19 +10,17 @@ import ModalInfoReservation from "../ModalInfoReservation/ModalInfoReservation"
 interface CardPastMatchProps {
     match: ReturnPastMatches
 }
-const CardPastMatch = (match: ReturnPastMatches) => {
+const CardPastMatch = ({match}: CardPastMatchProps) => {
     const [showResult, setShowResult] = useState(false)
     const handleAddResult = (e: MouseEvent) => {
         e.preventDefault()
         e.stopPropagation()
         console.log("Agregar resultado")
     }
-    const handleShowResult = () => {
-        setShowResult(!showResult)
-    }
+   
     return (
         <div
-        onClick={handleShowResult}
+        onClick={()=>setShowResult(true)}
 
             className="flex items-center p-1 px-4 justify-between bg-white rounded-lg  w-full h-[5.5rem] shadow-lg hover:bg-primary-95 hover:cursor-pointer ">
             <div className="flex items-center gap-4 p-4">
@@ -78,7 +76,7 @@ const CardPastMatch = (match: ReturnPastMatches) => {
 
             </div>
 
-            <ModalInfoReservation isOpen={showResult} onClose={handleShowResult} reservation={match} isPastReservation={true} />
+            <ModalInfoReservation isOpen={showResult} onClose={()=>setShowResult(false)} reservation={match} isPastReservation={true} />
         </div>
     )
 }

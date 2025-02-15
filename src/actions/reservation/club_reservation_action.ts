@@ -103,7 +103,7 @@ export interface TeamReservationReturn {
     isParticipating: boolean,
     teamAName:string,
     teamBName:string
-    score?: {teamName:string,teamId:string, score:number |undefined}[];
+    
     
 }
 
@@ -137,20 +137,22 @@ return teamReservationsMock;
 }
 
 export interface TeamsReturn{
-    TeamA: { idTeam: string, teamName: string, members: string[] }
-    TeamB: { idTeam: string, teamName: string, members: string[] }
+    TeamA: { idTeam: string, teamName: string, members: string[],score?:number }
+    TeamB: { idTeam: string, teamName: string, members: string[],score?:number }
 }
 
 const teamsMock: TeamsReturn = {
     TeamA: { 
         idTeam: "team_201", 
         teamName: "Leones del Norte", 
-        members: ["David Herrera", "Santiago López", "Pedro Castillo"] 
+        members: ["David Herrera", "Santiago López", "Pedro Castillo"],
+        score:2
       },
       TeamB: { 
         idTeam: "team_202", 
         teamName: "Dragones Rojos", 
-        members: ["David Herrera Palacios feo muy largo", "Santiago López", "Pedro Castillo", "Pedro Castillo","David Herrera", "Santiago López", "Pedro Castillo", "Pedro Castillo", "Pedro Castillo","David Herrera", "Santiago López",] 
+        members: ["David Herrera Palacios feo muy largo", "Santiago López", "Pedro Castillo", "Pedro Castillo","David Herrera", "Santiago López", "Pedro Castillo", "Pedro Castillo", "Pedro Castillo","David Herrera", "Santiago López",] ,
+        score:3
       }
 }
 export async function getTeams(id_reservation: string, ): Promise<TeamsReturn> {
