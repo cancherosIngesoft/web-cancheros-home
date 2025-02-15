@@ -93,7 +93,7 @@ const ClubPlayers = ({ idTeam, teamName }: ClubPlayersProps) => {
           </div>
         )}
         {players?.map((player) => (
-          <CardPlayer key={player.idPlayer} player={player} />
+          <CardPlayer key={player.idPlayer} player={player}  />
         ))}
       </div>
       <ConfirmationModal

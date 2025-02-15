@@ -76,5 +76,39 @@
     //   }
     // }
   }
+
+  export async function deleteMember(
+    idTeam:string, idUserToDelete:string, idUserWhoDelete:string):Promise<void> {
+
+    console.log("delete",idTeam, idUserToDelete, idUserWhoDelete) 
+
+
+    // try {
+
+    //   const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/clubs/delete/`, {
+    //     method: "POST",
+    //     headers: {
+    //       "Content-Type": "application/json",
+    //     },
+    //     body: JSON.stringify({idTeam, idUserToDelete, idUserWhoDelete})
+    //   });
   
+    //   if (!res.ok) {
+    //     const data = await res.json();
+    //     throw new Error(data.message);
+    //   }
+  
+    //   // Devolver la respuesta del servidor
+    //   return await res.json();
+    // } catch (e) {
+    //   if (e instanceof Error) {
+    //     console.error("Error a eliminar al usuario", e.message);
+    //     throw new Error(e.message);
+    //   } else {
+    //     throw new Error("Error desconocido");
+    //   }
+    // }
+  }
+  
+
   
