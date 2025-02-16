@@ -6,8 +6,10 @@ import ShieldTeamAIcon from "@/components/icon/ShieldTeamAIcon"
 import ShieldTeamBIcon from "@/components/icon/ShieldTeamBIcon"
 import { Button } from "@/components/ui/button"
 import { Calendar, Clock, MapIcon } from "lucide-react"
-import { type MouseEvent, useState } from "react"
+import { type MouseEvent, use, useState } from "react"
 import ModalInfoReservation from "../ModalInfoReservation/ModalInfoReservation"
+import { useGlobalStore, useTeamDataStore } from "@/store"
+import AddScoreModal from "./AddScoreModal"
 
 interface CardPastMatchProps {
   match: ReturnPastMatches
@@ -15,11 +17,64 @@ interface CardPastMatchProps {
 
 const CardPastMatch = ({ match }: CardPastMatchProps) => {
   const [showResult, setShowResult] = useState(false)
+  const [showAddResult, setShowAddResult] = useState(false)
+  const idCaptain = useTeamDataStore((state) => state.idCaptain)
+  const idUser = useGlobalStore((state) => state.auth.id)
+
+
   const handleAddResult = (e: MouseEvent) => {
     e.preventDefault()
     e.stopPropagation()
-    console.log("Agregar resultado")
+    setShowAddResult(true)
   }
+
+  const hasValidScore = match.score && 
+    match.score[0].score !== undefined && 
+    match.score[1].score !== undefined;
+
+  const getScoreColor = (teamIndex: number) => {
+    if (!match.score) return '';
+    const teamAScore = match.score[0].score;
+    const teamBScore = match.score[1].score;
+    
+    if (teamAScore === teamBScore) return 'text-yellow-500';
+    if (teamIndex === 0) {
+      return teamAScore! > teamBScore! ? 'text-primary' : 'text-destructive';
+    }
+    return teamAScore! < teamBScore! ? 'text-primary' : 'text-destructive';
+  };
+
+  const renderScore = () => (
+    <div className="flex flex-row items-center justify-center md:justify-end gap-2 font-bold text-sm">
+      <div className={`flex flex-row items-center justify-center gap-1 ${getScoreColor(0)}`}>
+        <span>{match.score![0].teamName}</span>
+        <ShieldTeamAIcon className="w-6 h-6" />
+        <span>{match.score![0].score}</span>
+      </div>
+      <span>-</span>
+      <div className={`flex flex-row items-center gap-1 ${getScoreColor(1)}`}>
+        <span>{match.score![1].score}</span>
+        <ShieldTeamBIcon className="w-6 h-6" />
+        <span>{match.score![1].teamName}</span>
+      </div>
+    </div>
+  );
+
+  const renderAddResultButton = () => (
+    idCaptain == idUser ? (
+      <Button 
+        variant="default" 
+        onClick={(e) => handleAddResult(e)} 
+        className="w-full md:w-auto"
+      >
+        Agregar resultado
+      </Button>
+    ):(
+      <div>
+        <span className="font-semibold text-sm">Resultado no disponible</span>
+      </div>
+    )
+  );
 
   return (
     <div
@@ -47,29 +102,7 @@ const CardPastMatch = ({ match }: CardPastMatchProps) => {
         </div>
       </div>
       <div className="mt-4 md:mt-0 w-full md:w-auto">
-        {match.score && match.score[0].score !== undefined && match.score[1].score !== undefined ? (
-          <div className="flex flex-row items-center justify-center md:justify-end gap-2 font-bold text-sm">
-            <div
-              className={`flex flex-row items-center justify-center gap-1 ${match.score[0].score == match.score[1].score ? "text-yellow-500" : match.score[0].score > match.score[1].score ? "text-primary" : "text-destructive"}`}
-            >
-              <span>{match.score[0].teamName}</span>
-              <ShieldTeamAIcon className="w-6 h-6" />
-              <span>{match.score[0].score}</span>
-            </div>
-            <span>-</span>
-            <div
-              className={`flex flex-row items-center gap-1 ${match.score[0].score == match.score[1].score ? "text-yellow-500" : match.score[0].score < match.score[1].score ? "text-primary" : "text-destructive"}`}
-            >
-              <span>{match.score[1].score}</span>
-              <ShieldTeamBIcon className="w-6 h-6" />
-              <span>{match.score[1].teamName}</span>
-            </div>
-          </div>
-        ) : (
-          <Button variant="default" onClick={(e) => handleAddResult(e)} className="w-full md:w-auto">
-            Agregar resultado
-          </Button>
-        )}
+        {hasValidScore ? renderScore() : renderAddResultButton()}
       </div>
 
       <ModalInfoReservation
@@ -78,6 +111,7 @@ const CardPastMatch = ({ match }: CardPastMatchProps) => {
         reservation={match}
         isPastReservation={true}
       />
+      <AddScoreModal score={match.score} idReservation={match.idReservation} isOpen={showAddResult} onClose={() => setShowAddResult(false)} />
     </div>
   )
 }
