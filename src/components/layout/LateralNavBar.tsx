@@ -70,13 +70,21 @@ export const LateralNavBar = () => {
                 <Image
                   src="/icons/miscanchas.svg"
                   alt="Logo"
-                  width={50}
-                  height={50}
+                  width={40}
+                  height={40}
                 />
               </Link>
               <Link href="/reservas_negocio">
                 <Image
                   src="/icons/booking_logo.svg"
+                  alt="Logo"
+                  width={40}
+                  height={40}
+                />
+              </Link>
+              <Link href="/panel_negocio">
+                <Image
+                  src="/icons/negocios_icon.svg"
                   alt="Logo"
                   width={40}
                   height={40}

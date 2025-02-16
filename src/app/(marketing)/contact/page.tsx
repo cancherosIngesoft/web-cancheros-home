@@ -15,9 +15,9 @@ export default function ContactPage() {
           Contacto
         </h1>
 
-        <div className="grid md:grid-cols-2 gap-8 items-start justify-center">
+        <div className="flex flex-col md:grid md:grid-cols-2 gap-8">
           {/* Información de Contacto */}
-          <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
+          <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-100 h-fit">
             <h2 className="text-xl font-semibold text-[#1A6B51] mb-6">
               Información de contacto
             </h2>
@@ -25,7 +25,7 @@ export default function ContactPage() {
               <div className="flex items-center space-x-3">
                 <Link
                   href="mailto:cancherosfb@gmail.com"
-                  className="text-gray-600 hover:text-[#1A6B51] transition-colors duration-200"
+                  className="text-gray-600 hover:text-[#1A6B51] transition-colors duration-200 break-all"
                 >
                   📧 cancherosfb@gmail.com
                 </Link>
@@ -47,7 +47,7 @@ export default function ContactPage() {
           </div>
 
           {/* Formulario de Google */}
-          <div className="w-[600px] h-[500px] bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden">
+          <div className="w-full h-[500px] bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden">
             <iframe
               src="https://docs.google.com/forms/d/e/1FAIpQLSfEeNEavXDLm7pP5eVdHw6piCl4lTvZiT3BOyvnvxqvuWV6lQ/viewform?embedded=true"
               className="w-full h-full"
