@@ -3,7 +3,7 @@
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState, Suspense } from "react";
 import Link from "next/link";
-
+import { useGlobalStore } from "@/store";
 interface PaymentInfo {
   collection_id: string;
   collection_status: string;
@@ -19,8 +19,13 @@ interface PaymentInfo {
 function PaymentContent() {
   const searchParams = useSearchParams();
   const [paymentInfo, setPaymentInfo] = useState<PaymentInfo | null>(null);
+  const auth = useGlobalStore((state) => state.auth);
+  const [userRole, setUserRole] = useState<string | null>(null);
 
   useEffect(() => {
+    if (auth.id) {
+      setUserRole(auth.userRole);
+    }
     const paymentData = {
       collection_id: searchParams.get("collection_id"),
       collection_status: searchParams.get("collection_status"),
@@ -38,8 +43,10 @@ function PaymentContent() {
 
   const handleRetryPayment = async () => {
     try {
+      const url =
+        userRole == "duenio" ? "/api/fee_payment" : "/api/payment_gateway";
       // Crear nueva preferencia de pago usando la referencia original
-      const response = await fetch("/api/payment_gateway/retry", {
+      const response = await fetch(url, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -101,19 +108,22 @@ function PaymentContent() {
             </p>
 
             <div className="flex flex-col space-y-2">
-              {/* PENDIENTE PARA CUANDO SE COMPLETE EL FLUJO DE RESERVAS, LA IDEA ES TOMAR DEL ESTADO DE ZUSTAND DE LA RESERVA Y CREAR UN NUEVO PAGO
+              {/*
               <button
                 onClick={handleRetryPayment}
                 className="inline-flex justify-center items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-black hover:bg-gray-800"
               >
                 Reintentar Pago
-              </button>
-              */}
+                </button>
+                */}
+
               <Link
-                href="/reservar_cancha"
+                href={userRole == "duenio" ? "/comisiones" : "/reservar_cancha"}
                 className="inline-flex justify-center items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-black hover:bg-gray-800"
               >
-                Volver a reservar
+                {userRole == "duenio"
+                  ? "Volver al panel de comisiones"
+                  : "Volver a reservar"}
               </Link>
 
               <Link

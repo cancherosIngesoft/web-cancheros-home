@@ -1,12 +1,7 @@
 "use client";
 
 import { useForm } from "react-hook-form";
-import {
-  CalendarIcon,
-  BarChartIcon as ChartBarIcon,
-  DownloadIcon,
-  Search,
-} from "lucide-react";
+import { BarChartIcon as ChartBarIcon, Search } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";

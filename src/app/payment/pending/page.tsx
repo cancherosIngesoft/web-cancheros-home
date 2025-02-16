@@ -3,6 +3,7 @@
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState, Suspense } from "react";
 import Link from "next/link";
+import { useGlobalStore } from "@/store";
 
 interface PaymentInfo {
   collection_id: string;
@@ -19,8 +20,12 @@ interface PaymentInfo {
 function PaymentContent() {
   const searchParams = useSearchParams();
   const [paymentInfo, setPaymentInfo] = useState<PaymentInfo | null>(null);
-
+  const auth = useGlobalStore((state) => state.auth);
+  const [userRole, setUserRole] = useState<string | null>(null);
   useEffect(() => {
+    if (auth.id) {
+      setUserRole(auth.userRole);
+    }
     const paymentData = {
       collection_id: searchParams.get("collection_id"),
       collection_status: searchParams.get("collection_status"),
@@ -80,10 +85,12 @@ function PaymentContent() {
 
             <div className="flex flex-col space-y-2">
               <Link
-                href="/mis_reservas"
+                href={userRole == "duenio" ? "/comisiones" : "/mis_reservas"}
                 className="inline-flex justify-center items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-black hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
               >
-                Ver Mis Reservas
+                {userRole == "duenio"
+                  ? "Volver al panel de comisiones"
+                  : "Ver Mis Reservas"}
               </Link>
 
               <button

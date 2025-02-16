@@ -3,10 +3,20 @@ import Image from "next/image";
 import { CalendarIcon, MapPinIcon, UserIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
+interface IReservation {
+  id: string;
+  field: string;
+  user: string;
+  date: string;
+  location: string;
+  amount: number;
+  status: string;
+}
+
 export default function GenericReservaCard({
   reservation,
 }: {
-  reservation: any;
+  reservation: IReservation;
 }) {
   return (
     <Card key={reservation.id}>

@@ -3,7 +3,7 @@
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState, Suspense } from "react";
 import Link from "next/link";
-
+import { useGlobalStore } from "@/store";
 interface PaymentInfo {
   collection_id: string;
   collection_status: string;
@@ -19,7 +19,8 @@ interface PaymentInfo {
 function PaymentContent() {
   const searchParams = useSearchParams();
   const [paymentInfo, setPaymentInfo] = useState<PaymentInfo | null>(null);
-
+  const auth = useGlobalStore((state) => state.auth);
+  const [userRole, setUserRole] = useState<string | null>(null);
   useEffect(() => {
     // Extraer todos los queryParams relevantes
     const paymentData = {
@@ -33,28 +34,11 @@ function PaymentContent() {
       preference_id: searchParams.get("preference_id"),
       site_id: searchParams.get("site_id"),
     };
+    if (auth.id) {
+      setUserRole(auth.userRole);
+    }
 
     setPaymentInfo(paymentData as PaymentInfo);
-    /*
-    // Verificar estado del pago en tu backend
-    const verifyPayment = async () => {
-      try {
-        const response = await fetch(`/api/payment_gateway/verify`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(paymentData),
-        });
-        const data = await response.json();
-      } catch (error) {
-        console.error("Error verifying payment:", error);
-      }
-    };
-
-
-    verifyPayment();
-    */
   }, [searchParams]);
 
   return (
@@ -92,22 +76,30 @@ function PaymentContent() {
 
           <div className="mt-6 space-y-4">
             <p className="text-gray-600">
-              Tu reserva ha sido confirmada exitosamente.
+              Tu pago ha sido realizado exitosamente.
             </p>
 
             <div className="flex flex-col space-y-2">
-              <Link
-                href="/mis_reservas"
-                className="inline-flex justify-center items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-black hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
-              >
-                Ver Mis Reservas
-              </Link>
+              {userRole == "duenio" ? (
+                <Link
+                  href="/comisiones"
+                  className="inline-flex justify-center items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-black hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
+                >
+                  Volver al panel de comisiones
+                </Link>
+              ) : (
+                <Link
+                  href="/mis_reservas"
+                  className="inline-flex justify-center items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-black hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
+                >
+                  Ver Mis Reservas
+                </Link>
+              )}
             </div>
           </div>
 
           <div className="mt-6">
             <p className="text-xs text-gray-500">
-              Recibirás un correo electrónico con los detalles de tu reserva.
               Para cualquier consulta, contáctanos vía{" "}
               <Link
                 href="https://api.whatsapp.com/send/?phone=%2B573023242843"
