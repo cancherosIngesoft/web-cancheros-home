@@ -11,20 +11,28 @@ import { Input } from "@/components/ui/input"
 import { useToast } from "@/hooks/use-toast"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { QueryClient, useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
-import { Loader2 } from 'lucide-react'
+import { Loader2, Shield } from 'lucide-react'
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 import { addScoreToMatch } from "../../../actions/club_management/club_past_matches"
 import { useTeamDataStore } from "@/store"
+import ShieldTeamAIcon from "@/components/icon/ShieldTeamAIcon"
+import ShieldTeamBIcon from "@/components/icon/ShieldTeamBIcon"
 
 
 const scoreSchema = z.object({
   teamAScore: z.coerce
-    .number()
+    .number({ 
+      required_error: "El marcador es requerido",
+      invalid_type_error: "El marcador debe ser un número" 
+    })
     .min(0, "El marcador debe ser un número positivo")
     .max(99, "El marcador no puede ser mayor a 99"),
   teamBScore: z.coerce
-    .number()
+    .number({ 
+      required_error: "El marcador es requerido",
+      invalid_type_error: "El marcador debe ser un número" 
+    })
     .min(0, "El marcador debe ser un número positivo")
     .max(99, "El marcador no puede ser mayor a 99"),
 })
@@ -58,12 +66,12 @@ export default function ScoreModal({
   const queryClient = useQueryClient()
 
   const { mutate: addScore, isPending } = useMutation({
-    mutationFn: async (data: ScoreFormData) => {
+    mutationFn:(data: ScoreFormData) => {
       const scoreData = [
         { teamName: score[0].teamName, teamId: score[0].teamId, score: data.teamAScore },
-        { teamName: score[1].teamName, teamId: score[1 ].teamId, score: data.teamBScore },
+        { teamName: score[1].teamName, teamId: score[1].teamId, score: data.teamBScore },
       ]
-        addScoreToMatch(idTeam, idReservation, scoreData)
+      return addScoreToMatch(idTeam, idReservation, scoreData)
     },
     onSuccess: () => {
       toast({
@@ -93,28 +101,29 @@ export default function ScoreModal({
         <DialogHeader>
           <DialogTitle className="text-center">Agregar Marcador</DialogTitle>
         </DialogHeader>
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-          <div className="grid grid-cols-2 gap-6">
-            <div className="space-y-2">
+        <form onSubmit={(e) => {
+          e.preventDefault()
+          e.stopPropagation()
+          handleSubmit(onSubmit)(e)
+        }}  className="space-y-6">
+          <div className="flex gap-6 items-center">
+            <div className="space-y-2 flex-1">
               <div className="text-center text-destructive font-semibold">
-                EQUIPO A
+                {score[0].teamName}
               </div>
               <div className="flex justify-center">
-                <div className="w-12 h-12 bg-destructive/10 rounded-full flex items-center justify-center">
-                  <svg
-                    viewBox="0 0 24 24"
-                    className="w-8 h-8 text-destructive"
-                    fill="currentColor"
-                  >
-                    <path d="M3.979 7.69a8.99 8.99 0 0 1 16.042 0l-8.021 4.63-8.021-4.63zm16.372.942a9 9 0 1 1-16.702 0L12 13.959l8.351-5.327z" />
-                  </svg>
+                <div className="w-14 h-14 bg-destructive/10 rounded-full flex items-center justify-center">
+                  <ShieldTeamAIcon className="w-10 h-10 text-destructive" />
                 </div>
               </div>
               <div className="space-y-1">
                 <Input
+                  required
                   placeholder="Marcador"
                   {...register("teamAScore")}
                   className="text-center"
+                  onClick={(e) => e.stopPropagation()}
+                  onMouseDown={(e) => e.stopPropagation()}
                 />
                 {errors.teamAScore && (
                   <p className="text-xs text-destructive text-center">
@@ -122,29 +131,26 @@ export default function ScoreModal({
                   </p>
                 )}
               </div>
-              <div className="text-center text-sm font-medium">{score[0].teamName}</div>
             </div>
+            <span className="font-bold text-xl">-</span>
 
-            <div className="space-y-2">
+            <div className="space-y-2 flex-1">
               <div className="text-center text-primary font-semibold">
-                EQUIPO B
+                {score[1].teamName}
               </div>
               <div className="flex justify-center">
-                <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center">
-                  <svg
-                    viewBox="0 0 24 24"
-                    className="w-8 h-8 text-primary"
-                    fill="currentColor"
-                  >
-                    <path d="M3.979 7.69a8.99 8.99 0 0 1 16.042 0l-8.021 4.63-8.021-4.63zm16.372.942a9 9 0 1 1-16.702 0L12 13.959l8.351-5.327z" />
-                  </svg>
+                <div className="w-14 h-14 bg-primary/10 rounded-full flex items-center justify-center">
+                  <ShieldTeamBIcon className="w-10 h-10 text-primary" />
                 </div>
               </div>
               <div className="space-y-1">
                 <Input
+                  required
                   placeholder="Marcador"
                   {...register("teamBScore")}
                   className="text-center"
+                  onClick={(e) => e.stopPropagation()}
+                  onMouseDown={(e) => e.stopPropagation()}
                 />
                 {errors.teamBScore && (
                   <p className="text-xs text-destructive text-center">
@@ -152,13 +158,13 @@ export default function ScoreModal({
                   </p>
                 )}
               </div>
-              <div className="text-center text-sm font-medium">{score[1].teamName}</div>
+              
             </div>
           </div>
 
           <Button
             type="submit"
-            className="w-full bg-[#4CAF50] hover:bg-[#45a049]"
+            className="w-full "
             disabled={isPending}
           >
             {isPending ? (
@@ -167,7 +173,7 @@ export default function ScoreModal({
                 Guardando...
               </>
             ) : (
-              "Consolidar"
+              "Guardar"
             )}
           </Button>
         </form>

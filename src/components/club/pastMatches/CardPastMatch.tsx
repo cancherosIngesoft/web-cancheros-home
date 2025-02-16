@@ -27,16 +27,16 @@ const CardPastMatch = ({ match }: CardPastMatchProps) => {
     e.stopPropagation()
     setShowAddResult(true)
   }
-
-  const hasValidScore = match.score && 
-    match.score[0].score !== undefined && 
+ 
+  const hasValidScore = match.score &&
+    match.score[0].score !== undefined &&
     match.score[1].score !== undefined;
 
   const getScoreColor = (teamIndex: number) => {
     if (!match.score) return '';
     const teamAScore = match.score[0].score;
     const teamBScore = match.score[1].score;
-    
+
     if (teamAScore === teamBScore) return 'text-yellow-500';
     if (teamIndex === 0) {
       return teamAScore! > teamBScore! ? 'text-primary' : 'text-destructive';
@@ -62,14 +62,14 @@ const CardPastMatch = ({ match }: CardPastMatchProps) => {
 
   const renderAddResultButton = () => (
     idCaptain == idUser ? (
-      <Button 
-        variant="default" 
-        onClick={(e) => handleAddResult(e)} 
+      <Button
+        variant="default"
+        onClick={(e) => handleAddResult(e)}
         className="w-full md:w-auto"
       >
         Agregar resultado
       </Button>
-    ):(
+    ) : (
       <div>
         <span className="font-semibold text-sm">Resultado no disponible</span>
       </div>
@@ -77,42 +77,50 @@ const CardPastMatch = ({ match }: CardPastMatchProps) => {
   );
 
   return (
-    <div
-      onClick={() => setShowResult(true)}
-      className="flex flex-col md:flex-row items-start md:items-center p-4 md:px-4 justify-between bg-white rounded-lg w-full min-h-[5.5rem] shadow-lg hover:bg-primary-95 hover:cursor-pointer"
-    >
-      <div className="flex flex-col md:flex-row items-start md:items-center gap-4 w-full md:w-auto">
-        <FieldIcon className="w-10 h-10 text-primary" />
-        <div className="flex-col gap-2 text-xs w-full md:w-auto">
-          <p className="text-base font-bold mb-2 md:mb-0">{match.teamAName + " VS " + match.teamBName}</p>
-          <div className="grid grid-cols-2 md:grid-flow-col md:grid-cols-2 md:grid-rows-2 gap-2 md:gap-1">
-            <div className="flex flex-row items-center gap-2">
-              <Calendar className="w-4 h-4 text-primary" />
-              <span>{match.dateReservation}</span>
-            </div>
-            <div className="flex flex-row items-center gap-2">
-              <Clock className="w-4 h-4 text-primary" />
-              <span>{match.hours.startHour + " - " + match.hours.endHour}</span>
-            </div>
-            <div className="flex flex-row items-center gap-2 col-span-2 md:col-span-1">
-              <MapIcon className="w-4 h-4 text-primary" />
-              <span>{match.bussinesName}</span>
+    <>
+      <div
+        onClick={() => setShowResult(true)}
+        className="flex flex-col md:flex-row items-start md:items-center p-4 md:px-4 justify-between bg-white rounded-lg w-full min-h-[5.5rem] shadow-lg hover:bg-primary-95 hover:cursor-pointer"
+      >
+        <div className="flex flex-col md:flex-row items-start md:items-center gap-4 w-full md:w-auto">
+          <FieldIcon className="w-10 h-10 text-primary" />
+          <div className="flex-col gap-2 text-xs w-full md:w-auto">
+            <p className="text-base font-bold mb-2 md:mb-0">{match.teamAName + " VS " + match.teamBName}</p>
+            <div className="grid grid-cols-2 md:grid-flow-col md:grid-cols-2 md:grid-rows-2 gap-2 md:gap-1">
+              <div className="flex flex-row items-center gap-2">
+                <Calendar className="w-4 h-4 text-primary" />
+                <span>{match.dateReservation}</span>
+              </div>
+              <div className="flex flex-row items-center gap-2">
+                <Clock className="w-4 h-4 text-primary" />
+                <span>{match.hours.startHour + " - " + match.hours.endHour}</span>
+              </div>
+              <div className="flex flex-row items-center gap-2 col-span-2 md:col-span-1">
+                <MapIcon className="w-4 h-4 text-primary" />
+                <span>{match.bussinesName}</span>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-      <div className="mt-4 md:mt-0 w-full md:w-auto">
-        {hasValidScore ? renderScore() : renderAddResultButton()}
-      </div>
+        <div className="mt-4 md:mt-0 w-full md:w-auto">
+          {hasValidScore ? renderScore() : renderAddResultButton()}
+        </div>
 
+
+      </div>
       <ModalInfoReservation
         isOpen={showResult}
         onClose={() => setShowResult(false)}
         reservation={match}
         isPastReservation={true}
       />
-      <AddScoreModal score={match.score} idReservation={match.idReservation} isOpen={showAddResult} onClose={() => setShowAddResult(false)} />
-    </div>
+      <AddScoreModal
+        score={match.score}
+        idReservation={match.idReservation}
+        isOpen={showAddResult}
+        onClose={() => setShowAddResult(false)} />
+
+    </>
   )
 }
 

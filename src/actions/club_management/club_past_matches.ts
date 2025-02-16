@@ -155,33 +155,32 @@ export async function addScoreToMatch(
     idReservation: string,
     score: { teamName: string, teamId: string, score: number }[]
 
-): Promise<ReturnPastMatches[]> {
+): Promise<void> {
 
     console.log("add Score", idTeam, idReservation, score)
 
-    try {
+    // try {
 
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/clubs/add_score`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ idTeam, idReservation, score })
-        });
+    //     const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/clubs/add_score`, {
+    //         method: "POST",
+    //         headers: {
+    //             "Content-Type": "application/json",
+    //         },
+    //         body: JSON.stringify({ idTeam, idReservation, score })
+    //     });
 
-        if (!res.ok) {
-            const data = await res.json();
-            throw new Error(data.message);
-        }
+    //     if (!res.ok) {
+    //         const data = await res.json();
+    //         throw new Error(data.message);
+    //     }
 
-        // Devolver la respuesta del servidor
-        return await res.json();
-    } catch (e) {
-        if (e instanceof Error) {
-            console.error("Error al agregar el marcador: ", e.message);
-            throw new Error(e.message);
-        } else {
-            throw new Error("Error desconocido");
-        }
-    }
+       
+    // } catch (e) {
+    //     if (e instanceof Error) {
+    //         console.error("Error al agregar el marcador: ", e.message);
+    //         throw new Error(e.message);
+    //     } else {
+    //         throw new Error("Error desconocido");
+    //     }
+    // }
 }
