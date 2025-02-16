@@ -25,8 +25,13 @@ import {
 } from "@/components/ui/popover";
 import GenericReservaCard from "@/components/reservar_components/genericReservaCard";
 import { useEffect, useState } from "react";
-import { getCanchas } from "@/actions/reservation/reservation_action";
+import {
+  getCanchas,
+  getOcupationAndIncomes,
+  getReservas,
+} from "@/actions/reservation/reservation_action";
 import { useGlobalStore } from "@/store";
+import { Skeleton } from "@/components/ui/skeleton";
 
 // Definir el tipo para los filtros
 type FilterFormValues = {
@@ -83,9 +88,21 @@ export default function FinancialDashboard() {
     fetchHostCanchas();
   }, [user.id]);
 
-  const onSubmit = (data: FilterFormValues) => {
+  const onSubmit = async (data: FilterFormValues) => {
     console.log("Filtros seleccionados:", data);
     // Aquí puedes hacer la llamada a tu API con los filtros
+    const { ocupation, incomes } = await getOcupationAndIncomes(
+      user.id || "",
+      data.cancha,
+      data.mes,
+      data.año
+    );
+    setTasaOcupacion(ocupation);
+    setTotalIngresos(incomes);
+    setLoading(true);
+    const reservas = await getReservas(data.mes, data.cancha);
+    setReservas(reservas);
+    setLoading(false);
   };
 
   return (
@@ -192,7 +209,7 @@ export default function FinancialDashboard() {
         <Card>
           <CardHeader className="space-y-1">
             <CardTitle className="text-3xl font-bold">
-              {tasaOcupacion.toFixed(2)}%
+              {tasaOcupacion.toFixed(1)}%
             </CardTitle>
             <p className="text-sm text-muted-foreground">Tasa de ocupación</p>
           </CardHeader>
@@ -207,7 +224,11 @@ export default function FinancialDashboard() {
         </h2>
         <div className="space-y-4">
           {/* Reservation Card */}
-          {reservas.length > 0 ? (
+          {loading ? (
+            [1, 2, 3].map((item) => (
+              <Skeleton className="h-24 w-full" key={item} />
+            ))
+          ) : reservas.length > 0 ? (
             reservas.map((reservation) => (
               <GenericReservaCard
                 key={reservation.id}

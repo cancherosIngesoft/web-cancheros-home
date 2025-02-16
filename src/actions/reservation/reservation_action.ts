@@ -165,6 +165,39 @@ export async function getCanchas(
   }
 }
 
+export async function getOcupationAndIncomes(
+  id_user: string,
+  court_id: string,
+  month: string,
+  year: string
+) {
+  /*
+  try {
+    const res = await fetchWithRetry(
+      `${process.env.NEXT_PUBLIC_API_URL}/api/get_court_ocupation_and_incomes/${id_user}/${court_id}/${month}/${year}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    const data = await res.json();
+    return data;
+  } catch (e) {
+    console.error(e);
+    return {
+      ocupation: 0,
+      incomes: 0,
+    };
+  }
+  */
+  return {
+    ocupation: 100,
+    incomes: 1000000,
+  };
+}
+
 export async function cancelarReserva(id: string): Promise<void> {
   // Mock data
   console.log(`Cancelando reserva ${id}`);
@@ -176,6 +209,3 @@ export async function reprogramarReserva(id: string): Promise<void> {
   console.log(`Reprogramando reserva ${id}`);
   // Aquí iría la lógica para reprogramar la reserva en el backend
 }
-
-
-
