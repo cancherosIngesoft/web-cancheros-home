@@ -3,7 +3,7 @@
 import { DialogTitle } from "@radix-ui/react-dialog"
 import { Dialog, DialogContent, DialogDescription, DialogHeader } from "../ui/dialog"
 import { CalendarIcon, ImageOff } from "lucide-react"
-import { useMutation, useQuery } from "@tanstack/react-query"
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { getAvailableHour, type SchedulesToBook } from "@/actions/book_field/booking_actions"
 import { Calendar } from "@/components/ui/calendar"
 import { useState, useEffect, useMemo } from "react"
@@ -15,8 +15,10 @@ import { Button } from "../ui/button"
 import { TimeSlot } from "./TimeSlot"
 import z from "zod"
 import { reprogramationReservation } from "@/actions/reservation/reservation_action"
-import { useGlobalStore } from "@/store"
+import { useGlobalStore, useTeamDataStore } from "@/store"
 import { useToast } from "@/hooks/use-toast"
+import { CalendarClock } from "lucide-react"
+import ConfirmationModal from "../modals/ConfirmationModal"
 
 const dateSchema = z.date().refine(
   (value) => {
@@ -54,6 +56,8 @@ const ReprogramationModal = ({
   numHours,
 }: ReprogramacionModalProps) => {
   const idUser = useGlobalStore((state) => state.auth?.id)
+  const idTeam = useTeamDataStore((state) => state.idTeam)
+  const [isConfirmationModalOpen, setIsConfirmationModalOpen] = useState(false)
   const [formatHours, setFormatHours] = useState<SchedulesToBook[] | undefined>(undefined)
   const [errorDate, setErrorDate] = useState<string>("")
   const [selectedDate, setSelectedDate] = useState<{
@@ -61,7 +65,7 @@ const ReprogramationModal = ({
     valid: boolean
   }>()
 
-  const {toast} = useToast()
+  const { toast } = useToast()
   const [selectedHours, setSelectedHours] = useState<SchedulesToBook[] | null>([])
 
   const handleHourToggle = (franja: SchedulesToBook) => {
@@ -93,6 +97,7 @@ const ReprogramationModal = ({
       setSelectedDate({ date: date, valid: true })
     }
   }
+
   const {
     data: availableHours,
     isLoading: isLoadingHours,
@@ -106,7 +111,8 @@ const ReprogramationModal = ({
     staleTime: 1000 * 60 * 5,
   })
 
-  const {mutate:reprogramation} = useMutation({
+  const queryClient = useQueryClient()
+  const { mutate: reprogramation } = useMutation({
     mutationFn: () => {
       if (!selectedDate?.date || !selectedHours || !idUser) return Promise.reject("Error en los datos")
       const newHours = {
@@ -117,20 +123,21 @@ const ReprogramationModal = ({
       return reprogramationReservation(idReservation, idUser, newHours)
     },
     onSuccess: () => {
-        toast({
-            title: "Reserva reprogramada",
-            description: "Tu reserva ha sido reprogramada exitosamente",
-            variant: "default",
-        })
+      toast({
+        title: "Reserva reprogramada",
+        description: "Tu reserva ha sido reprogramada exitosamente",
+        variant: "default",
+      })
+      queryClient.invalidateQueries({ queryKey: ["upcomingMatch", idTeam, idUser] })
       onClose()
     },
     onError: (error: Error) => {
-        toast({
-            title: "Error al reprogramar la reserva",
-            description: error.message,
-            variant: "destructive",
-        })
-    }
+      toast({
+        title: "Error al reprogramar la reserva",
+        description: error.message,
+        variant: "destructive",
+      })
+    },
   })
   const onSubmit = () => {
     reprogramation()
@@ -161,100 +168,142 @@ const ReprogramationModal = ({
   }, [selectedHours, numHours])
 
   return (
-    <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle>
-            <h1 className="text-2xl font-bold">Reprogramar Reserva</h1>
-          </DialogTitle>
-          <DialogDescription>Selecciona una nueva fecha y hora para tu reserva</DialogDescription>
-        </DialogHeader>
-        <p>Reprogramar reserva en: {businessName}</p>
-        <div className="flex flex-row">
-          <div className="flex-1">
-            {fieldImg ? (
-              <>
-                <img
-                  src={fieldImg || "/placeholder.svg"}
-                  alt={businessName}
-                  className="h-full w-full rounded-md object-cover"
-                />
-              </>
-            ) : (
-              <div className="h-full w-full flex items-center rounded-md bg-gray-200">
-                <ImageOff className="h-10 w-10 mx-auto text-primary-50" />
-              </div>
-            )}
-          </div>
-          <div className="flex-1">
-            <p>{totalPrice}</p>
-            <p>{fieldType}</p>
-          </div>
-        </div>
-        <div className="flex flex-col gap-4">
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="space-y-4 w-1/2">
-            <h3 className="text-lg font-semibold text-primary-50">Seleccionar fecha</h3>
-            <Popover>
-              <PopoverTrigger asChild>
-                <Button
-                  variant="outline"
-                  className={`${
-                    errorDate !== "" ? "border-destructive" : ""
-                  } w-full justify-start text-left font-normal`}
-                >
-                  <CalendarIcon className="mr-2 h-4 w-4" />
-                  {selectedDate?.date ? format(selectedDate.date, "PPP") : <span>Selecciona una fecha</span>}
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent className="w-auto p-0">
-                <Calendar
-                  mode="single"
-                  selected={selectedDate?.date}
-                  onSelect={(date) => {
-                    handleDateChange(date)
-                    setSelectedHours(null)
-                  }}
-                  initialFocus
-                />
-              </PopoverContent>
-            </Popover>
-            <span className="text-xs text-destructive">{errorDate}</span>
-          </motion.div>
+    <>
+      <Dialog open={isOpen} onOpenChange={onClose}>
+        <DialogContent className="w-full md:w-[70vw] max-w-5xl p-0 gap-0 max-h-[90vh] overflow-y-auto">
+          <DialogHeader className="bg-tertiary p-4 text-white">
+            <DialogTitle className="flex items-center gap-2">
+              <CalendarClock className="h-8 w-8 " />
+              <h1 className="text-2xl font-bold">Reprogramar Reserva</h1>
+            </DialogTitle>
+            <DialogDescription>
+              Selecciona una nueva fecha y hora para tu reserva{" "}
+              <span className="font-semibold text-yellow-400">
+                (si reprogramas la reserva, ya no podras cancelarla)
+              </span>
+            </DialogDescription>
+          </DialogHeader>
 
-          {selectedDate && (
-            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="space-y-4">
-              <h3 className="text-lg font-semibold text-primary-50">Horarios disponibles</h3>
-              {isLoadingHours ? (
-                <div className="grid grid-cols-3 gap-2">
-                  {[1, 2, 3].map((i) => (
-                    <div key={i} className="h-10 bg-gray-300 animate-pulse rounded-md" />
-                  ))}
+          <div className="p-4 flex flex-col gap-4 md:flex-row md:items-start">
+            <p className="text-xl font-bold text-tertiary">Reprogramar reserva en: {businessName}</p>
+            <div className="flex flex-col gap-4 md:w-1/2">
+              <div className="flex flex-col md:flex-row items-center gap-4 bg-tertiary-90/50 p-4 rounded-md">
+                <div className="w-full md:w-40 h-40">
+                  {fieldImg ? (
+                    <>
+                      <img
+                        src={fieldImg || "/placeholder.svg"}
+                        alt={businessName}
+                        className="h-full w-full rounded-md object-cover"
+                      />
+                    </>
+                  ) : (
+                    <div className="h-full w-full flex items-center rounded-md bg-gray-200">
+                      <ImageOff className="h-10 w-10 mx-auto text-primary-50" />
+                    </div>
+                  )}
                 </div>
-              ) : isErrorHours ? (
-                <ErrorGetInfo retry={() => refetchHours()} error={failureReasonHours} />
-              ) : (
-                <div className="flex flex-row flex-wrap gap-2">
-                  {formatHours?.map((franja) => (
-                    <TimeSlot
-                      key={franja.hora_inicio}
-                      time={franja}
-                      isSelected={selectedHours ? selectedHours.includes(franja) : false}
-                      onClick={() => handleHourToggle(franja)}
+                <div className="flex flex-col">
+                  <p className="font-bold">
+                    Precio:{" "}
+                    <span className="font-normal">
+                      {new Intl.NumberFormat("es-CO", {
+                        style: "currency",
+                        currency: "COP",
+                        maximumFractionDigits: 0,
+                      }).format(totalPrice)}
+                    </span>
+                  </p>
+                  <p className="font-bold">
+                    Tipo de cancha: <span className="font-normal">{fieldType}</span>
+                  </p>
+                </div>
+              </div>
+
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="space-y-4 w-full md:w-1/2"
+              >
+                <h3 className="text-lg font-semibold text-black">Seleccionar nueva fecha</h3>
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <Button
+                      variant="outline"
+                      className={`${
+                        errorDate !== "" ? "border-destructive" : ""
+                      } w-full justify-start text-left font-normal`}
+                    >
+                      <CalendarIcon className="mr-2 h-4 w-4" />
+                      {selectedDate?.date ? format(selectedDate.date, "PPP") : <span>Selecciona una fecha</span>}
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-auto p-0">
+                    <Calendar
+                      mode="single"
+                      selected={selectedDate?.date}
+                      onSelect={(date) => {
+                        handleDateChange(date)
+                        setSelectedHours(null)
+                      }}
+                      initialFocus
                     />
-                  ))}
-                </div>
+                  </PopoverContent>
+                </Popover>
+                <span className="text-xs text-destructive">{errorDate}</span>
+              </motion.div>
+            </div>
+            <div className="flex flex-col gap-4 w-full md:w-1/2">
+              {selectedDate && (
+                <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="space-y-4">
+                  <h3 className="text-lg font-semibold text-primary-50">Horarios disponibles</h3>
+                  {isLoadingHours ? (
+                    <div className="grid grid-cols-3 gap-2">
+                      {[1, 2, 3].map((i) => (
+                        <div key={i} className="h-10 bg-gray-300 animate-pulse rounded-md" />
+                      ))}
+                    </div>
+                  ) : isErrorHours ? (
+                    <ErrorGetInfo retry={() => refetchHours()} error={failureReasonHours} />
+                  ) : (
+                    <div className="flex flex-row flex-wrap gap-2">
+                      {formatHours?.map((franja) => (
+                        <TimeSlot
+                          key={franja.hora_inicio}
+                          time={franja}
+                          isSelected={selectedHours ? selectedHours.includes(franja) : false}
+                          onClick={() => handleHourToggle(franja)}
+                        />
+                      ))}
+                    </div>
+                  )}
+                </motion.div>
               )}
-            </motion.div>
-          )}
-          <Button className="w-full font-bold" size="lg" onClick={onSubmit} disabled={!isSelectionValid}>
-            Reprogramar
-          </Button>
-          {!isSelectionValid && selectedHours && (
-            <p className="text-sm text-destructive">Por favor, selecciona {numHours} horas consecutivas.</p>
-          )}
-        </div>
-      </DialogContent>
-    </Dialog>
+              <Button
+                className="w-full font-bold mt-4 md:mt-0"
+                size="lg"
+                onClick={() => setIsConfirmationModalOpen(true)}
+                disabled={!isSelectionValid}
+              >
+                Reprogramar
+              </Button>
+              {!isSelectionValid && selectedHours && (
+                <p className="text-sm text-destructive">Por favor, selecciona {numHours} horas consecutivas.</p>
+              )}
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      <ConfirmationModal
+        isOpen={isConfirmationModalOpen}
+        title="¿Estás seguro de reprogramar la reserva?"
+        description="Recuerda que si reprogramas la reserva, ya no podrás cancelarla."
+        onClose={() => setIsConfirmationModalOpen(false)}
+        onConfirm={onSubmit}
+        icon={<CalendarClock className="h-8 w-8 text-yellow-500" />}
+      />
+    </>
   )
 }
 

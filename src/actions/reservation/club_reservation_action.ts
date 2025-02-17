@@ -71,7 +71,7 @@ export async function desJoinTeam(id_reservation: string, id_user:string): Promi
 const teamReservationsMock: TeamReservationReturn[] = [
     {
       idReservation: "res_001",
-      dateReservation: "2025-02-17",
+      dateReservation: "2025-02-20",
       hours: { startHour: "18:00", endHour: "20:00" },
       idBooker: "66",
       bussinesName: "Cancha Fútbol 5 Bogotá",
@@ -84,14 +84,14 @@ const teamReservationsMock: TeamReservationReturn[] = [
       isParticipating: false,
       teamAName: "Leones del Norte",
       teamBName: "Dragones azules",
-      idField:"field_001"
+      idField:"49"
       
     },
     {
       idReservation: "res_002",
-      dateReservation: "2025-02-19",
+      dateReservation: "2025-02-20",
       hours: { startHour: "20:30", endHour: "22:30" },
-      idBooker: "user_456",
+      idBooker: "66",
       bussinesName: "Complejo Deportivo El Campín",
       FieldType: "Fútbol 8",
       capacity: 16,
@@ -101,7 +101,7 @@ const teamReservationsMock: TeamReservationReturn[] = [
       isParticipating: true,
       teamAName: "Leones del Norte",
       teamBName: "Dragones Rojos",
-      idField:"field_002"
+      idField:"49"
       
     }
   ];
