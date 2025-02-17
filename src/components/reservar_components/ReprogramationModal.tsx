@@ -42,6 +42,7 @@ interface ReprogramacionModalProps {
   totalPrice: number
   idField: string
   numHours: number
+  isInTeam?: boolean
 }
 
 const ReprogramationModal = ({
@@ -54,6 +55,7 @@ const ReprogramationModal = ({
   totalPrice,
   idField,
   numHours,
+  isInTeam=false
 }: ReprogramacionModalProps) => {
   const idUser = useGlobalStore((state) => state.auth?.id)
   const idTeam = useTeamDataStore((state) => state.idTeam)
@@ -128,7 +130,15 @@ const ReprogramationModal = ({
         description: "Tu reserva ha sido reprogramada exitosamente",
         variant: "default",
       })
-      queryClient.invalidateQueries({ queryKey: ["upcomingMatch", idTeam, idUser] })
+      //Para recargar las reservas y que se actualice las vista
+      if(isInTeam){
+        queryClient.invalidateQueries({ queryKey: ["upcomingMatch", idTeam, idUser] })
+      }else{
+        queryClient.invalidateQueries({ queryKey: ["activeReservations", idUser] })
+
+      }
+      setSelectedHours(null)
+      setSelectedDate(undefined)
       onClose()
     },
     onError: (error: Error) => {
@@ -170,7 +180,7 @@ const ReprogramationModal = ({
   return (
     <>
       <Dialog open={isOpen} onOpenChange={onClose}>
-        <DialogContent className="w-full md:w-[70vw] max-w-5xl p-0 gap-0 max-h-[90vh] overflow-y-auto">
+        <DialogContent className="w-full md:w-[70vw] max-w-5xl p-0 gap-0 max-h-[90vh] overflow-y-auto flex flex-col">
           <DialogHeader className="bg-tertiary p-4 text-white">
             <DialogTitle className="flex items-center gap-2">
               <CalendarClock className="h-8 w-8 " />
@@ -184,9 +194,9 @@ const ReprogramationModal = ({
             </DialogDescription>
           </DialogHeader>
 
-          <div className="p-4 flex flex-col gap-4 md:flex-row md:items-start">
+          <div className="p-4 flex flex-col gap-4 md:items-start">
             <p className="text-xl font-bold text-tertiary">Reprogramar reserva en: {businessName}</p>
-            <div className="flex flex-col gap-4 md:w-1/2">
+            <div className="flex flex-col md:flex-row gap-4 w-full ">
               <div className="flex flex-col md:flex-row items-center gap-4 bg-tertiary-90/50 p-4 rounded-md">
                 <div className="w-full md:w-40 h-40">
                   {fieldImg ? (
@@ -253,7 +263,7 @@ const ReprogramationModal = ({
                 <span className="text-xs text-destructive">{errorDate}</span>
               </motion.div>
             </div>
-            <div className="flex flex-col gap-4 w-full md:w-1/2">
+            <div className="flex flex-col gap-4 w-full ">
               {selectedDate && (
                 <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="space-y-4">
                   <h3 className="text-lg font-semibold text-primary-50">Horarios disponibles</h3>
