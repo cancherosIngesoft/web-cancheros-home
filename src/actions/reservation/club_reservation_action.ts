@@ -14,9 +14,10 @@ export interface TeamReservationReturn {
   teamAName:string,
   teamBName:string,
   idField:string,
-  
-  
-}export async function joinTeam(id_reservation: string, id_subTeam:string, id_user:string): Promise<void> {
+
+}
+
+export async function joinTeam(id_reservation: string, id_subTeam:string, id_user:string): Promise<void> {
      console.log("joinTeam", id_reservation)
     // try {
     //     const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/reservations/team/join_team}`, {
