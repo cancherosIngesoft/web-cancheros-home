@@ -1,4 +1,22 @@
-export async function joinTeam(id_reservation: string, id_subTeam:string, id_user:string): Promise<void> {
+export interface TeamReservationReturn {
+  idReservation: string,
+  dateReservation: string
+  hours: { startHour: string, endHour: string }
+  idBooker: string
+  bussinesName: string
+  FieldType: string
+  capacity: number
+  bussinessDirection: string,
+  fieldImg?: string
+  totalPrice: number
+  geoGraphicalLocation: { lat: number, long: number }
+  isParticipating: boolean,
+  teamAName:string,
+  teamBName:string,
+  idField:string,
+  
+  
+}export async function joinTeam(id_reservation: string, id_subTeam:string, id_user:string): Promise<void> {
      console.log("joinTeam", id_reservation)
     // try {
     //     const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/reservations/team/join_team}`, {
@@ -53,7 +71,7 @@ export async function desJoinTeam(id_reservation: string, id_user:string): Promi
 const teamReservationsMock: TeamReservationReturn[] = [
     {
       idReservation: "res_001",
-      dateReservation: "2025-02-15",
+      dateReservation: "2025-02-17",
       hours: { startHour: "18:00", endHour: "20:00" },
       idBooker: "66",
       bussinesName: "Cancha Fútbol 5 Bogotá",
@@ -65,12 +83,13 @@ const teamReservationsMock: TeamReservationReturn[] = [
       geoGraphicalLocation: { lat: 4.6765, long: -74.0488 },
       isParticipating: false,
       teamAName: "Leones del Norte",
-      teamBName: "Dragones azules"
+      teamBName: "Dragones azules",
+      idField:"field_001"
       
     },
     {
       idReservation: "res_002",
-      dateReservation: "2025-02-16",
+      dateReservation: "2025-02-19",
       hours: { startHour: "20:30", endHour: "22:30" },
       idBooker: "user_456",
       bussinesName: "Complejo Deportivo El Campín",
@@ -81,31 +100,14 @@ const teamReservationsMock: TeamReservationReturn[] = [
       geoGraphicalLocation: { lat: 4.6453, long: -74.0785 },
       isParticipating: true,
       teamAName: "Leones del Norte",
-      teamBName: "Dragones Rojos"
+      teamBName: "Dragones Rojos",
+      idField:"field_002"
       
     }
   ];
   
   
-  
-export interface TeamReservationReturn {
-    idReservation: string,
-    dateReservation: string
-    hours: { startHour: string, endHour: string }
-    idBooker: string
-    bussinesName: string
-    FieldType: string
-    capacity: number
-    bussinessDirection: string,
-    fieldImg?: string
-    totalPrice: number
-    geoGraphicalLocation: { lat: number, long: number }
-    isParticipating: boolean,
-    teamAName:string,
-    teamBName:string
-    
-    
-}
+
 
 
 export async function getTeamActiveReservation(id_team: string, id_user:string): Promise<TeamReservationReturn[]> {

@@ -15,6 +15,7 @@ import {
 import { useToast } from "@/hooks/use-toast"
 import { Skeleton } from "@/components/ui/skeleton"
 import { XCircle } from "lucide-react"
+import ReprogramationModal from "@/components/reservar_components/ReprogramationModal"
 
 interface ModalInfoReservationProps {
   isOpen: boolean
@@ -30,6 +31,8 @@ export default function ModalInfoReservation({ isOpen, onClose, reservation, isP
   const auth = useGlobalStore(useShallow((state) => state.auth))
   const queryClient = useQueryClient()
   const { toast } = useToast()
+  const [showReprogramationModal, setShowReprogramationModal] = useState(false)
+  const [diffHours, setDiffHours] = useState<number>(0)
 
   const isBooker = auth.id == reservation.idBooker
 
@@ -37,7 +40,7 @@ export default function ModalInfoReservation({ isOpen, onClose, reservation, isP
     const checkTimeConstraint = () => {
       const reservationDate = new Date(`${reservation.dateReservation} ${reservation.hours.startHour}`)
       const now = new Date()
-      const diffHours = (reservationDate.getTime() - now.getTime()) / (1000 * 60 * 60)
+      setDiffHours((reservationDate.getTime() - now.getTime()) / (1000 * 60 * 60))
 
       if (diffHours < 24) {
         setDisabled(true)
@@ -144,6 +147,7 @@ export default function ModalInfoReservation({ isOpen, onClose, reservation, isP
       })
       return
     }
+    setShowReprogramationModal(true)
     console.log("Reprogramar")
   }
 
@@ -163,6 +167,7 @@ export default function ModalInfoReservation({ isOpen, onClose, reservation, isP
   }
 
   return (
+    <>
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="w-[95vw] max-w-5xl p-0 gap-0 max-h-[90vh] overflow-y-auto md:overflow-hidden">
         <DialogHeader className="p-4 m-0 flex flex-row items-center justify-between border-b max-h-16 bg-primary-70 rounded-t-md">
@@ -215,6 +220,21 @@ export default function ModalInfoReservation({ isOpen, onClose, reservation, isP
         </div>
       </DialogContent>
     </Dialog>
+    <ReprogramationModal 
+      isOpen={showReprogramationModal}
+      onClose={() => setShowReprogramationModal(false)}
+      idReservation={reservation.idReservation}
+      businessName={reservation.bussinesName}
+      fieldType={reservation.FieldType}
+      fieldImg={reservation.fieldImg}
+      totalPrice={reservation.totalPrice}
+      idField={reservation.idField}
+      numHours={diffHours}
+
+      />
+
+    </>
+    
   )
 }
 

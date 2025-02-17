@@ -13,6 +13,7 @@ export interface ReservationActiveReturn {
   fieldImg?: string;
   totalPrice: number;
   teamName?: string;
+  idField: string;
 }
 
 export interface Cancha {
@@ -171,10 +172,39 @@ export async function cancelarReserva(id: string): Promise<void> {
   // Aquí iría la lógica para cancelar la reserva en el backend
 }
 
-export async function reprogramarReserva(id: string): Promise<void> {
+export async function reprogramationReservation(
+  idResservation: string, 
+  idUser:string,  
+  newHours:{startDateAndHour:string, endDateAndHour:string}): Promise<void> { 
   // Mock data
-  console.log(`Reprogramando reserva ${id}`);
-  // Aquí iría la lógica para reprogramar la reserva en el backend
+  console.log(`Reprogramando reserva ${idResservation}`);
+  try {
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/api/reservations/reprogramation/`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({idResservation, idUser, newHours}),
+      }
+    );
+
+    if (!res.ok) {
+      const data = await res.json();
+      throw new Error(data.message);
+    }
+    const data = await res.json();
+
+    return data;
+  } catch (e) {
+    if (e instanceof Error) {
+      console.error("Error en get Reservations:", e.message);
+      throw new Error(e.message);
+    } else {
+      throw new Error("Error desconocido");
+    }
+  }
 }
 
 
