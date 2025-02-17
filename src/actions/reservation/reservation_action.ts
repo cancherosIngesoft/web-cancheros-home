@@ -193,11 +193,11 @@ export async function cancelarReserva(id: string): Promise<void> {
 }
 
 export async function reprogramationReservation(
-  idResservation: string, 
+  idReservation: string, 
   idUser:string,  
   newHours:{startDateAndHour:string, endDateAndHour:string}): Promise<void> { 
   // Mock data
-  console.log(`Reprogramando reserva ${JSON.stringify( {idResservation, idUser, newHours})}`);
+  console.log(`Reprogramando reserva ${JSON.stringify( {idReservation, idUser, newHours})}`);
   // try {
   //   const res = await fetch(
   //     `${process.env.NEXT_PUBLIC_API_URL}/api/reservations/reprogramation/`,
@@ -206,7 +206,7 @@ export async function reprogramationReservation(
   //       headers: {
   //         "Content-Type": "application/json",
   //       },
-  //       body: JSON.stringify({idResservation, idUser, newHours}),
+  //       body: JSON.stringify({idReservation, idUser, newHours}),
   //     }
   //   );
 
