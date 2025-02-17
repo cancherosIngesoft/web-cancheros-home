@@ -11,10 +11,10 @@ export interface ReturnPastMatches {
     totalPrice: number
     geoGraphicalLocation: { lat: number, long: number }
     isParticipating: boolean,
-    teamAName:string,
-    teamBName:string,
-    score?: {teamName:string,teamId:string, score:number |undefined}[];
-    
+    teamAName: string,
+    teamBName: string,
+    score: { teamName: string, teamId: string, score: number | undefined }[];
+
 }
 
 const pastMatchesMock: ReturnPastMatches[] = [
@@ -34,8 +34,8 @@ const pastMatchesMock: ReturnPastMatches[] = [
         teamAName: "Team Alpha",
         teamBName: "Team Beta",
         score: [
-            { teamName: "Team Alpha", teamId: "team1", score: 3 },
-            { teamName: "Team Beta", teamId: "team2", score: 2 }
+            { teamName: "Team Alpha", teamId: "team1", score: undefined },
+            { teamName: "Team Beta", teamId: "team2", score: undefined }
         ]
     },
     {
@@ -119,9 +119,9 @@ const pastMatchesMock: ReturnPastMatches[] = [
 ];
 
 export async function getPastMatches(
-    idTeam:string):Promise<ReturnPastMatches[]> {
+    idTeam: string): Promise<ReturnPastMatches[]> {
 
-    console.log("get pastMatches",idTeam)
+    console.log("get pastMatches", idTeam)
     return pastMatchesMock
 
     // try {
@@ -132,12 +132,12 @@ export async function getPastMatches(
     //       "Content-Type": "application/json",
     //     },
     //   });
-  
+
     //   if (!res.ok) {
     //     const data = await res.json();
     //     throw new Error(data.message);
     //   }
-  
+
     //   // Devolver la respuesta del servidor
     //   return await res.json();
     // } catch (e) {
@@ -148,4 +148,39 @@ export async function getPastMatches(
     //     throw new Error("Error desconocido");
     //   }
     // }
-  }
+}
+
+export async function addScoreToMatch(
+    idTeam: string,
+    idReservation: string,
+    score: { teamName: string, teamId: string, score: number }[]
+
+): Promise<void> {
+
+    console.log("add Score", idTeam, idReservation, score)
+
+    // try {
+
+    //     const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/clubs/add_score`, {
+    //         method: "POST",
+    //         headers: {
+    //             "Content-Type": "application/json",
+    //         },
+    //         body: JSON.stringify({ idTeam, idReservation, score })
+    //     });
+
+    //     if (!res.ok) {
+    //         const data = await res.json();
+    //         throw new Error(data.message);
+    //     }
+
+       
+    // } catch (e) {
+    //     if (e instanceof Error) {
+    //         console.error("Error al agregar el marcador: ", e.message);
+    //         throw new Error(e.message);
+    //     } else {
+    //         throw new Error("Error desconocido");
+    //     }
+    // }
+}
