@@ -82,7 +82,7 @@ const teamReservationsMock: TeamReservationReturn[] = [
       totalPrice: 120000,
       geoGraphicalLocation: { lat: 4.6765, long: -74.0488 },
       isParticipating: false,
-      teamAName: "Leones del Norte",
+      teamAName: "Leones",
       teamBName: "Dragones azules",
       idField:"49"
       
@@ -100,7 +100,7 @@ const teamReservationsMock: TeamReservationReturn[] = [
       geoGraphicalLocation: { lat: 4.6453, long: -74.0785 },
       isParticipating: true,
       teamAName: "Leones del Norte",
-      teamBName: "Dragones Rojos",
+      teamBName: " Rojos",
       idField:"49"
       
     }

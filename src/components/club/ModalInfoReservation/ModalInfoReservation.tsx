@@ -25,37 +25,18 @@ interface ModalInfoReservationProps {
 }
 
 export default function ModalInfoReservation({ isOpen, onClose, reservation, isPastReservation = false }: ModalInfoReservationProps) {
-  const [disabled, setDisabled] = useState(false)
-  const [tooltipMessage, setTooltipMessage] = useState("")
   const [userTeam, setUserTeam] = useState<string | null>(null)
   const auth = useGlobalStore(useShallow((state) => state.auth))
   const queryClient = useQueryClient()
   const { toast } = useToast()
   const [showReprogramationModal, setShowReprogramationModal] = useState(false)
-  const [diffHours, setDiffHours] = useState<number>(0)
-
-  const isBooker = auth.id == reservation.idBooker
+ 
+  const [isBooker, setIsBooker] = useState(false)
   const startDate = new Date(`${reservation.dateReservation}T${reservation.hours.startHour}:00`);
   const endDate = new Date(`${reservation.dateReservation}T${reservation.hours.endHour}:00`);
   const numHoursReservation = (endDate.getTime() - startDate.getTime()) / (1000 * 3600);
 
-  useEffect(() => {
-    const checkTimeConstraint = () => {
-      const reservationDate = new Date(`${reservation.dateReservation} ${reservation.hours.startHour}`)
-      const now = new Date()
-      setDiffHours((reservationDate.getTime() - now.getTime()) / (1000 * 3600))
-
-      if (diffHours < 24) {
-        setDisabled(true)
-        setTooltipMessage("No se pueden realizar cambios 24 horas antes del partido")
-      } else {
-        setDisabled(false)
-        setTooltipMessage("")
-      }
-    }
-
-    checkTimeConstraint()
-  }, [reservation])
+  
 
   const {
     data: teams,
@@ -78,6 +59,13 @@ export default function ModalInfoReservation({ isOpen, onClose, reservation, isP
       setUserTeam(null)
     }
   }, [teams, auth.name])
+
+  useEffect(() => {
+    if(auth.id == reservation.idBooker){
+      setIsBooker(true)
+    } 
+
+  }, [auth.id])
 
   const joinTeamMutation = useMutation({
     mutationFn: (id_team: string) => {
@@ -184,8 +172,6 @@ export default function ModalInfoReservation({ isOpen, onClose, reservation, isP
               <MatchInformation
                 reservation={reservation}
                 isBooker={isBooker}
-                disabled={disabled}
-                tooltipMessage={tooltipMessage}
                 onReschedule={handleReschedule}
                 onCancel={handleCancel}
                 isPastReservation={isPastReservation}

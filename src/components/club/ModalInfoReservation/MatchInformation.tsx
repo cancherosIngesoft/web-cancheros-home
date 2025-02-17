@@ -7,13 +7,12 @@ import PlayerWithBall from "@/components/icon/PlayerWithBall"
 import CustomMap from "@/components/georeference/map"
 import { TeamReservationReturn } from "@/actions/reservation/club_reservation_action"
 import ReprogramacionModal from "@/components/reservar_components/ReprogramationModal"
+import { useEffect, useState } from "react"
 
 
 interface MatchInformationProps {
   reservation: TeamReservationReturn
   isBooker: boolean
-  disabled: boolean
-  tooltipMessage: string
   onReschedule: () => void
   onCancel: () => void
   isPastReservation: boolean
@@ -22,8 +21,6 @@ interface MatchInformationProps {
 export default function MatchInformation({
   reservation,
   isBooker,
-  disabled,
-  tooltipMessage,
   onReschedule,
   onCancel,
   isPastReservation
@@ -32,6 +29,26 @@ export default function MatchInformation({
   const startDate = new Date(`${reservation.dateReservation}T${reservation.hours.startHour}:00`);
   const endDate = new Date(`${reservation.dateReservation}T${reservation.hours.endHour}:00`);
   const diferenceHours = (endDate.getTime() - startDate.getTime()) / (1000 * 3600);
+  const diffHours = (endDate.getTime() - new Date().getTime()) / (1000 * 3600)
+  const [disabled, setDisabled] = useState(false)
+  const [tooltipMessage, setTooltipMessage] = useState("")
+ 
+  const now = new Date()
+  useEffect(() => {
+    const checkTimeConstraint = () => {
+  
+
+      if (diffHours < 24) {
+        setDisabled(true)
+        setTooltipMessage("No se pueden realizar cambios 24 horas antes del partido")
+      } else {
+        setDisabled(false)
+        setTooltipMessage("")
+      }
+    }
+
+    checkTimeConstraint()
+  }, [reservation])
   return (
     <div className="flex flex-col w-full  space-y-4 p-4 px-6">
       {isBooker && !isPastReservation && (
