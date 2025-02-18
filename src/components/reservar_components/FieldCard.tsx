@@ -27,9 +27,10 @@ import { ImageOff, Eye, Users, DollarSign, Info } from "lucide-react";
 import { ImageViewer } from "./ImageViewer";
 import Image from "next/image";
 import FieldIcon from "../icon/FieldIcon";
+import { IField } from "@/actions/registro_host/field";
 
 interface FieldCardProps {
-  field: Cancha;
+  field: Cancha | IField;
   setSelectedField: ({
     id_field,
     price,
@@ -61,16 +62,16 @@ const FieldCard = ({
     <>
       <Card
         key={field.id_cancha}
-        className={`cursor-pointer transition-colors h-full  ${
-          selectedField?.id_field === field.id_cancha
+        className={`cursor-pointer transition-colors w-60 h-60 aspect-square  ${
+          selectedField?.id_field === String(field.id_cancha)
             ? "border-primary bg-green-100"
             : "hover:border-muted"
         }`}
         onClick={() =>
-          setSelectedField({ id_field: field.id_cancha, price: field.precio })
+          setSelectedField({ id_field: String(field.id_cancha), price: field.precio })
         }
       >
-        <CardContent className="flex flex-col h-80 aspect-square p-4">
+        <CardContent className="flex flex-col  p-4">
           <div
             className="relative h-24 aspect-video group"
             onClick={(e) => e.stopPropagation()}

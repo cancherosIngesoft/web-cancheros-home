@@ -7,6 +7,8 @@ import Image from "next/image";
 import { useGlobalStore } from "@/store";
 import { useEffect, useState } from "react";
 import { Loader2 } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import BookerReservationModal from "@/components/reservar_components/BookerReservationModal";
 
 export default function ReservasNegocio() {
   const auth = useGlobalStore((state) => state.auth);
@@ -15,6 +17,8 @@ export default function ReservasNegocio() {
   >([]);
   const [isLoading, setIsLoading] = useState(true);
   const updateStore = useGlobalStore((state) => state.updateStore);
+
+  const [isCreateReservationOpen, setIsCreateReservationOpen] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -43,15 +47,22 @@ export default function ReservasNegocio() {
 
   return (
     <div className="flex flex-col items-start justify-start h-screen w-[90vw] ml-[5vw] self-center">
-      <h1 className="text-2xl font-bold mb-4 flex flex-row items-center gap-2">
-        Mis Reservas{" "}
-        <Image
-          src="/icons/booking_logo.svg"
-          alt="logo"
-          width={32}
-          height={32}
-        />
-      </h1>
+      <div className="flex flex-row items-center justify-between w-full mb-6">
+        <h1 className="text-3xl font-bold text-tertiary flex flex-row items-center gap-2">
+          Mis Reservas{" "}
+          <Image
+            src="/icons/booking_logo.svg"
+            alt="logo"
+            width={32}
+            height={32}
+          />
+        </h1>
+        <Button 
+          className="font-bold"
+          onClick={() => setIsCreateReservationOpen(true)}
+          >Reserva para tus clientes</Button>
+      </div>
+
       <p className="text-sm text-gray-500 mb-10">
         Aquí puedes ver las reservas de tu negocio. Para empezar, selecciona el
         botón de "Vista por Canchas" y elige una cancha para ver las reservas.
@@ -77,6 +88,13 @@ export default function ReservasNegocio() {
           */}
         </Tabs>
       </section>
+
+
+      <BookerReservationModal
+        show={isCreateReservationOpen}
+        handleClose={() => setIsCreateReservationOpen(false)}
+        idHost={auth.id}
+      />
     </div>
   );
 }
