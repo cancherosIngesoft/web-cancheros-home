@@ -133,19 +133,10 @@ const BookerReservationModal = ({ show, handleClose, idHost }: BookerReservation
             setSelectedHours(null) // Reset selected hours when available hours change
         }
     }, [availableHours])
-    const handleDateChange = (date: Date | undefined) => {
-        const result = dateSchema.safeParse(date)
-        if (!result.success) {
-            setErrorDate(result.error.errors[0].message)
-        } else {
-            setErrorDate("")
-
-        }
-    }
+    
     useEffect(() => {
-        if (selectedField) {
-            refetchHours()
-        }
+       refetchHours()
+        
     }, [selectedField])
 
     return (
@@ -235,6 +226,9 @@ const BookerReservationModal = ({ show, handleClose, idHost }: BookerReservation
                             {form.watch("date") && (
                                 <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="space-y-4">
                                     <h3 className="text-lg font-semibold text-primary-50">Horarios disponibles</h3>
+                                    {!isSelectionValid && selectedHours && (
+                                        <p className="text-sm text-destructive">Por favor, seleccion horas consecutivas.</p>
+                                    )}
                                     {isLoadingHours ? (
                                         <div className="grid grid-cols-3 gap-2">
                                             {[1, 2, 3].map((i) => (
@@ -258,9 +252,10 @@ const BookerReservationModal = ({ show, handleClose, idHost }: BookerReservation
                                 </motion.div>
                             )}
 
-                            <Button type="submit" className="w-full" disabled={!selectedHours}>
+                            <Button type="submit" className="w-full" disabled={!selectedHours || !isSelectionValid}>
                                 Crear Reserva
                             </Button>
+
                         </form>
                     </Form>
                 )}
