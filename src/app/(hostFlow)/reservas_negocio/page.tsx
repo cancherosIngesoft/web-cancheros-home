@@ -8,7 +8,7 @@ import { useGlobalStore } from "@/store";
 import { useEffect, useState } from "react";
 import { Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import BookerReservationModal from "@/components/reservar_components/BookerReservationModal";
+import HostReservationModal from "@/components/reservar_components/HostReservationModal";
 
 export default function ReservasNegocio() {
   const auth = useGlobalStore((state) => state.auth);
@@ -90,7 +90,7 @@ export default function ReservasNegocio() {
       </section>
 
 
-      <BookerReservationModal
+      <HostReservationModal
         show={isCreateReservationOpen}
         handleClose={() => setIsCreateReservationOpen(false)}
         idHost={auth.id}

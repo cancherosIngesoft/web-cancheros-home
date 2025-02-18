@@ -40,7 +40,7 @@ interface BookerReservationModalProps {
     idHost: string | null
 }
 
-const BookerReservationModal = ({ show, handleClose, idHost }: BookerReservationModalProps) => {
+const HostReservationModal = ({ show, handleClose, idHost }: BookerReservationModalProps) => {
     const [selectedField, setSelectedField] = useState<{ id_field: string; price: number } | null>(null)
     const [selectedHours, setSelectedHours] = useState<SchedulesToBook[] | null>([])
     const [formatHours, setFormatHours] = useState<SchedulesToBook[] | undefined>(undefined)
@@ -170,12 +170,12 @@ const BookerReservationModal = ({ show, handleClose, idHost }: BookerReservation
 
     return (
         <Dialog open={show} onOpenChange={handleClose}>
-            <DialogContent className="sm:max-w-3xl sm:max-h-[90vh] overflow-y-auto p-0">
+            <DialogContent className="sm:max-w-3xl max-h-[90vh] overflow-y-auto p-0">
                 <DialogHeader className="bg-primary-60 text-white p-4">
                     <DialogTitle className="text-2xl flex flex-row">
                         <CalendarClock className="h-8 w-8 mr-2 " />
                         Reserva tu cancha</DialogTitle>
-                    <DialogDescription className="text-sm">Completa los datos para realizar la reserva de tu cliente</DialogDescription>
+                    <DialogDescription className="text-sm text-start">Completa los datos para realizar la reserva de tu cliente</DialogDescription>
                 </DialogHeader>
                 <div className="p-4 flex flex-col gap-4 w-full overflow-x-hidden">
                     <div className="flex flex-col">
@@ -331,6 +331,6 @@ const BookerReservationModal = ({ show, handleClose, idHost }: BookerReservation
     )
 }
 
-export default BookerReservationModal
+export default HostReservationModal
 
 
