@@ -62,7 +62,7 @@ const FieldCard = ({
     <>
       <Card
         key={field.id_cancha}
-        className={`cursor-pointer transition-colors w-60 h-60 aspect-square  ${
+        className={`cursor-pointer transition-colors w-60 h-60 aspect-square bg-white  ${
           selectedField?.id_field === String(field.id_cancha)
             ? "border-primary bg-green-100"
             : "hover:border-muted"
