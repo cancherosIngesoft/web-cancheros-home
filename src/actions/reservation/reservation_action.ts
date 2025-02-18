@@ -186,10 +186,35 @@ export async function getCanchas(
   }
 }
 
-export async function cancelarReserva(id: string): Promise<void> {
-  // Mock data
-  console.log(`Cancelando reserva ${id}`);
-  // Aquí iría la lógica para cancelar la reserva en el backend
+
+export async function cancelReservation(idReservation:string, idUserWhoIsCanceling:string): Promise<void> {
+  
+  console.log(`Cancelando reserva ${idReservation}, cancelada por ${idUserWhoIsCanceling}`);
+  // try {
+  //   const res = await fetch(
+  //     `${process.env.NEXT_PUBLIC_API_URL}/api/reservations/cancel/`,
+  //     {
+  //       method: "POST",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //       body: JSON.stringify({idReservation, idUserWhoIsCanceling}),
+  //     }
+  //   );
+
+  //   if (!res.ok) {
+  //     const data = await res.json();
+  //     throw new Error(data.message);
+  //   }
+    
+  // } catch (e) {
+  //   if (e instanceof Error) {
+  //     console.error("Error en Cancel Reservation:", e.message);
+  //     throw new Error(e.message);
+  //   } else {
+  //     throw new Error("Error desconocido");
+  //   }
+  // }
 }
 
 export async function reprogramationReservation(

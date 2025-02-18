@@ -2,7 +2,7 @@
 
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { useState, useEffect } from "react"
-import { useGlobalStore, useShallow } from "@/store"
+import { useGlobalStore, useShallow, useTeamDataStore } from "@/store"
 import MatchInformation from "./MatchInformation"
 import TeamsInformation from "./TeamsInformation"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
@@ -14,8 +14,11 @@ import {
 } from "@/actions/reservation/club_reservation_action"
 import { useToast } from "@/hooks/use-toast"
 import { Skeleton } from "@/components/ui/skeleton"
-import { XCircle } from "lucide-react"
+import { CalendarOff, XCircle } from "lucide-react"
 import ReprogramationModal from "@/components/reservar_components/ReprogramationModal"
+import { cancelReservation } from "@/actions/reservation/reservation_action"
+import ConfirmationModal from "@/components/modals/ConfirmationModal"
+
 
 interface ModalInfoReservationProps {
   isOpen: boolean
@@ -30,13 +33,17 @@ export default function ModalInfoReservation({ isOpen, onClose, reservation, isP
   const queryClient = useQueryClient()
   const { toast } = useToast()
   const [showReprogramationModal, setShowReprogramationModal] = useState(false)
- 
+  const [isOpenConfirmationCancelModal, setIsOpenConfirmationCancelModal] = useState(false)
+  const currentUserId = auth.id
+
+  const currentTeam = useTeamDataStore(useShallow((state) => state.idTeam))
+
   const [isBooker, setIsBooker] = useState(false)
   const startDate = new Date(`${reservation.dateReservation}T${reservation.hours.startHour}:00`);
   const endDate = new Date(`${reservation.dateReservation}T${reservation.hours.endHour}:00`);
   const numHoursReservation = (endDate.getTime() - startDate.getTime()) / (1000 * 3600);
 
-  
+
 
   const {
     data: teams,
@@ -61,9 +68,9 @@ export default function ModalInfoReservation({ isOpen, onClose, reservation, isP
   }, [teams, auth.name])
 
   useEffect(() => {
-    if(auth.id == reservation.idBooker){
+    if (auth.id == reservation.idBooker) {
       setIsBooker(true)
-    } 
+    }
 
   }, [auth.id])
 
@@ -142,15 +149,44 @@ export default function ModalInfoReservation({ isOpen, onClose, reservation, isP
     console.log("Reprogramar")
   }
 
-  const handleCancel = () => {
-    if (isPastReservation) {
-      throw new Error("No se puede unir a un equipo en una reserva pasada")
-    }
-    console.log("Cancelar")
-  }
+ 
 
   const handleJoinTeam = (teamId: string, teamName: string) => {
     joinTeamMutation.mutate(teamId)
+  }
+
+  const {
+    mutate: cancel,
+  } = useMutation({
+    mutationFn: () => {
+      if (!currentUserId) return Promise.reject("Error en los datos")
+      if (isPastReservation) return Promise.reject("No se puede cancelar una reserva pasada")
+      return cancelReservation(reservation.idReservation, currentUserId)
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["upcomingMatch", currentTeam, currentUserId] })
+      toast({
+        title: "Reserva cancelada",
+        description: "La reserva ha sido cancelada exitosamente.",
+        variant: "default",
+      })
+      setIsOpenConfirmationCancelModal(false)
+      onClose()
+    },
+
+    onError: (error: Error) => {
+      console.error(error)
+      toast({
+        title: "Error",
+        description: ` ${error.message} Hubo un problema al cancelar la reserva por favor vuelva a interntarlo`,
+        variant: "destructive",
+      })
+      
+    }
+  })
+
+  const handleCancel = () => {
+    cancel()
   }
 
   const handleLeaveTeam = () => {
@@ -173,7 +209,7 @@ export default function ModalInfoReservation({ isOpen, onClose, reservation, isP
                 reservation={reservation}
                 isBooker={isBooker}
                 onReschedule={handleReschedule}
-                onCancel={handleCancel}
+                onCancel={() => setIsOpenConfirmationCancelModal(true)}
                 isPastReservation={isPastReservation}
               />
             </div>
@@ -220,6 +256,14 @@ export default function ModalInfoReservation({ isOpen, onClose, reservation, isP
         idField={reservation.idField}
         numHours={numHoursReservation}
 
+      />
+      <ConfirmationModal
+        isOpen={isOpenConfirmationCancelModal}
+        onClose={() => setIsOpenConfirmationCancelModal(false)}
+        onConfirm={handleCancel}
+        title={`¿Estás seguro de cancelar la reserva hecha en ${reservation.bussinesName}?`}
+        description="Al cancelar la reserva, se liberará el espacio para que otro usuario pueda reservarlo"
+        icon={<CalendarOff className="w-14 h-14 text-red-500" />}
       />
 
     </>
