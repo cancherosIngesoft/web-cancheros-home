@@ -6,6 +6,8 @@ import { Button } from "@/components/ui/button"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 import type { ReservationActiveReturn } from "@/actions/reservation/reservation_action"
 import BallIcon from "../icon/BallIcon"
+import ReprogramationModal from "../reservar_components/ReprogramationModal"
+import { useState } from "react"
 
 interface CardReservationProps extends ReservationActiveReturn {
     currentUserId: string | undefined
@@ -27,7 +29,15 @@ export default function CardReservation({
     teamName,
     currentUserId,
     isActive,
+    idField,
 }: CardReservationProps) {
+
+    const [isOpenReprogramationModal, setIsOpenReprogramationModal] = useState(false)
+    const startDate = new Date(hours.horaInicio);
+    const endDate = new Date(hours.horaFin);
+    const numHoursReservation = ((endDate.getTime() - startDate.getTime()) / (1000 * 3600));
+    
+
     const isLessThan24Hours = () => {
         const reservationDate = new Date(`${dateReservation} ${hours.horaInicio}`)
         const now = new Date()
@@ -38,10 +48,7 @@ export default function CardReservation({
     const disabled = isLessThan24Hours()
     const tooltipMessage = "No es posible realizar cambios cuando quedan menos de 24 horas para la reserva"
 
-    const handleReschedule = () => {
-        console.log("Reschedule", idReservation)
-    }
-
+   
     const handleCancel = () => {
         console.log("Cancel", idReservation)
     }
@@ -112,7 +119,7 @@ export default function CardReservation({
                                     <Tooltip>
                                         <TooltipTrigger asChild>
                                             <div>
-                                                <Button variant="outline" onClick={handleReschedule} disabled={disabled} className="w-full" >
+                                                <Button variant="outline" onClick={()=>setIsOpenReprogramationModal(true)} disabled={disabled} className="w-full" >
                                                     Reprogramar
                                                 </Button>
                                             </div>
@@ -157,6 +164,18 @@ export default function CardReservation({
 
                 </div>
             </div>
+
+            <ReprogramationModal
+                isOpen={isOpenReprogramationModal}
+                onClose={() => setIsOpenReprogramationModal(false)}
+                idReservation={idReservation}
+                businessName={bussinesName}
+                fieldType={FieldType}
+                fieldImg={fieldImg}
+                totalPrice={totalPrice}
+                idField={idField}
+                numHours={numHoursReservation}
+            />
         </div>
     )
 }

@@ -13,6 +13,7 @@ export interface ReservationActiveReturn {
   fieldImg?: string;
   totalPrice: number;
   teamName?: string;
+  idField: string;
 }
 
 export interface Cancha {
@@ -35,11 +36,31 @@ export interface Cancha {
   tipo: string;
 }
 
+const mockReservations: ReservationActiveReturn[] = [
+  {
+    idReservation: "res-001",
+    dateReservation: "2025-02-20",
+    hours: { 
+      horaInicio: new Date("2025-02-18T10:00:00").toISOString(), 
+      horaFin: new Date("2025-02-18T12:00:00").toISOString(),
+    },
+    inTeam: true,
+    idBooker: "66",
+    bussinesName: "Empresa Ejemplo",
+    FieldType: "Fútbol",
+    capacity: 22,
+    bussinessDirection: "Calle Falsa 123, Ciudad Ejemplo",
+    totalPrice: 100,
+    teamName: "Equipo A",
+    idField: "49"
+  }
+];
+
 export async function getActiveReservation(
   id_user: string
 ): Promise<ReservationActiveReturn[]> {
   console.log("active reservartions", id_user);
-
+  //return mockReservations;
   try {
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/api/reservations/active/${id_user}`,
@@ -204,8 +225,35 @@ export async function cancelarReserva(id: string): Promise<void> {
   // Aquí iría la lógica para cancelar la reserva en el backend
 }
 
-export async function reprogramarReserva(id: string): Promise<void> {
+export async function reprogramationReservation(
+  idReservation: string, 
+  idUser:string,  
+  newHours:{startDateAndHour:string, endDateAndHour:string}): Promise<void> { 
   // Mock data
-  console.log(`Reprogramando reserva ${id}`);
-  // Aquí iría la lógica para reprogramar la reserva en el backend
+  console.log(`Reprogramando reserva ${JSON.stringify( {idReservation, idUser, newHours})}`);
+  // try {
+  //   const res = await fetch(
+  //     `${process.env.NEXT_PUBLIC_API_URL}/api/reservations/reprogramation/`,
+  //     {
+  //       method: "POST",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //       body: JSON.stringify({idReservation, idUser, newHours}),
+  //     }
+  //   );
+
+  //   if (!res.ok) {
+  //     const data = await res.json();
+  //     throw new Error(data.message);
+  //   }
+    
+  // } catch (e) {
+  //   if (e instanceof Error) {
+  //     console.error("Error en get Reservations:", e.message);
+  //     throw new Error(e.message);
+  //   } else {
+  //     throw new Error("Error desconocido");
+  //   }
+  // }
 }

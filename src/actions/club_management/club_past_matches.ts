@@ -13,6 +13,7 @@ export interface ReturnPastMatches {
     isParticipating: boolean,
     teamAName: string,
     teamBName: string,
+    idField: string,
     score: { teamName: string, teamId: string, score: number | undefined }[];
 
 }
@@ -33,6 +34,7 @@ const pastMatchesMock: ReturnPastMatches[] = [
         isParticipating: true,
         teamAName: "Team Alpha",
         teamBName: "Team Beta",
+        idField: "field1",
         score: [
             { teamName: "Team Alpha", teamId: "team1", score: undefined },
             { teamName: "Team Beta", teamId: "team2", score: undefined }
@@ -52,6 +54,7 @@ const pastMatchesMock: ReturnPastMatches[] = [
         isParticipating: false,
         teamAName: "Team Gamma",
         teamBName: "Team Delta",
+        idField: "field2",
         score: [
             { teamName: "Team Gamma", teamId: "team3", score: 1 },
             { teamName: "Team Delta", teamId: "team4", score: 1 }
@@ -72,6 +75,7 @@ const pastMatchesMock: ReturnPastMatches[] = [
         isParticipating: true,
         teamAName: "Team Epsilon",
         teamBName: "Team Zeta",
+        idField: "field2",
         score: [
             { teamName: "Team Epsilon", teamId: "team5", score: 4 },
             { teamName: "Team Zeta", teamId: "team6", score: 4 }
@@ -91,6 +95,7 @@ const pastMatchesMock: ReturnPastMatches[] = [
         isParticipating: true,
         teamAName: "Team Eta",
         teamBName: "Team Theta",
+        idField: "field2",
         score: [
             { teamName: "Team Eta", teamId: "team7", score: 2 },
             { teamName: "Team Theta", teamId: "team8", score: 3 }
@@ -111,6 +116,7 @@ const pastMatchesMock: ReturnPastMatches[] = [
         isParticipating: false,
         teamAName: "Team Iota",
         teamBName: "Team Kappa",
+        idField: "field2",
         score: [
             { teamName: "Team Iota", teamId: "team9", score: 5 },
             { teamName: "Team Kappa", teamId: "team10", score: 2 }

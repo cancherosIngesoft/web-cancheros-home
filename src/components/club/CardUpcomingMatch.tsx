@@ -1,6 +1,6 @@
 "use client"
 
-import { Clock, MapPin, Timer, ChevronRight, Circle, ImageOff } from 'lucide-react'
+import { Clock, MapPin, Timer, ChevronRight, Circle, ImageOff, Calendar } from 'lucide-react'
 import { Card, CardContent } from "@/components/ui/card"
 import Link from "next/link"
 
@@ -77,6 +77,10 @@ const CardUpcomingMatch = (reservation: TeamReservationReturn) => {
                                 <div className="flex items-center gap-2">
                                     <Timer className="w-4 h-4 flex-shrink-0" />
                                     <span>{diferenceHours} horas</span>
+                                </div>
+                                <div className="flex items-center gap-2">
+                                    <Calendar className="w-4 h-4 flex-shrink-0" />
+                                    <span>{reservation.dateReservation}</span>
                                 </div>
                                 <div className="flex items-center gap-2">
                                     <Circle className={`w-4 h-4 flex-shrink-0 ${reservation.isParticipating ? "fill-green-500 text-green-500" : "fill-destructive text-destructive"}`} />

@@ -41,6 +41,11 @@
             "id": 8,
             "title": "8. Ley Aplicable",
             "description": "Estos términos se rigen por las leyes de Colombia. Cualquier disputa será resuelta en los tribunales competentes de Bogotá, Colombia."
+        },
+        {
+            "id": 9,
+            "title": "9. Servicio Externo",
+            "description": "Un propietario de cancha puede registrar una reserva externa para un usuario que no es de Cancheros. Este servicio está sujeto a términos y condiciones de la política de cancelación y de comisiones de la plataforma. Es decir, al agregar una reserva externa, el propietario de cancha asume el pago de la reserva y por tanto  el pago de la comisión de la plataforma."
         }
     ]
 }
