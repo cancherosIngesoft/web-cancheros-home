@@ -12,6 +12,7 @@ import BallIcon from "../icon/BallIcon";
 import SoccerField from "../icon/SoccerField";
 import TeamShield from "../icon/TeamShield";
 import { PanelClub } from "../club/PanelClub";
+import { useRouter } from "next/navigation";
 
 type NavItem = {
   icon: React.ReactNode;
@@ -42,8 +43,8 @@ export const LateralNavBar = () => {
     }
   }, []);
 
-  const handleLogout = () => {
-    signOut({ callbackUrl: "/" });
+  const handleLogout =async () => {
+    signOut({ callbackUrl: "/"});
   };
 
   return (
@@ -118,7 +119,7 @@ export const LateralNavBar = () => {
           <Button
             variant="ghost"
             size="icon"
-            onClick={() => signOut({ callbackUrl: "/" })}
+            onClick={handleLogout}
           >
             <LogOut className="h-6 w-6" />
           </Button>
