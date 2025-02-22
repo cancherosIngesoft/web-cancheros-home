@@ -2,13 +2,12 @@ export async function CreateHostReservation(
     idField: string, 
     idHost:string,  
     newHours:{startDateAndHour:string, endDateAndHour:string},
-    userName:string,
-    userEmail:string
+    
 
 ): Promise<void> { 
     
     console.log(`creando host reserva ${idField}`);
-    console.log(JSON.stringify({idField, idHost, newHours, userName, userEmail}))
+    console.log(JSON.stringify({idField, idHost, newHours}))
     // try {
     //   const res = await fetch(
     //     `${process.env.NEXT_PUBLIC_API_URL}/api/reservations/create_host/`,

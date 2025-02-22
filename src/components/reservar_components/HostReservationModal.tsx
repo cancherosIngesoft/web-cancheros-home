@@ -21,14 +21,11 @@ import { motion } from "framer-motion"
 import { ErrorGetInfo } from "./ErrorGetInfo"
 import { CreateHostReservation } from "@/actions/reservation/host_reservation"
 import { useToast } from "@/hooks/use-toast"
-import Loading from "@/app/(admin)/panel_solicitudes/loading"
 import { Spinner } from "../ui/spinner"
 import { CalendarClock } from 'lucide-react';
 import { addDays } from "date-fns";
 import ReservationSummary from "./ReservationSummary"
 const formSchema = z.object({
-    clientName: z.string().min(2, "El nombre debe tener al menos 2 caracteres"),
-    clientEmail: z.string().email("Correo electrónico inválido"),
     date: z.date({
         required_error: "Se requiere una fecha",
     }),
@@ -49,8 +46,6 @@ const HostReservationModal = ({ show, handleClose, idHost }: BookerReservationMo
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            clientName: "",
-            clientEmail: "",
             date: addDays(new Date(), 1),
         },
     })
@@ -68,7 +63,7 @@ const HostReservationModal = ({ show, handleClose, idHost }: BookerReservationMo
                 endDateAndHour: `${new Date(values.date).toISOString().split("T")[0]} ${selectedHours[selectedHours.length - 1].hora_fin}:00`,
             }
 
-            return CreateHostReservation(selectedField!.id_field, idHost!, newHours, values.clientName, values.clientEmail)
+            return CreateHostReservation(selectedField!.id_field, idHost!, newHours)
         },
         retry: 2,
         onError: (error: Error) => {
@@ -175,7 +170,7 @@ const HostReservationModal = ({ show, handleClose, idHost }: BookerReservationMo
                     <DialogTitle className="text-2xl flex flex-row">
                         <CalendarClock className="h-8 w-8 mr-2 " />
                         Reserva tu cancha</DialogTitle>
-                    <DialogDescription className="text-sm text-start">Completa los datos para realizar la reserva de tu cliente</DialogDescription>
+                    <DialogDescription className="text-sm text-start">Completa los datos para realizar la reserva de tu cliente <span className="font-bold text-yellow-400">(Esta reserva sera registrada como reserva hecha por el host)</span> </DialogDescription>
                 </DialogHeader>
                 <div className="p-4 flex flex-col gap-4 w-full overflow-x-hidden">
                     <div className="flex flex-col">
@@ -201,33 +196,7 @@ const HostReservationModal = ({ show, handleClose, idHost }: BookerReservationMo
                                 <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
 
                                     <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-                                        <FormField
-                                            control={form.control}
-                                            name="clientName"
-                                            render={({ field }) => (
-                                                <FormItem>
-                                                    <FormLabel className="text-lg font-semibold text-primary-50">Nombre del Cliente</FormLabel>
-                                                    <FormControl>
-                                                        <Input placeholder="Nombre del cliente" {...field} />
-                                                    </FormControl>
-                                                    <FormMessage />
-                                                </FormItem>
-                                            )}
-                                        />
-
-                                        <FormField
-                                            control={form.control}
-                                            name="clientEmail"
-                                            render={({ field }) => (
-                                                <FormItem>
-                                                    <FormLabel className="text-lg font-semibold text-primary-50">Correo del Cliente</FormLabel>
-                                                    <FormControl>
-                                                        <Input placeholder="correo@ejemplo.com" {...field} />
-                                                    </FormControl>
-                                                    <FormMessage />
-                                                </FormItem>
-                                            )}
-                                        />
+                                        
 
                                         <FormField
                                             control={form.control}
