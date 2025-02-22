@@ -18,29 +18,29 @@ export interface TeamReservationReturn {
 }
 
 export async function joinTeam(id_reservation: string, id_subTeam:string, id_user:string): Promise<void> {
-     console.log("joinTeam", id_reservation)
-    // try {
-    //     const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/reservations/team/join_team}`, {
-    //         method: "POST",
-    //         headers: {
-    //             "Content-Type": "application/json",
-    //         },
-    //         body: JSON.stringify({id_reservation, id_team, id_user}),
-    //     });
+    console.log("joinTeam", id_reservation)
+    try {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/subequipos/post_to_subequipo`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({id_reservation, id_subTeam, id_user}),
+        });
 
-    //     if (!res.ok) {
-    //         const data = await res.json();
-    //         throw new Error(data.message);
-    //     }
+        if (!res.ok) {
+            const data = await res.json();
+            throw new Error(data.message);
+        }
         
-    // } catch (e) {
-    //     if (e instanceof Error) {
-    //         console.error("Error on join Team:", e.message);
-    //         throw new Error(e.message);
-    //     } else {
-    //         throw new Error("Error desconocido");
-    //     }
-    //  }
+    } catch (e) {
+        if (e instanceof Error) {
+            console.error("Error on join Team:", e.message);
+            throw new Error(e.message);
+        } else {
+            throw new Error("Error desconocido");
+        }
+     }
 }
 
 export async function desJoinTeam(id_reservation: string, id_user:string): Promise<void> {
@@ -113,30 +113,30 @@ const teamReservationsMock: TeamReservationReturn[] = [
 
 export async function getTeamActiveReservation(id_team: string, id_user:string): Promise<TeamReservationReturn[]> {
     console.log("active reservations", id_user, id_team)
-return teamReservationsMock;
-    // try {
-    //     const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/reservations/team/active${id_team}`, {
-    //         method: "GET",
-    //         headers: {
-    //             "Content-Type": "application/json",
-    //         },
-    //     });
+//return teamReservationsMock;
+    try {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/reservations/active/club/${id_team}/${id_user}`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+            },
+        });
 
-    //     if (!res.ok) {
-    //         const data = await res.json();
-    //         throw new Error(data.message);
-    //     }
-    //     const data = await res.json();
+        if (!res.ok) {
+            const data = await res.json();
+            throw new Error(data.message);
+        }
+        const data = await res.json();
 
-    //     return data;
-    // } catch (e) {
-    //     if (e instanceof Error) {
-    //         console.error("Error en get active Reservations:", e.message);
-    //         throw new Error(e.message);
-    //     } else {
-    //         throw new Error("Error desconocido");
-    //     }
-    // }
+        return data;
+    } catch (e) {
+        if (e instanceof Error) {
+            console.error("Error en get active Reservations:", e.message);
+            throw new Error(e.message);
+        } else {
+            throw new Error("Error desconocido");
+        }
+    }
 }
 
 export interface TeamsReturn{
@@ -160,30 +160,30 @@ const teamsMock: TeamsReturn = {
 }
 export async function getTeams(id_reservation: string, ): Promise<TeamsReturn> {
     console.log("teams", id_reservation,)
-    return teamsMock;
-    // try {
-    //     const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/reservations/team/active${id_reservation}`, {
-    //         method: "GET",
-    //         headers: {
-    //             "Content-Type": "application/json",
-    //         },
-    //     });
+    //return teamsMock;
+    try {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/subequipos/reserva/${id_reservation}`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+            },
+        });
 
-    //     if (!res.ok) {
-    //         const data = await res.json();
-    //         throw new Error(data.message);
-    //     }
-    //     const data = await res.json();
+        if (!res.ok) {
+            const data = await res.json();
+            throw new Error(data.message);
+        }
+        const data = await res.json();
 
-    //     return data;
-    // } catch (e) {
-    //     if (e instanceof Error) {
-    //         console.error("Error en get teams:", e.message);
-    //         throw new Error(e.message);
-    //     } else {
-    //         throw new Error("Error desconocido");
-    //     }
-    // }
+        return data;
+    } catch (e) {
+        if (e instanceof Error) {
+            console.error("Error en get teams:", e.message);
+            throw new Error(e.message);
+        } else {
+            throw new Error("Error desconocido");
+        }
+    }
 }
 
 
