@@ -164,7 +164,7 @@ const BookingForm: React.FC<BookingFormProps> = ({ selectedField }) => {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="space-y-4 w-1/2"
+          className="space-y-4 md:w-1/2"
         >
           <h3 className="text-lg font-semibold text-primary-50">
             Seleccionar fecha

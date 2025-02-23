@@ -10,10 +10,10 @@ interface BusinessInfoDisplayProps {
 
 const BusinessInfoDisplay: React.FC<BusinessInfoDisplayProps> = ({ business, selectedField, setSelectedField }) => {
   return (
-    <div className="space-y-4">
-      <div className="flex flex-row items-center">
-        <Image src="/icons/soccer_ball.svg" alt="icon" width={50} height={50} />
-        <h2 className="text-3xl font-bold">{business.name}</h2>
+    <div className="space-y-4 mt-4">
+      <div className="flex flex-row items-center gap-4">
+        <Image src="/icons/soccer_ball.svg" alt="icon"  className="w-12 h-12 md:w-16 md:h-16" width={50} height={50} />
+        <h2 className="text-2xl md:text-3xl font-bold">{business.name}</h2>
       </div>
 
       <div className="space-y-4">

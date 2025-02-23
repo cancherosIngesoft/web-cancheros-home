@@ -6,11 +6,16 @@ export default function Layout({
   children: React.ReactNode;
 }>) {
   return (
-    <div className="w-full h-full flex flex-row overflow-x-hidden">
-      <nav className="fixed w-full bottom-0  md:top-0 md:left-0 md:bottom-none h-16 md:h-full md:w-16">
-        <LateralNavBar />
-      </nav>
-      <main className="flex-1 h-full p-2 py-4 mb-10 md:pb-0 md:p-8">{children}</main>
-    </div>
+    <div className="flex flex-col-reverse md:flex-row h-screen w-screen">
+            {/* Barra lateral */}
+            <nav className="fixed w-full h-16 md:relative md:top-0 md:left-0 md:h-full md:w-16">
+                <LateralNavBar />
+            </nav>
+
+            {/* Contenido principal */}
+            <main className="flex-1 pb-20 md:mt-0 md:h-full overflow-auto p-4 md:p-8">
+                {children}
+            </main>
+        </div>
   );
 }

@@ -39,7 +39,7 @@ const navItems: NavItem[] = [
 export const LateralNavBar = () => {
   const [isOpenTeam, setIsOpenTeam] = useState(false);
   const [navbarWidth, setNavbarWidth] = useState(0);
-  const [navbarHight, setNavbaHight] = useState(0);
+  const [navbarHeight, setNavbarHeight] = useState(0);
   const navbarRef = useRef<HTMLDivElement>(null);
   const { data: session } = useSession();
   const authUser = useGlobalStore((state) => state.auth);
@@ -47,7 +47,7 @@ export const LateralNavBar = () => {
   useEffect(() => {
     if (navbarRef.current) {
       setNavbarWidth(navbarRef.current.offsetWidth);
-      setNavbaHight(navbarRef.current.offsetHeight);
+      setNavbarHeight(navbarRef.current.offsetHeight);
     }
   }, []);
 
@@ -62,7 +62,7 @@ export const LateralNavBar = () => {
         className="flex  z-10 flex-row md:flex-col justify-center md:justify-between md:align-center h-full w-full bg-primary-95 md:bg-gradient-to-b from-surface from-60% to-primary-80 to-80% md:py-4  border-t md:border-r border-neutral-300"
       >
         
-        <section className="flex flex-row md:flex-col items-center justify-center  gap-6  md:gap-4 ">
+        <section className="flex flex-row md:flex-col items-center justify-center  gap-8  md:gap-4 ">
         <Link
           href="/"
           className="md:flex justify-center font-bold text-[#1A6B51] hidden md:mt-4"
@@ -87,7 +87,7 @@ export const LateralNavBar = () => {
               </Link>
               <Link href="/reservas_negocio">
                 <Image
-                  className="md:w-10 md:h-10 w-10 h-10"
+                  className="md:w-10 md:h-8 w-8 h-10"
                   src="/icons/booking_logo.svg"
                   alt="Logo"
                   width={40}
@@ -99,7 +99,7 @@ export const LateralNavBar = () => {
                 className="flex items-center justify-center"
               >
                 <Image
-                  className="md:w-10 md:h-10 w-10 h-10"
+                  className="md:w-10 md:h-10 w-8 h-8"
                   src="/icons/negocios_icon.svg"
                   alt="Panel de Negocio"
                   width={40}
@@ -110,13 +110,13 @@ export const LateralNavBar = () => {
                 href="/comisiones"
                 className="flex items-center justify-center  hover:text-green-600 transition-colors"
               >
-                <CircleDollarSign className="md:w-10 md:h-10 w-10 h-10 text-green-800" />
+                <CircleDollarSign className="md:w-10 md:h-10 w-8 h-8 text-green-800" />
               </Link>
             </>
           )}
 
           {authUser?.userRole === "jugador" && (
-            <div className="flex flex-row md:flex-col justify-center items-center w-full gap-4">
+            <div className="flex flex-row md:flex-col justify-center items-center w-full h-full gap-8">
             {navItems.map((item, index) => (
                 <Link key={index} href={item.route} className="h-fit w-fit">
                   {item.icon}
@@ -161,7 +161,7 @@ export const LateralNavBar = () => {
         isOpen={isOpenTeam}
         onClose={() => setIsOpenTeam(false)}
         navbarWidth={navbarWidth}
-        navbarHight={navbarHight}
+        navbarHeight={navbarHeight}
       />
       </div>
       

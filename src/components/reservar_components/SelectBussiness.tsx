@@ -18,8 +18,8 @@ const SelectBusiness = ({
     useState<bussinessInfo[]>(initialBusinesses);
   const bussinessID = useBussinessStore((state) => state.bussinessID);
   return (
-    <Card className="p-4 flex flex-col-reverse md:flex-row gap-8 bg-background w-full relative -z-10">
-      <div className="md:w-2/5  md:z-1">
+    <Card className="p-4 flex flex-col-reverse md:flex-row gap-8 bg-background w-full relative  ">
+      <div className="md:w-2/5  ">
         <CustomMap
           center={{ lat: 4.60971, lng: -74.08175 }}
           markers={businesses.map((item) => ({

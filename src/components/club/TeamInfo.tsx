@@ -34,11 +34,11 @@ export default function TeamInfo() {
     return (
         <div
             className={cn(
-                " flex flex-row  gap-4 items-start p-6 transition-opacity duration-500 ease-in-out w-full",
+                " flex  flex-col md:flex-row  gap-4 items-start pt-4 md:py-0 md:p-6 transition-opacity duration-500 ease-in-out w-full",
                 isVisible ? "opacity-100" : "opacity-0",
             )}
         >
-            <div className="w-32 h-32 rounded-lg flex items-center justify-center">
+            <div className="w-full md:w-32 h-32 rounded-lg flex items-center justify-center">
                 {icon ? (
                     <img src={icon} alt={teamName} className="w-full h-full object-contain" />
                 ) : (
@@ -46,16 +46,16 @@ export default function TeamInfo() {
                 )}
             </div>
             <div className="flex flex-col gap-2 w-full">
-                <div className="flex flex-row justify-between">
+                <div className="flex flex-col md:flex-row items-center md:justify-between">
                     <h1 className="text-3xl font-bold text-primary">{teamName}</h1>
-                    <div className="flex flex-row gap-4  p-2 rounded-md ">
+                    <div className="flex flex-row gap-4  p-2 rounded-md text-sm md:test-base ">
                         <div className="flex items-center gap-2 text-muted-foreground">
                             <PlayerWithBall className="w-6 h-6 text-tertiary" />
-                            <span className="text-md font-bold">Jugadores</span>
+                            <span className=" font-bold">Jugadores</span>
                             <span>{numberPlayers}</span>
                         </div>
                         <div className=" flex flex-row items-center gap-2">
-                            <div className="text-md text-muted-foreground font-bold ">Capitán:</div>
+                            <div className=" text-muted-foreground font-bold ">Capitán:</div>
                             <div className="font-medium">{nameCapitan}</div>
                         </div>
 
