@@ -5,6 +5,8 @@ import {
   IGlobalState,
   ReservationData,
   ReservationState,
+  TeamData,
+  TeamState,
 } from "./types";
 import { TGlobalStoreData, BussinessData } from "./types";
 import { de } from "date-fns/locale";
@@ -157,6 +159,48 @@ export const useReservationStore = create<ReservationData>()(
     }),
     {
       name: "ReservationInfoStore", // Nombre que aparecerá en DevTools
+      enabled: process.env.NODE_ENV === "development", // Solo activo en desarrollo
+    }
+  )
+);
+
+
+const initialTeamData: TeamState = {
+ 
+    idTeam: "",
+    idCaptain: "",
+    nameCapitan: "",
+    description: "",
+    numberPlayers: 0,
+    teamName: "",
+    icon: "",
+  
+};
+export const useTeamDataStore = create<TeamData>()(
+  devtools(
+    (set) => ({
+      ...initialTeamData,
+      updateTeamData: ( payload) => {
+        set(
+          (state) => (
+             { ...state, ...payload }
+          ),
+          false,
+          "UPDATE_TEAM_DATA_STORE" // Acción identificable en DevTools
+        );
+      },
+      clearTeamData: () => {
+        set(
+          (state) => ({
+             ...initialTeamData,
+          }),
+          false,
+          "CLEAR_TEAM_DATA_STORE" // Acción identificable en DevTools
+        );
+      },
+    }),
+    {
+      name: "TeamDataStore", // Nombre que aparecerá en DevTools
       enabled: process.env.NODE_ENV === "development", // Solo activo en desarrollo
     }
   )

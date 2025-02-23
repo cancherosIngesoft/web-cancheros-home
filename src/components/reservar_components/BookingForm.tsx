@@ -141,8 +141,8 @@ const BookingForm: React.FC<BookingFormProps> = ({ selectedField }) => {
       inTeam: bookingModality === "team",
       teamId: selectedTeam?.id,
       price: selectedField
-        ? (selectedField.price * (selectedHours?.length || 0)) / 2 + 1000
-        : 1000,
+        ? (selectedField.price * (selectedHours?.length || 0)) / 2
+        : 0,
     };
     updateReservationInfo("reservationInfo", formData);
     setIsModalActive(true);
@@ -252,9 +252,7 @@ const BookingForm: React.FC<BookingFormProps> = ({ selectedField }) => {
             horas: reservationInfo.hours?.length ?? 0,
             horaInicio: reservationInfo.hours?.[0].hora_inicio ?? "",
             horaFin: reservationInfo.hours?.[0].hora_fin ?? "",
-            total: parseInt(
-              (Number(reservationInfo?.price ?? "0") / 2).toString()
-            ),
+            total: reservationInfo?.price ?? 0,
           }}
         ></PaymentModal>
       )}

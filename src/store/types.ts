@@ -23,6 +23,7 @@ export interface IFieldState {
     endTime: string;
   }[];
   canchas_id: string[];
+  id_establecimiento?: number;
 }
 
 export interface HostReservationState {
@@ -101,4 +102,22 @@ export type ReservationData = ReservationState & {
     payload: Partial<ReservationState[keyof ReservationState]>
   ) => void;
   clearReservationInfoStore: (slice: keyof ReservationState) => void;
+};
+
+export interface TeamState {
+  idTeam: string;
+  idCaptain: string;
+  nameCapitan:string;
+  description:string;
+  numberPlayers: number;
+  teamName: string;
+  icon?:string;
+  
+}
+
+export type TeamData = TeamState & {
+  updateTeamData: (
+    payload: Partial<TeamState>
+  ) => void;
+  clearTeamData: () => void;
 };

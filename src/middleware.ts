@@ -61,6 +61,7 @@ export const config = {
     "/mis_canchas",
     "/reservas_negocio",
     "/mis_reservas",
+    "/panel_comisiones",
     // "/((?!api/auth|_next/static|_next/image|favicon.ico|/|public).*)", no esta permitiendo cargar las imagenes de la home, toca corregir el comportamiento
   ],
 };

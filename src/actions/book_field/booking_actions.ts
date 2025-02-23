@@ -254,8 +254,8 @@ export async function createBooking(
   return data;
 }
 
-export async function initiatePayment(data: any): Promise<any> {
-  const response = await fetch("/api/payment_gateway", {
+export async function initiatePayment(data: any, route: string): Promise<any> {
+  const response = await fetch(`api/${route}`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -306,19 +306,22 @@ export async function handleBookingAndPayment(
   });
 
   // 2. Iniciar el pago
-  const paymentResult = await initiatePayment({
-    nombres: formData.nombres,
-    apellidos: formData.apellidos,
-    cedula: formData.cedula,
-    correo: formData.correo,
-    reservaDetails: {
-      id: booking.id_reserva,
-      lugar: reservaDetails.lugar,
-      cancha: reservaDetails.cancha,
-      horas: reservaDetails.horas,
-      total: reservaDetails.total,
+  const paymentResult = await initiatePayment(
+    {
+      nombres: formData.nombres,
+      apellidos: formData.apellidos,
+      cedula: formData.cedula,
+      correo: formData.correo,
+      reservaDetails: {
+        id: booking.id_reserva,
+        lugar: reservaDetails.lugar,
+        cancha: reservaDetails.cancha,
+        horas: reservaDetails.horas,
+        total: reservaDetails.total,
+      },
     },
-  });
+    "/payment_gateway"
+  );
 
   return paymentResult;
 }

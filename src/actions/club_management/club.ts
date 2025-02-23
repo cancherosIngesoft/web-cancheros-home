@@ -75,44 +75,52 @@ interface ClubAttributes {
   }
 
 
-const mockClubs: ReturnClub[] = [
+  const mockClubs:ReturnClub[] = [
     {
       idTeam: "team_001",
-      idCaptain: "15",
+      idCaptain: "66",
       numberPlayers: 11,
-      name: "Los Titanes",
-      icon: "https://example.com/icons/titanes.png"
+      teamName: "Los Titanes",
+      icon: "/soccer_photo.png",
+      nameCapitan: "Carlos Rodríguez",
+      description: "Un equipo fuerte con gran espíritu competitivo."
     },
     {
       idTeam: "team_002",
-      idCaptain: "15",
+      idCaptain: "66",
       numberPlayers: 8,
-      name: "Fuerza Azul",
-      icon: "https://example.com/icons/fuerza_azul.png"
+      teamName: "Fuerza Azul",
+      nameCapitan: "Juan Pérez",
+      description: "Un equipo con gran determinación y estrategia."
     },
     {
       idTeam: "team_003",
       idCaptain: "captain_103",
       numberPlayers: 5,
-      name: "Rápidos y Furiosos"
+      teamName: "Rápidos y Furiosos",
+      nameCapitan: "Luis Fernández",
+      description: "Especialistas en velocidad y jugadas rápidas."
     },
     {
       idTeam: "team_004",
       idCaptain: "captain_104",
       numberPlayers: 7,
-      name: "Los Halcones",
-      icon: "https://example.com/icons/halcones.png"
-    },
-    
-    
+      teamName: "Los Halcones",
+      icon: "/soccer_photo.png",
+      nameCapitan: "Miguel Álvarez",
+      description: "Jugadores con visión táctica y precisión."
+    }
   ];
+  
 
   
 export interface ReturnClub{
   idTeam: string;
   idCaptain: string;
+  nameCapitan:string;
+  description:string;
   numberPlayers: number;
-  name: string;
+  teamName: string;
   icon?:string;
 }
   export async function getClubs(

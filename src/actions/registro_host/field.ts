@@ -1,4 +1,6 @@
 import { IFieldState } from "@/store/types";
+import { fetchWithRetry } from "@/utils/utils";
+
 
 const formatt_data = (data: IFieldState) => {
   const jsonData = {
@@ -43,7 +45,7 @@ export async function registerField(fieldData: IFieldState, id: string) {
   try {
     const formattedData = formatt_data(fieldData);
 
-    const response = await fetch(
+    const response = await fetchWithRetry(
       process.env.NEXT_PUBLIC_API_URL + `/api/register_courts/${id}`,
       {
         method: "POST",
@@ -57,6 +59,34 @@ export async function registerField(fieldData: IFieldState, id: string) {
     }
 
     return await response.json();
+  } catch (error) {
+    console.error("Register field error:", error);
+    throw error;
+  }
+}
+
+export async function updateField(fieldData: IFieldState, id: string) {
+  try {
+    console.log(fieldData);
+    return true;
+    /*
+    const formattedData = formatt_data(fieldData);
+
+    const response = await fetchWithRetry(
+      process.env.NEXT_PUBLIC_API_URL + `/api/register_courts/${id}`,
+      {
+        method: "POST",
+        body: formattedData,
+      }
+    );
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.message || "Error al registrar la cancha");
+    }
+
+    return await response.json();
+    */
   } catch (error) {
     console.error("Register field error:", error);
     throw error;
@@ -81,11 +111,28 @@ export interface IField {
   nombre: string;
   precio: number;
   tipo: string;
+  field_schedule?: {
+    dia: string;
+    hora_inicio: string;
+    hora_fin: string;
+  }[];
 }
 
+export interface IExistingField extends IField {
+  field_schedule_?: {
+    dia: string;
+    hora_inicio: string;
+    hora_fin: string;
+  }[];
+}
+
+
 export const getFieldsById = async (id: string) => {
-  const response = await fetch(
-    process.env.NEXT_PUBLIC_API_URL + `/api/get_courts/${id}`
+  const response = await fetchWithRetry(
+    process.env.NEXT_PUBLIC_API_URL + `/api/get_courts/${id}`,
+    {
+      method: "GET",
+    }
   );
 
   const responseJson = await response.json();
@@ -93,5 +140,12 @@ export const getFieldsById = async (id: string) => {
     console.error("Error al obtener la cancha:", responseJson.error);
     return [];
   }
-  return ((await responseJson.courts) as IField[]) || [];
+  return responseJson.courts.map((court: IExistingField) => ({
+    ...court,
+    field_schedule_: court.field_schedule?.map(schedule => ({
+      dia: schedule.dia,
+      hora_inicio: schedule.hora_inicio,
+      hora_fin: schedule.hora_fin
+    })),
+  }));
 };

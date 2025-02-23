@@ -1,44 +1,72 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Reserva de Canchas App
 
-## Getting Started
+## Descripción
 
-First, run the development server:
+Aplicación web para la gestión y reserva de canchas deportivas.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## Estructura del Proyecto
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Componentes (/components)
 
-## Documentación
+- **forms/**: Formularios y componentes relacionados
+  - fields-register/: Componentes para registro de canchas
+    - addFieldModal.tsx: Modal para agregar/editar canchas
+    - scheduleSelector.tsx: Selector de horarios
+    - scheduleCalendar.tsx: Calendario de horarios
+- **reservar_components/**: Componentes para reservas
+  - BookingForm.tsx: Formulario de reserva
+  - ReprogramationModal.tsx: Modal para reprogramar reservas
+- **ui/**: Componentes base reutilizables
+  - button.tsx
+  - input.tsx
+  - select.tsx
+  - dialog.tsx
+  - etc.
 
-### En carpeta de /components:
+### Estado Global (/store)
 
-La regla general es:
+- **index.ts**: Configuración principal del store
+- **types.ts**: Tipos e interfaces del store
+- Slices:
+  - auth: Autenticación
+  - field: Gestión de canchas
+  - user: Datos de usuario
+  - hostReservation: Reservas del host
 
-- layout/: Componentes estructurales grandes que definen el diseño general
-- ui/: Componentes pequeños y reutilizables que se usan dentro de otros componentes
-- Típicamente, los componentes de layout usarán componentes de UI
+### Acciones (/actions)
 
-### En proceso...
+- **registro_host/**: Acciones relacionadas con el registro de canchas
+  - field.ts: Operaciones CRUD de canchas
+- **book_field/**: Acciones para reservas
+- **reservation/**: Gestión de reservaciones
 
-## Learn More
+### Utilidades (/utils)
 
-To learn more about Next.js, take a look at the following resources:
+- utils.ts: Funciones auxiliares (fetchWithRetry, formateo, etc.)
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Tecnologías Principales
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- Next.js 13+
+- TypeScript
+- Zustand (Estado global)
+- React Hook Form
+- Shadcn/ui
+- TanStack Query
 
-## Deploy on Vercel
+## Instalación y Desarrollo
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- npm install
+  -npm run dev
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Convenciones de Código
+
+- Nombres de componentes en PascalCase
+- Nombres de funciones y variables en camelCase
+- Interfaces prefijadas con 'I' (ej: IField)
+- Tipos en PascalCase
+
+## En Desarrollo
+
+- Sistema de pagos
+- Gestión de equipos
+- Mejoras en el sistema de horarios

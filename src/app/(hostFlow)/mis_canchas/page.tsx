@@ -12,6 +12,7 @@ export default function pageMisCanchas() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [fields, setFields] = useState<IField[]>([]);
   const auth = useGlobalStore(useShallow((state) => state.auth));
+  const clearStore = useGlobalStore(useShallow((state) => state.clearStore));
   const [isLoading, setIsLoading] = useState(false);
   useEffect(() => {
     const fetchFields = async () => {
@@ -25,9 +26,9 @@ export default function pageMisCanchas() {
     fetchFields();
   }, [auth.id]);
   return (
-    <article className="flex flex-col items-center justify-center h-screen w-[90vw]   ml-[5vw] self-center">
-      <section className="flex flex-col items-center gap-4 mb-20 max-w-[90vw] align-center pl-[5vw]">
-        <div className="flex flex-row items-center gap-4 self-start">
+    <article className="flex flex-col items-start justify-start h-screen w-[90vw] ml-[5vw] self-center">
+      <section className="flex flex-col items-start gap-4 mb-20 max-w-[90vw] align-start ">
+        <div className="flex flex-row items-start gap-4 self-start">
           <Image
             src="/icons/canchaGris.svg"
             alt="Logo"
@@ -36,12 +37,15 @@ export default function pageMisCanchas() {
           />
           <h1 className="text-2xl font-bold text-[#1A6B51]">TUS CANCHAS</h1>
         </div>
-        <div className="flex flex-row items-start gap-32 mt-5 align-top self-start pl-[5vw]">
+        <div className="flex flex-row items-start gap-32 mt-5 align-top self-start ">
           <p className="text-center text-sm text-gray-500 ">
             Registra las canchas de tu complejo deportivo y ajusta su
             disponibilidad para recibir reservas.
           </p>
-          <Button variant="default" onClick={() => setIsModalOpen(true)}>
+          <Button variant="default" onClick={() => {
+            clearStore("field");
+            setIsModalOpen(true);
+          }}>
             Agregar Cancha
           </Button>
         </div>
@@ -82,6 +86,7 @@ export default function pageMisCanchas() {
             <Button
               variant="default"
               onClick={() => {
+                clearStore("field");
                 setIsModalOpen(true);
               }}
             >

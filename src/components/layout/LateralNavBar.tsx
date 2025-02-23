@@ -4,7 +4,7 @@ import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { LogOut } from "lucide-react";
+import { CircleDollarSign, LogOut } from "lucide-react";
 import { signOut, useSession } from "next-auth/react";
 import Image from "next/image";
 import { useGlobalStore } from "@/store";
@@ -70,8 +70,8 @@ export const LateralNavBar = () => {
                 <Image
                   src="/icons/miscanchas.svg"
                   alt="Logo"
-                  width={50}
-                  height={50}
+                  width={40}
+                  height={40}
                 />
               </Link>
               <Link href="/reservas_negocio">
@@ -81,6 +81,23 @@ export const LateralNavBar = () => {
                   width={40}
                   height={40}
                 />
+              </Link>
+              <Link
+                href="/panel_negocio"
+                className="flex items-center justify-center w-[40px] h-[40px]"
+              >
+                <Image
+                  src="/icons/negocios_icon.svg"
+                  alt="Panel de Negocio"
+                  width={40}
+                  height={40}
+                />
+              </Link>
+              <Link
+                href="/comisiones"
+                className="flex items-center justify-center w-[40px] h-[40px] hover:text-green-600 transition-colors"
+              >
+                <CircleDollarSign className="h-[40px] w-[40px] text-green-800" />
               </Link>
             </>
           )}
