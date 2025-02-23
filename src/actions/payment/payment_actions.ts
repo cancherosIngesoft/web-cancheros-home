@@ -1,3 +1,4 @@
+import { fetchWithRetry } from "@/utils/utils";
 import {
   initiatePayment,
   PaymentFormData,
@@ -24,13 +25,32 @@ export async function handleFeePayment(
   return paymentResult;
 }
 
-export async function getPendingFees(userId: number) {
+export async function getPendingFees(userId: number): Promise<{
+  commission_amount: number | null;
+  total_profit: number;
+}> {
   /*Aqui se debe obtener las comisiones pendientes de un usuario */
-  return {
+  try {
+    const fees = await fetchWithRetry(
+      `${process.env.NEXT_PUBLIC_API_URL}/api/owner/debt/${userId}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    const feesData = await fees.json();
+    return feesData;
+    /*
     id: 1,
     amount: 1000,
     status: "pending",
     createdAt: new Date(),
     updatedAt: new Date(),
-  };
+    */
+  } catch (error) {
+    console.error("Error fetching fees:", error);
+    throw error;
+  }
 }
