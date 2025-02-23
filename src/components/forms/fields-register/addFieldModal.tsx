@@ -35,6 +35,8 @@ import { ScheduleSelector } from "./scheduleSelector";
 import { toast } from "@/hooks/use-toast";
 import { formatCOP, parseCOP } from "@/utils/utils";
 import { registerField } from "@/actions/registro_host/field";
+import { IExistingField } from "@/actions/registro_host/field";
+import { updateField } from "@/actions/registro_host/field";
 
 interface FieldFormData {
   nombre: string;
@@ -48,9 +50,11 @@ interface FieldFormData {
 interface AddFieldModalProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
+  existingField?: IExistingField;
+  isEdit?: boolean;
 }
 
-export function AddFieldModal({ open, onOpenChange }: AddFieldModalProps) {
+export function AddFieldModal({ open, onOpenChange, existingField, isEdit }: AddFieldModalProps) {
   const [images, setImages] = useState<{ preview: string; base64: string }[]>(
     []
   );
@@ -66,35 +70,55 @@ export function AddFieldModal({ open, onOpenChange }: AddFieldModalProps) {
     formState: { errors },
   } = useForm<FieldFormData>();
 
-  // Efecto para sincronizar el formulario con el estado global
+  // Efecto para manejar la apertura/cierre del modal
   useEffect(() => {
-    if (field) {
-      // Asegurarnos de que el tipo se mantenga
-      if (field.field_type) {
-        setValue("tipo", field.field_type);
+    if (open) {
+      if (isEdit && existingField) {
+        // Actualizar form con datos existentes
+        setValue("nombre", existingField.nombre);
+        setValue("tipo", existingField.tipo);
+        setValue("capacidad", existingField.capacidad);
+        setValue("descripcion", existingField.descripcion);
+        setValue("precioHora", existingField.precio);
+        setDisplayPrice(formatCOP(existingField.precio));
+
+        // Actualizar estado global
+        useGlobalStore.getState().updateStore("field", {
+          field_name: existingField.nombre,
+          field_type: existingField.tipo,
+          field_capacity: existingField.capacidad,
+          field_description: existingField.descripcion,
+          field_price: existingField.precio,
+          field_schedule: existingField.field_schedule_?.map(h => ({
+            day: h.dia,
+            startTime: h.hora_inicio,
+            endTime: h.hora_fin
+          })) || []
+        });
+      } else {
+        // Limpiar form y estado para nueva cancha
+        clearForm();
       }
-      if (field.field_name) {
-        setValue("nombre", field.field_name);
-      }
-      if (field.field_description) {
-        setValue("descripcion", field.field_description);
-      }
-      if (field.field_capacity) {
-        setValue("capacidad", field.field_capacity);
-      }
-      if (field.field_price) {
-        setValue("precioHora", field.field_price);
-        setDisplayPrice(formatCOP(field.field_price));
-      }
+    } else {
+      // Limpiar al cerrar
+      clearForm();
     }
-  }, [field, setValue]);
+  }, [open, isEdit, existingField, setValue]);
+
+  // Efecto para limpiar el estado cuando el modal se cierra
+  useEffect(() => {
+      if (!open) {
+        clearForm();
+      }
+  }, [open]);
 
   // Función para limpiar todos los estados
   const clearForm = () => {
+    useGlobalStore.getState().clearStore("field"); 
     setImages([]);
     setDisplayPrice("");
     reset(); // Limpia el formulario
-    useGlobalStore.getState().clearStore("field"); // Limpia el estado global
+    // Limpia el estado global
   };
 
   // Manejar el cierre del modal
@@ -163,6 +187,7 @@ export function AddFieldModal({ open, onOpenChange }: AddFieldModalProps) {
     });
   };
 
+  // Manejar el cambio de tipo específicamente
   const onSubmit = handleSubmit(async (data) => {
     setIsLoading(true);
     try {
@@ -172,24 +197,26 @@ export function AddFieldModal({ open, onOpenChange }: AddFieldModalProps) {
         precioHora: parseCOP(data.precioHora.toString()),
       };
 
-      if (images.length === 0) {
-        toast({
-          title: "Error",
-          description: "Debes agregar al menos una imagen",
-          variant: "destructive",
-        });
-        setIsLoading(false);
-        return;
-      }
-
-      if (!field.field_schedule || field.field_schedule.length === 0) {
-        toast({
-          title: "Error",
-          description: "Debes agregar al menos un horario",
-          variant: "destructive",
-        });
-        setIsLoading(false);
-        return;
+      if (!isEdit) {
+        if (images.length === 0) {
+          toast({
+            title: "Error",
+            description: "Debes agregar al menos una imagen",
+            variant: "destructive",
+          });
+          setIsLoading(false);
+          return;
+        }
+  
+        if (!field.field_schedule || field.field_schedule.length === 0) {
+          toast({
+            title: "Error",
+            description: "Debes agregar al menos un horario",
+            variant: "destructive",
+          });
+          setIsLoading(false);
+          return;
+        }
       }
 
       useGlobalStore.getState().updateStore("field", {
@@ -202,10 +229,31 @@ export function AddFieldModal({ open, onOpenChange }: AddFieldModalProps) {
       });
 
       if (auth.id) {
-        await registerField(
-          useGlobalStore.getState().field,
-          auth.id.toString()
-        );
+        if (isEdit && existingField) {
+          // Llamada a endpoint de edición
+          await updateField(
+            {
+              ...useGlobalStore.getState().field,
+              canchas_id: [existingField.id_cancha.toString()],
+              id_establecimiento: existingField.id_establecimiento,
+            },
+            auth.id.toString()
+          );
+          toast({
+            title: "Éxito",
+            description: "Cancha actualizada correctamente",
+          });
+        } else {
+          // Llamada a endpoint de creación
+          await registerField(
+            useGlobalStore.getState().field,
+            auth.id.toString()
+          );
+          toast({
+            title: "Éxito",
+            description: "Cancha guardada correctamente",
+          });
+        }
       } else {
         toast({
           title: "Error",
@@ -214,16 +262,14 @@ export function AddFieldModal({ open, onOpenChange }: AddFieldModalProps) {
         });
       }
 
-      toast({
-        title: "Éxito",
-        description: "Cancha guardada correctamente",
-      });
       clearForm();
       handleOpenChange(false);
     } catch (error) {
       toast({
         title: "Error",
-        description: "Hubo un error al guardar la cancha",
+        description: isEdit 
+          ? "Hubo un error al actualizar la cancha"
+          : "Hubo un error al guardar la cancha",
         variant: "destructive",
       });
     } finally {
@@ -236,7 +282,7 @@ export function AddFieldModal({ open, onOpenChange }: AddFieldModalProps) {
       <DialogContent className="max-w-none w-[80vw] h-[90vh] border overflow-y-auto overflow-x-hidden p-20">
         <DialogHeader>
           <DialogTitle className="text-2xl font-bold">
-            Agregar Nueva Cancha
+            {isEdit ? "Editar Cancha" : "Agregar Nueva Cancha"}
           </DialogTitle>
         </DialogHeader>
 
@@ -259,66 +305,68 @@ export function AddFieldModal({ open, onOpenChange }: AddFieldModalProps) {
 
             <TabsContent value="info">
               <div className="space-y-4 py-4">
-                <div className="space-y-2">
-                  <Label
-                    htmlFor="imagenes"
-                    className="text-center text-xl text-[#1A6B51] font-bold"
-                  >
-                    AGREGA IMÁGENES DE TU CANCHAS ({images.length}/5)
-                  </Label>
-                  {images.length < 5 && (
-                    <div className="border-2 border-dashed border-gray-300 rounded-lg p-4">
-                      <Input
-                        id="imagenes"
-                        type="file"
-                        multiple
-                        accept="image/*"
-                        className="hidden"
-                        {...register("imagenes")}
-                        onChange={handleImageChange}
-                      />
-                      <Label
-                        htmlFor="imagenes"
-                        className="flex flex-col items-center justify-center cursor-pointer"
-                      >
-                        <div className="w-full h-64 bg-gray-100 rounded-lg mb-4" />
-                        <p className="text-center text-sm text-gray-500">
-                          Arrastra y suelta las imágenes aquí o haz clic para
-                          seleccionar
-                        </p>
-                      </Label>
-                    </div>
-                  )}
+                {!isEdit && (
+                  <div className="space-y-2">
+                    <Label
+                      htmlFor="imagenes"
+                      className="text-center text-xl text-[#1A6B51] font-bold"
+                    >
+                      AGREGA IMÁGENES DE TU CANCHAS ({images.length}/5)
+                    </Label>
+                    {images.length < 5 && (
+                      <div className="border-2 border-dashed border-gray-300 rounded-lg p-4">
+                        <Input
+                          id="imagenes"
+                          type="file"
+                          multiple
+                          accept="image/*"
+                          className="hidden"
+                          {...register("imagenes")}
+                          onChange={handleImageChange}
+                        />
+                        <Label
+                          htmlFor="imagenes"
+                          className="flex flex-col items-center justify-center cursor-pointer"
+                        >
+                          <div className="w-full h-64 bg-gray-100 rounded-lg mb-4" />
+                          <p className="text-center text-sm text-gray-500">
+                            Arrastra y suelta las imágenes aquí o haz clic para
+                            seleccionar
+                          </p>
+                        </Label>
+                      </div>
+                    )}
 
-                  {images.length > 0 && (
-                    <Carousel className="w-full">
-                      <CarouselContent>
-                        {images.map((image, index) => (
-                          <CarouselItem
-                            key={index}
-                            className="basis-1/3 relative"
-                          >
-                            <Button
-                              variant="ghost"
-                              size="icon"
-                              className="absolute top-2 right-2 bg-black/50 hover:bg-black/70 rounded-full"
-                              onClick={() => handleDeleteImage(index)}
+                    {images.length > 0 && (
+                      <Carousel className="w-full">
+                        <CarouselContent>
+                          {images.map((image, index) => (
+                            <CarouselItem
+                              key={index}
+                              className="basis-1/3 relative"
                             >
-                              <X className="h-4 w-4 text-white" />
-                            </Button>
-                            <img
-                              src={image.preview}
-                              alt={`Cancha ${index + 1}`}
-                              className="w-full h-32 object-cover rounded-lg"
-                            />
-                          </CarouselItem>
-                        ))}
-                      </CarouselContent>
-                      <CarouselPrevious />
-                      <CarouselNext />
-                    </Carousel>
-                  )}
-                </div>
+                              <Button
+                                variant="ghost"
+                                size="icon"
+                                className="absolute top-2 right-2 bg-black/50 hover:bg-black/70 rounded-full"
+                                onClick={() => handleDeleteImage(index)}
+                              >
+                                <X className="h-4 w-4 text-white" />
+                              </Button>
+                              <img
+                                src={image.preview}
+                                alt={`Cancha ${index + 1}`}
+                                className="w-full h-32 object-cover rounded-lg"
+                              />
+                            </CarouselItem>
+                          ))}
+                        </CarouselContent>
+                        <CarouselPrevious />
+                        <CarouselNext />
+                      </Carousel>
+                    )}
+                  </div>
+                )}
 
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
@@ -418,7 +466,14 @@ export function AddFieldModal({ open, onOpenChange }: AddFieldModalProps) {
             </TabsContent>
 
             <TabsContent value="schedule">
-              <ScheduleSelector />
+              <ScheduleSelector 
+                existingSchedules={existingField?.field_schedule_?.map(h => ({
+                  day: h.dia,
+                  startTime: h.hora_inicio,
+                  endTime: h.hora_fin
+                }))} 
+                isEdit={isEdit}
+              />
             </TabsContent>
           </Tabs>
 
@@ -438,10 +493,10 @@ export function AddFieldModal({ open, onOpenChange }: AddFieldModalProps) {
               {isLoading ? (
                 <>
                   <span className="animate-spin mr-2">🕒</span>
-                  Guardando...
+                  {isEdit ? "Actualizando..." : "Guardando..."}
                 </>
               ) : (
-                "Guardar"
+                isEdit ? "Actualizar" : "Guardar"
               )}
             </Button>
           </div>

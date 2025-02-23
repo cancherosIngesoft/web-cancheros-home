@@ -18,29 +18,32 @@ interface ScheduleCalendarProps {
 export function ScheduleCalendar({ schedules }: ScheduleCalendarProps) {
   const [date, setDate] = useState<Date | undefined>(new Date());
 
-  // Convertir los horarios a intervalos de fecha para visualización
   const schedulesToIntervals = (schedules: TimeSlot[]) => {
     return schedules.map((schedule) => {
-      const dayDate = parse(schedule.day, "EEEE", new Date(), { locale: es });
-      const startTime = parse(schedule.startTime, "HH:mm", dayDate);
-      const endTime = parse(schedule.endTime, "HH:mm", dayDate);
+      try {
+        const dayDate = parse(schedule.day, "EEEE", new Date(), { locale: es });
+        const startTime = parse(schedule.startTime.substring(0, 5), "HH:mm", dayDate);
+        const endTime = parse(schedule.endTime.substring(0, 5), "HH:mm", dayDate);
 
-      return {
-        start: startTime,
-        end: endTime,
-        day: schedule.day,
-      };
-    });
+        return {
+          start: startTime,
+          end: endTime,
+          day: schedule.day,
+        };
+      } catch (error) {
+        console.error("Error parsing schedule:", schedule, error);
+        return null;
+      }
+    }).filter(Boolean); // Eliminar cualquier resultado null
   };
 
   // Función para verificar si una fecha tiene horarios programados
   const isDayScheduled = (date: Date) => {
     const intervals = schedulesToIntervals(schedules);
     const dayName = format(date, "EEEE", { locale: es });
-
-    return intervals.some(
-      (interval) => interval.day.toLowerCase() === dayName.toLowerCase()
-    );
+    return intervals?.some(
+      (interval) => interval?.day.toLowerCase() === dayName.toLowerCase()
+    ) ?? false;
   };
 
   return (

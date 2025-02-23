@@ -46,9 +46,11 @@ export default function GenericReservaCard({
           </div>
         </div>
         <div className="text-right">
-          <div className="font-semibold">
-            $ {reservation.amount.toLocaleString()}
-          </div>
+          {reservation.amount > 0 && (
+            <div className="font-semibold">
+              $ {reservation.amount.toLocaleString()}
+            </div>
+          )}
           <Button
             variant="secondary"
             className="mt-2 bg-green-700 text-white hover:bg-green-800"

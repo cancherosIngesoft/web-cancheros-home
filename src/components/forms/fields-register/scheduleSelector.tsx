@@ -22,16 +22,22 @@ interface TimeSlot {
   endTime: string;
 }
 
-export function ScheduleSelector() {
+interface ScheduleSelectorProps {
+  existingSchedules?: TimeSlot[];
+  isEdit?: boolean;
+}
+
+export function ScheduleSelector({ existingSchedules, isEdit }: ScheduleSelectorProps) {
   const { toast } = useToast();
   const field = useGlobalStore(useShallow((state) => state.field));
   const [schedules, setSchedules] = useState<TimeSlot[]>(
-    field.field_schedule || []
+    existingSchedules || field.field_schedule || []
   );
   const [selectedDay, setSelectedDay] = useState<string>("");
   const [selectedStartTime, setSelectedStartTime] = useState<string>("");
   const [selectedRange, setSelectedRange] = useState<string>("2");
 
+  
   const days = [
     "lunes",
     "martes",
@@ -46,6 +52,18 @@ export function ScheduleSelector() {
     const hour = i.toString().padStart(2, "0");
     return `${hour}:00`;
   });
+
+  // Efecto para sincronizar con horarios existentes cuando es modo edición
+  useEffect(() => {
+    if (isEdit && existingSchedules && existingSchedules !== field.field_schedule) {
+      
+      setSchedules(existingSchedules);
+      useGlobalStore.getState().updateStore("field", {
+        ...field,
+        field_schedule: existingSchedules,
+      });
+    }
+  }, [isEdit]); // Solo depende de isEdit
 
   // Mantener sincronizado con el estado global
   useEffect(() => {
@@ -126,13 +144,16 @@ export function ScheduleSelector() {
     });
   };
 
-  const handleDeleteSchedule = (index: number) => {
+  const handleDeleteSchedule = (e: React.MouseEvent, index: number) => {
+    e.preventDefault();
+    e.stopPropagation();
+    
     const newSchedules = schedules.filter((_, i) => i !== index);
     setSchedules(newSchedules);
 
     // Actualizar el estado global manteniendo los demás campos
     useGlobalStore.getState().updateStore("field", {
-      ...field, // Mantener todos los campos existentes
+      ...field,
       field_schedule: newSchedules,
     });
   };
@@ -199,12 +220,14 @@ export function ScheduleSelector() {
             onClick={handleAddSchedule}
             className="w-full bg-[#46C556] text-white"
           >
-            Agregar horario
+            {isEdit ? "Actualizar horario" : "Agregar horario"}
           </Button>
 
           {schedules.length > 0 && (
             <div className="mt-4">
-              <h3 className="font-semibold mb-2">Horarios agregados:</h3>
+              <h3 className="font-semibold mb-2">
+                {isEdit ? "Horarios actuales:" : "Horarios agregados:"}
+              </h3>
               <div className="space-y-2">
                 {schedules.map((schedule, index) => (
                   <div
@@ -217,7 +240,7 @@ export function ScheduleSelector() {
                     <Button
                       variant="ghost"
                       size="sm"
-                      onClick={() => handleDeleteSchedule(index)}
+                      onClick={(e) => handleDeleteSchedule(e, index)}
                     >
                       ✕
                     </Button>
