@@ -25,9 +25,10 @@ interface ClubsPanelProps {
   isOpen: boolean
   onClose: () => void
   navbarWidth: number
+  navbarHight: number 
 }
 
-export function PanelClub({ isOpen, onClose, navbarWidth }: ClubsPanelProps) {
+export function PanelClub({ isOpen, onClose, navbarWidth,navbarHight }: ClubsPanelProps) {
   const { data: session } = useSession()
   const userId = session?.user?.id ?? ""
   const {
@@ -46,8 +47,11 @@ export function PanelClub({ isOpen, onClose, navbarWidth }: ClubsPanelProps) {
   return (
     <>
       <div
-        style={{ left: `${navbarWidth}px` }}
-        className={`fixed top-0 h-full w-[25vw] z-10 bg-surface shadow-lg transform transition-all duration-300 ease-in-out py-4 ${isOpen ? "translate-x-0 opacity-100 " : "-translate-x-[40vw] opacity-0  "
+        style={{
+          left: window.innerWidth < 768 ? "0" : `${navbarWidth}px`, // Ajuste para móviles
+          bottom: window.innerWidth < 768 ? `${navbarHight}px` :  "0", // Ajuste para móviles
+        }}
+        className={`fixed md:top-0 w-full h-[75vh] md:h-full md:w-[25vw] z-10 bg-surface shadow-lg transform transition-all duration-300 ease-in-out py-4 ${isOpen ? "translate-x-0 opacity-100 " : "-translate-x-[40vw] opacity-0  "
           } `}
       >
         <div className="flex flex-col h-full w-full p-4">

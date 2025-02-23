@@ -47,7 +47,7 @@ export default function ReservasNegocio() {
   }
 
   return (
-    <div className="flex flex-col items-start justify-start h-screen w-[90vw] ml-[5vw] self-center">
+    <div className="flex flex-col items-start justify-start h-screen w-[90vw] pl-4 md:pl-0 md:ml-[5vw] self-center">
       <div className="flex flex-row items-center justify-between w-full mb-6">
         <h1 className="text-3xl font-bold text-tertiary flex flex-row items-center gap-2">
           Mis Reservas{" "}

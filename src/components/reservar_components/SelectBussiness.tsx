@@ -18,8 +18,8 @@ const SelectBusiness = ({
     useState<bussinessInfo[]>(initialBusinesses);
   const bussinessID = useBussinessStore((state) => state.bussinessID);
   return (
-    <Card className="p-4 flex flex-row gap-8 bg-background w-full relative">
-      <div className="w-2/5 z-1">
+    <Card className="p-4 flex flex-col-reverse md:flex-row gap-8 bg-background w-full relative -z-10">
+      <div className="md:w-2/5  md:z-1">
         <CustomMap
           center={{ lat: 4.60971, lng: -74.08175 }}
           markers={businesses.map((item) => ({
@@ -31,11 +31,11 @@ const SelectBusiness = ({
             priceRange: item.priceRange,
           }))}
           showInfoWindow={true}
-          style={{ width: "60 vh", height: "60vh" }}
+          style={{ width: "100%", height: "50vh" }}
           gestureHandling="auto"
         />
       </div>
-      <div className="w-3/5 grow-0 ">
+      <div className="md:w-3/5 md:grow-0 ">
         {bussinessID && <BussinessInfo id={bussinessID} />}
         {!bussinessID && <FiltersForm onSearchResults={setBusinesses} />}
       </div>

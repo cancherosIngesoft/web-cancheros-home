@@ -32,7 +32,7 @@ export default async function reservar_cancha() {
         </p>
       </div>
 
-      <div className="px-6 w-full">
+      <div className="md:px-6 w-full">
         <SelectBussiness initialBusinesses={allTheBussiness} />
       </div>
     </div>

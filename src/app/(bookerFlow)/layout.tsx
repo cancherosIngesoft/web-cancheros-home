@@ -8,7 +8,7 @@ export default function BookerLayout({
     return (
         <div className="flex h-screen w-screen">
             {/* Barra lateral fija */}
-            <nav className="top-0 left-0 h-full w-16 relative">
+            <nav className="fixed w-full bottom-0  md:top-0 md:left-0 md:bottom-none h-16 md:h-full md:w-16">
                 <LateralNavBar />
             </nav>
 
