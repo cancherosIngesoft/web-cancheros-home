@@ -9,6 +9,7 @@ import { useEffect, useState } from "react";
 import { Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import HostReservationModal from "@/components/reservar_components/HostReservationModal";
+import Link from "next/link";
 
 export default function ReservasNegocio() {
   const auth = useGlobalStore((state) => state.auth);
@@ -57,10 +58,7 @@ export default function ReservasNegocio() {
             height={32}
           />
         </h1>
-        <Button 
-          className="font-bold"
-          onClick={() => setIsCreateReservationOpen(true)}
-          >Reserva para tus clientes</Button>
+        
       </div>
 
       <p className="text-sm text-gray-500 mb-10">
@@ -96,7 +94,10 @@ export default function ReservasNegocio() {
           Si tienes una reserva que no es de Cancheros, puedes registrarla
           aquí*.
         </p>
-        <Button className="mb-5">Registrar reserva</Button>
+        <Button 
+          className="mb-5"
+          onClick={() => setIsCreateReservationOpen(true)}
+          >Registrar reserva</Button>
         <p className="text-sm text-gray-500">
           Nota: Servicio sujeto a{" "}
           <Link href="/terms" target="_blank" className="text-blue-500">
