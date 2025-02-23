@@ -23,6 +23,7 @@ export interface IFieldState {
     endTime: string;
   }[];
   canchas_id: string[];
+  id_establecimiento?: number;
 }
 
 export interface HostReservationState {
