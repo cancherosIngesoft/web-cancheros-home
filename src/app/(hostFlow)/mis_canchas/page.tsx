@@ -12,6 +12,7 @@ export default function pageMisCanchas() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [fields, setFields] = useState<IField[]>([]);
   const auth = useGlobalStore(useShallow((state) => state.auth));
+  const clearStore = useGlobalStore(useShallow((state) => state.clearStore));
   const [isLoading, setIsLoading] = useState(false);
   useEffect(() => {
     const fetchFields = async () => {
@@ -41,7 +42,10 @@ export default function pageMisCanchas() {
             Registra las canchas de tu complejo deportivo y ajusta su
             disponibilidad para recibir reservas.
           </p>
-          <Button variant="default" onClick={() => setIsModalOpen(true)}>
+          <Button variant="default" onClick={() => {
+            clearStore("field");
+            setIsModalOpen(true);
+          }}>
             Agregar Cancha
           </Button>
         </div>
@@ -82,6 +86,7 @@ export default function pageMisCanchas() {
             <Button
               variant="default"
               onClick={() => {
+                clearStore("field");
                 setIsModalOpen(true);
               }}
             >

@@ -85,10 +85,10 @@ function PaymentContent() {
 
             <div className="flex flex-col space-y-2">
               <Link
-                href={userRole == "duenio" ? "/comisiones" : "/mis_reservas"}
+                href={userRole === "duenio" ? "/comisiones" : "/mis_reservas"}
                 className="inline-flex justify-center items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-black hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
               >
-                {userRole == "duenio"
+                {userRole === "duenio"
                   ? "Volver al panel de comisiones"
                   : "Ver Mis Reservas"}
               </Link>

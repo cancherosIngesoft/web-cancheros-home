@@ -8,15 +8,11 @@ import {
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 
 import GenericReservaCard from "@/components/reservar_components/genericReservaCard";
 import { useEffect, useState, useCallback } from "react";
-import {
-  getOcupationAndIncomes,
-  getReservas,
-  getActiveReservation,
-} from "@/actions/reservation/reservation_action";
+import { getReservationByHostId } from "@/actions/reservation/reservation_action";
 import { useGlobalStore } from "@/store";
 import { Skeleton } from "@/components/ui/skeleton";
 import { getPendingFees } from "@/actions/payment/payment_actions";
@@ -34,30 +30,30 @@ export default function PanelComisiones() {
   const user = useGlobalStore((state) => state.auth);
 
   const fetchReservasAndFees = async () => {
+    const week_day = new Date().toISOString().split("T")[0];
     if (!user.id) return;
 
     setLoading(true);
     try {
       // Realizar las llamadas en paralelo usando Promise.all
-      const [fees, response, ocupation] = await Promise.all([
+      const [fees, response] = await Promise.all([
         getPendingFees(parseInt(user.id)),
-        getActiveReservation(user.id),
-        getOcupationAndIncomes(user.id, "1", "1", "2024"),
+        getReservationByHostId(user.id, "2", "2025", week_day),
       ]);
 
       const reservas = response.map((reserva) => ({
-        id: reserva.idReservation,
-        field: reserva.FieldType,
-        user: reserva.idBooker,
-        date: reserva.dateReservation,
-        location: reserva.bussinessDirection,
-        amount: reserva.totalPrice,
+        id: "Reserva " + reserva.idReservation,
+        field: "Cancha " + reserva.idField,
+        user: "Dueño " + user.id,
+        date: week_day,
+        location: "Tu Negocio",
+        amount: 0,
         status: "Pagado",
       }));
 
       setReservas(reservas);
-      setTotalIngresos(ocupation.incomes);
-      setComisionesEnDeuda(fees.amount);
+      setTotalIngresos(fees.total_profit || 0);
+      setComisionesEnDeuda(fees.commission_amount || 0);
     } catch (error) {
       console.error("Error fetching data:", error);
       toast.error("Error al obtener las comisiones");
@@ -126,7 +122,11 @@ export default function PanelComisiones() {
                 onClick={() => setIsExplainOpen(true)}
               />
             </p>
-            <Button onClick={onSubmit} className="max-w-[40%] self-end ">
+            <Button
+              onClick={onSubmit}
+              disabled={comisionesEnDeuda === 0 || loading}
+              className="max-w-[40%] self-end "
+            >
               <DollarSignIcon className="h-5 w-5text-green-700" />
               Pagar comisiones
             </Button>
@@ -163,12 +163,17 @@ export default function PanelComisiones() {
               <Skeleton className="h-24 w-full" key={item} />
             ))
           ) : reservas.length > 0 ? (
-            reservas.map((reservation) => (
-              <GenericReservaCard
-                key={reservation.id}
-                reservation={reservation}
-              />
-            ))
+            <>
+              <p className="text-muted-foreground text-sm text-gray-500 self-center">
+                Necesitas más detalles? Ingresa a la sección de mis reservas
+              </p>
+              {reservas.map((reservation) => (
+                <GenericReservaCard
+                  key={reservation.id}
+                  reservation={reservation}
+                />
+              ))}
+            </>
           ) : (
             <p className="text-muted-foreground text-sm text-gray-500 self-center">
               No se han encontrado reservas activas.

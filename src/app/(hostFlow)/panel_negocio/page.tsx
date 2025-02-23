@@ -24,6 +24,7 @@ import {
   getCanchas,
   getOcupationAndIncomes,
   getReservas,
+  getReservationByHostId,
 } from "@/actions/reservation/reservation_action";
 import { useGlobalStore } from "@/store";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -39,64 +40,75 @@ export default function FinancialDashboard() {
   const [hostCanchas, setHostCanchas] = useState<any[]>([]);
   const [totalIngresos, setTotalIngresos] = useState(0);
   const [tasaOcupacion, setTasaOcupacion] = useState(0);
-  const [reservas, setReservas] = useState<any[]>([
-    {
-      id: 1,
-      field: "La caprichosa",
-      user: "Juan Alberto espitia",
-      date: "11 Octubre de 2024",
-      location: "Arena Total",
-      amount: 150000,
-      status: "Pagado",
-    },
-    {
-      id: 2,
-      field: "La caprichosa",
-      user: "Mario Riaño",
-      date: "08 Octubre de 2024",
-      location: "Arena Total",
-      amount: 150000,
-      status: "Pagado",
-    },
-  ]);
+  const [reservas, setReservas] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
-  const { register, handleSubmit, watch } = useForm<FilterFormValues>({
-    defaultValues: {
-      cancha: "all",
-      mes: new Date().getMonth().toString(),
-      año: new Date().getFullYear().toString(),
-    },
-  });
+  const { register, handleSubmit, watch, setValue } =
+    useForm<FilterFormValues>();
   const user = useGlobalStore((state) => state.auth);
 
   useEffect(() => {
     const fetchHostCanchas = async () => {
       if (user.id) {
         setLoading(true);
-        console.log("user", user);
         const canchas = await getCanchas(user.id || "");
-        console.log("canchas", canchas);
         setHostCanchas(canchas);
         setLoading(false);
+        const reservas = await getReservationByHostId(
+          user.id,
+          "2",
+          "2025",
+          new Date().toISOString().split("T")[0]
+        );
+        if (reservas.length > 0) {
+          const reservas_data = reservas.map((reserva) => ({
+            id: "Cliente " + reserva.idBooker,
+            field: "Cancha " + reserva.idField,
+            user: "Dueño " + user.id,
+            date: new Date().toISOString().split("T")[0],
+            location: "Tu Negocio",
+            amount: 0,
+            status: "Pagado",
+          }));
+          setReservas(reservas_data);
+        } else {
+          setReservas([]);
+        }
       }
     };
     fetchHostCanchas();
   }, [user.id]);
 
   const onSubmit = async (data: FilterFormValues) => {
-    console.log("Filtros seleccionados:", data);
-    // Aquí puedes hacer la llamada a tu API con los filtros
-    const { ocupation, incomes } = await getOcupationAndIncomes(
+    if (!user.id) return;
+    const { use_porcentage, total_profit } = await getOcupationAndIncomes(
       user.id || "",
       data.cancha,
       data.mes,
       data.año
     );
-    setTasaOcupacion(ocupation);
-    setTotalIngresos(incomes);
+    setTasaOcupacion(use_porcentage || 0);
+    setTotalIngresos(total_profit || 0);
     setLoading(true);
-    const reservas = await getReservas(data.mes, data.cancha);
-    setReservas(reservas);
+    const reservas = await getReservationByHostId(
+      user.id,
+      data.mes,
+      data.año,
+      new Date().toISOString().split("T")[0]
+    );
+    if (reservas.length > 0) {
+      const reservas_data = reservas.map((reserva) => ({
+        id: "Cliente " + reserva.idBooker,
+        field: "Cancha " + reserva.idField,
+        user: "Dueño " + user.id,
+        date: new Date().toISOString().split("T")[0],
+        location: "Tu Negocio",
+        amount: 0,
+        status: "Pagado",
+      }));
+      setReservas(reservas_data);
+    } else {
+      setReservas([]);
+    }
     setLoading(false);
   };
 
@@ -122,12 +134,14 @@ export default function FinancialDashboard() {
         <div className="grid gap-4 md:grid-cols-3 w-full">
           <div className="space-y-2">
             <label className="text-sm font-medium">Cancha</label>
-            <Select {...register("cancha")}>
+            <Select
+              onValueChange={(value) => setValue("cancha", value)}
+              defaultValue={watch("cancha")}
+            >
               <SelectTrigger>
-                <SelectValue placeholder="Todas las canchas" />
+                <SelectValue placeholder="Seleccione una cancha" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">Todas las canchas</SelectItem>
                 {loading ? (
                   <SelectItem value="loading">Cargando...</SelectItem>
                 ) : (
@@ -146,30 +160,36 @@ export default function FinancialDashboard() {
 
           <div className="space-y-2">
             <label className="text-sm font-medium">Mes</label>
-            <Select {...register("mes")}>
+            <Select
+              onValueChange={(value) => setValue("mes", value)}
+              defaultValue={watch("mes")}
+            >
               <SelectTrigger>
                 <SelectValue placeholder="Seleccionar Mes" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="0">Enero</SelectItem>
-                <SelectItem value="1">Febrero</SelectItem>
-                <SelectItem value="2">Marzo</SelectItem>
-                <SelectItem value="3">Abril</SelectItem>
-                <SelectItem value="4">Mayo</SelectItem>
-                <SelectItem value="5">Junio</SelectItem>
-                <SelectItem value="6">Julio</SelectItem>
-                <SelectItem value="7">Agosto</SelectItem>
-                <SelectItem value="8">Septiembre</SelectItem>
-                <SelectItem value="9">Octubre</SelectItem>
-                <SelectItem value="10">Noviembre</SelectItem>
-                <SelectItem value="11">Diciembre</SelectItem>
+                <SelectItem value="1">Enero</SelectItem>
+                <SelectItem value="2">Febrero</SelectItem>
+                <SelectItem value="3">Marzo</SelectItem>
+                <SelectItem value="4">Abril</SelectItem>
+                <SelectItem value="5">Mayo</SelectItem>
+                <SelectItem value="6">Junio</SelectItem>
+                <SelectItem value="7">Julio</SelectItem>
+                <SelectItem value="8">Agosto</SelectItem>
+                <SelectItem value="9">Septiembre</SelectItem>
+                <SelectItem value="10">Octubre</SelectItem>
+                <SelectItem value="11">Noviembre</SelectItem>
+                <SelectItem value="12">Diciembre</SelectItem>
               </SelectContent>
             </Select>
           </div>
 
           <div className="space-y-2">
             <label className="text-sm font-medium">Año</label>
-            <Select {...register("año")}>
+            <Select
+              onValueChange={(value) => setValue("año", value)}
+              defaultValue={watch("año")}
+            >
               <SelectTrigger>
                 <SelectValue placeholder="Año" />
               </SelectTrigger>

@@ -118,10 +118,14 @@ function PaymentContent() {
                 */}
 
               <Link
-                href={userRole == "duenio" ? "/comisiones" : "/reservar_cancha"}
+                href={
+                  userRole === "duenio"
+                    ? "/comisiones"
+                    : "/reservar_cancha"
+                }
                 className="inline-flex justify-center items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-black hover:bg-gray-800"
               >
-                {userRole == "duenio"
+                {userRole === "duenio"
                   ? "Volver al panel de comisiones"
                   : "Volver a reservar"}
               </Link>

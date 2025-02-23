@@ -80,7 +80,7 @@ function PaymentContent() {
             </p>
 
             <div className="flex flex-col space-y-2">
-              {userRole == "duenio" ? (
+              {userRole === "duenio" ? (
                 <Link
                   href="/comisiones"
                   className="inline-flex justify-center items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-black hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
