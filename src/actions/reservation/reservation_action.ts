@@ -40,8 +40,8 @@ const mockReservations: ReservationActiveReturn[] = [
   {
     idReservation: "res-001",
     dateReservation: "2025-02-20",
-    hours: { 
-      horaInicio: new Date("2025-02-18T10:00:00").toISOString(), 
+    hours: {
+      horaInicio: new Date("2025-02-18T10:00:00").toISOString(),
       horaFin: new Date("2025-02-18T12:00:00").toISOString(),
     },
     inTeam: true,
@@ -52,8 +52,8 @@ const mockReservations: ReservationActiveReturn[] = [
     bussinessDirection: "Calle Falsa 123, Ciudad Ejemplo",
     totalPrice: 100,
     teamName: "Equipo A",
-    idField: "49"
-  }
+    idField: "49",
+  },
 ];
 
 export async function getActiveReservation(
@@ -186,6 +186,67 @@ export async function getCanchas(
   }
 }
 
+export async function getOcupationAndIncomes(
+  id_user: string,
+  court_id: string,
+  month: string,
+  year: string
+) {
+  try {
+    const res = await fetchWithRetry(
+      `${process.env.NEXT_PUBLIC_API_URL}/api/reservations/financial-report/business/${id_user}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      },
+      {
+        id_court: court_id,
+        month: month,
+        year: year,
+      }
+    );
+    const data = await res.json();
+    return data;
+  } catch (e) {
+    console.error(e);
+    return {
+      ocupation: 0,
+      incomes: 0,
+    };
+  }
+}
+
+export async function getReservationByHostId(
+  id_user: string,
+  month = "2",
+  year = "2025",
+  week_day = new Date().toISOString().split("T")[0]
+): Promise<ReservationActiveReturn[]> {
+  try {
+    const res = await fetchWithRetry(
+      `${process.env.NEXT_PUBLIC_API_URL}/api/reservations/business/${id_user}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      },
+      {
+        month: month,
+        year: year,
+        week_day: week_day,
+      }
+    );
+    const data = await res.json();
+    return data;
+  } catch (e) {
+    console.error(e);
+    return [];
+  }
+}
+
 
 export async function cancelReservation(idReservation:string, idUserWhoIsCanceling:string): Promise<void> {
   
@@ -218,11 +279,18 @@ export async function cancelReservation(idReservation:string, idUserWhoIsCanceli
 }
 
 export async function reprogramationReservation(
-  idReservation: string, 
-  idUser:string,  
-  newHours:{startDateAndHour:string, endDateAndHour:string}): Promise<void> { 
+  idReservation: string,
+  idUser: string,
+  newHours: { startDateAndHour: string; endDateAndHour: string }
+): Promise<void> {
   // Mock data
-  console.log(`Reprogramando reserva ${JSON.stringify( {idReservation, idUser, newHours})}`);
+  console.log(
+    `Reprogramando reserva ${JSON.stringify({
+      idReservation,
+      idUser,
+      newHours,
+    })}`
+  );
   // try {
   //   const res = await fetch(
   //     `${process.env.NEXT_PUBLIC_API_URL}/api/reservations/reprogramation/`,
@@ -239,7 +307,7 @@ export async function reprogramationReservation(
   //     const data = await res.json();
   //     throw new Error(data.message);
   //   }
-    
+
   // } catch (e) {
   //   if (e instanceof Error) {
   //     console.error("Error en get Reservations:", e.message);
@@ -249,6 +317,3 @@ export async function reprogramationReservation(
   //   }
   // }
 }
-
-
-

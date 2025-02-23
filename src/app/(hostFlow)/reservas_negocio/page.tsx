@@ -88,6 +88,23 @@ export default function ReservasNegocio() {
           */}
         </Tabs>
       </section>
+      <section className="flex flex-col items-start justify-start w-full mt-10 border-2 border-gray-200 rounded-lg p-4">
+        <h1 className="text-lg font-bold mb-4 flex flex-row items-center gap-2">
+          ¿Quieres registrar una reserva externa?
+        </h1>
+        <p className="text-sm text-gray-500 mb-5">
+          Si tienes una reserva que no es de Cancheros, puedes registrarla
+          aquí*.
+        </p>
+        <Button className="mb-5">Registrar reserva</Button>
+        <p className="text-sm text-gray-500">
+          Nota: Servicio sujeto a{" "}
+          <Link href="/terms" target="_blank" className="text-blue-500">
+            términos y condiciones
+          </Link>
+          .
+        </p>
+      </section>
 
 
       <HostReservationModal
