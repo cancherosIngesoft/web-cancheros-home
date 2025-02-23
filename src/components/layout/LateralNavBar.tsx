@@ -37,15 +37,12 @@ const navItems: NavItem[] = [
 ];
 
 export const LateralNavBar = () => {
-
+  const [isOpenTeam, setIsOpenTeam] = useState(false);
   const [navbarWidth, setNavbarWidth] = useState(0);
   const [navbarHight, setNavbaHight] = useState(0);
   const navbarRef = useRef<HTMLDivElement>(null);
   const { data: session } = useSession();
   const authUser = useGlobalStore((state) => state.auth);
-
-  const panelIsOpen =useGlobalStore((state) => state.teamPanel.panelIsOpen);
-  const setPanelIsOpen = useGlobalStore((state) => state.setPanelIsOpen);
 
   useEffect(() => {
     if (navbarRef.current) {
@@ -127,7 +124,7 @@ export const LateralNavBar = () => {
               ))}
               <div
                 className=" cursor-pointer"
-                onClick={() => setPanelIsOpen(!panelIsOpen)}
+                onClick={() => setIsOpenTeam(!isOpenTeam)}
               >
                 <TeamShield className="md:w-10 md:h-10 w-10 h-10 text-tertiary stroke-4" />
               </div>
@@ -161,8 +158,8 @@ export const LateralNavBar = () => {
           </Button>
         </div>
         <PanelClub
-        isOpen={panelIsOpen}
-        onClose={() => setPanelIsOpen(false)}
+        isOpen={isOpenTeam}
+        onClose={() => setIsOpenTeam(false)}
         navbarWidth={navbarWidth}
         navbarHight={navbarHight}
       />

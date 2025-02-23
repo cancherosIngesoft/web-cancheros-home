@@ -40,9 +40,6 @@ const initialState: IGlobalState = {
     reservas: [],
     canchas: [],
   },
-  teamPanel:{
-    panelIsOpen:false
-  }
 };
 
 export const useGlobalStore = create<TGlobalStoreData>()(
@@ -66,19 +63,7 @@ export const useGlobalStore = create<TGlobalStoreData>()(
           false,
           "CLEAR_STORE" // Acción identificable en DevTools
         );
-      
-
       },
-      setPanelIsOpen: (panelIsOpen) => {
-        set(
-          () => ({
-            ["teamPanel"]: {panelIsOpen: panelIsOpen}
-          }),
-          false,
-          "SET_PANEL_CLUB_IS_OPEN" // Acción identificable en DevTools
-        );
-      }
-      
     }),
     {
       name: "GlobalStore", // Nombre que aparecerá en DevTools

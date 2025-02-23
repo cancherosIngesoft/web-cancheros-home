@@ -53,15 +53,11 @@ export interface IUserState {
   // Puedes agregar más propiedades aquí
 }
 
-export interface ITeamState {
-  panelIsOpen: boolean;
-}
 export interface IGlobalState {
   auth: IAuthState;
   user: IUserState;
   field: IFieldState;
   hostReservation: HostReservationState;
-  teamPanel: ITeamState;
   // Puedes agregar más slices aquí. una slice es una parte del store.
 }
 //Funciones para actualizar y borrar el store
@@ -71,7 +67,6 @@ export type TGlobalStoreData = IGlobalState & {
     payload: Partial<IGlobalState[keyof IGlobalState]>
   ) => void;
   clearStore: (slice: keyof IGlobalState) => void;
-  setPanelIsOpen: (isOpen: boolean) => void;
 };
 
 export interface BussinessState {
