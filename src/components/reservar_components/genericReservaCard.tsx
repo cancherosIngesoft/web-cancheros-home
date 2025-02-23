@@ -23,7 +23,7 @@ export default function GenericReservaCard({
       <CardContent className="flex items-center gap-4 p-4">
         <div className="relative h-24 w-32 flex-shrink-0">
           <Image
-            src="/CANCHEROS.svg"
+            src="/CANCHEROS .svg"
             alt={reservation.field}
             className="rounded-lg object-cover"
             width={128}
