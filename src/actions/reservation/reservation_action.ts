@@ -247,10 +247,36 @@ export async function getReservationByHostId(
   }
 }
 
-export async function cancelarReserva(id: string): Promise<void> {
+export async function cancelarReserva(
+  reservationId: string,
+  paymentId: string
+): Promise<any> {
   // Mock data
-  console.log(`Cancelando reserva ${id}`);
-  // Aquí iría la lógica para cancelar la reserva en el backend
+  console.log(`Cancelando reserva ${reservationId} con paymentId ${paymentId}`);
+  /*
+  try {
+    const res = await fetch(`/api/payment_gateway/delete/`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ paymentId, reservationId }),
+    });
+
+    if (!res.ok) {
+      const data = await res.json();
+      throw new Error(data.message);
+    }
+
+    console.log("Reserva cancelada exitosamente");
+  } catch (e) {
+    console.error(e);
+  }
+
+  */
+  return {
+    message: "Reserva cancelada exitosamente",
+  };
 }
 
 export async function reprogramationReservation(
