@@ -4,6 +4,7 @@ import { useSearchParams } from "next/navigation";
 import { useEffect, useState, Suspense } from "react";
 import Link from "next/link";
 import { useGlobalStore } from "@/store";
+import { useToast } from "@/hooks/use-toast";
 
 interface PaymentInfo {
   collection_id: string;
@@ -20,12 +21,57 @@ interface PaymentInfo {
 function PaymentContent() {
   const searchParams = useSearchParams();
   const [paymentInfo, setPaymentInfo] = useState<PaymentInfo | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
   const auth = useGlobalStore((state) => state.auth);
   const [userRole, setUserRole] = useState<string | null>(null);
+  const { toast } = useToast();
+
+  const checkPaymentStatus = async (paymentId: string) => {
+    setIsLoading(true);
+    try {
+      const response = await fetch(
+        `/api/payment_gateway/status?payment_id=${paymentId}`
+      );
+      const data = await response.json();
+
+      if (data.status === "approved") {
+        toast({
+          title: "¡Pago aprobado!",
+          description: "Tu pago ha sido procesado exitosamente.",
+        });
+        // Redirigir a success
+        window.location.href = "/payment/success" + window.location.search;
+      } else if (data.status === "rejected") {
+        toast({
+          variant: "destructive",
+          title: "Pago rechazado",
+          description:
+            "Tu pago ha sido rechazado. Por favor, intenta nuevamente.",
+        });
+        // Redirigir a failure
+        window.location.href = "/payment/failure" + window.location.search;
+      }
+
+      setPaymentInfo((prev) => ({
+        ...prev!,
+        status: data.status,
+      }));
+    } catch (error) {
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: "No se pudo verificar el estado del pago.",
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   useEffect(() => {
     if (auth.id) {
       setUserRole(auth.userRole);
     }
+
     const paymentData = {
       collection_id: searchParams.get("collection_id"),
       collection_status: searchParams.get("collection_status"),
@@ -39,6 +85,20 @@ function PaymentContent() {
     };
 
     setPaymentInfo(paymentData as PaymentInfo);
+
+    // Verificar estado inicial
+    if (paymentData.payment_id) {
+      checkPaymentStatus(paymentData.payment_id);
+    }
+
+    // Configurar intervalo para verificar el estado
+    const interval = setInterval(() => {
+      if (paymentData.payment_id) {
+        checkPaymentStatus(paymentData.payment_id);
+      }
+    }, 5000); // Verificar cada 5 segundos
+
+    return () => clearInterval(interval);
   }, [searchParams]);
 
   return (
@@ -94,10 +154,40 @@ function PaymentContent() {
               </Link>
 
               <button
-                onClick={() => window.location.reload()}
+                onClick={() =>
+                  paymentInfo?.payment_id &&
+                  checkPaymentStatus(paymentInfo.payment_id)
+                }
+                disabled={isLoading}
                 className="inline-flex justify-center items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
               >
-                Actualizar Estado
+                {isLoading ? (
+                  <span className="flex items-center">
+                    <svg
+                      className="animate-spin -ml-1 mr-3 h-5 w-5 text-gray-700"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                    >
+                      <circle
+                        className="opacity-25"
+                        cx="12"
+                        cy="12"
+                        r="10"
+                        stroke="currentColor"
+                        strokeWidth="4"
+                      ></circle>
+                      <path
+                        className="opacity-75"
+                        fill="currentColor"
+                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                      ></path>
+                    </svg>
+                    Verificando...
+                  </span>
+                ) : (
+                  "Actualizar Estado"
+                )}
               </button>
             </div>
           </div>
