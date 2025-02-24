@@ -141,3 +141,30 @@ export async function fetchWithRetry(
 
   return attemptFetch(initialUrl, retries);
 }
+
+export const isReservationAvailable = (date: string, time: string) => {
+  const [year, month, day] = date.split("-");
+  const [hours, minutes] = time.split(":");
+
+  const dateReservation = new Date(
+    parseInt(year),
+    parseInt(month) - 1, // Los meses en JS van de 0-11
+    parseInt(day),
+    parseInt(hours),
+    parseInt(minutes)
+  );
+
+  const currentDate = new Date();
+
+  // Calcular la diferencia en milisegundos
+  const diffInMs = dateReservation.getTime() - currentDate.getTime();
+
+  // Convertir a horas (1 hora = 3600000 ms)
+  const diffInHours = diffInMs / (1000 * 60 * 60);
+  console.log("Diferencia en horas", diffInHours);
+  console.log("Fecha de la reserva", dateReservation);
+  console.log("Fecha actual", currentDate);
+  console.log("Se puede cancelar?", diffInHours >= 24);
+
+  return diffInHours >= 24;
+};

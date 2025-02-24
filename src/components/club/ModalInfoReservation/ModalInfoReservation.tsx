@@ -1,42 +1,55 @@
-"use client"
+"use client";
 
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
-import { useState, useEffect } from "react"
-import { useGlobalStore, useShallow } from "@/store"
-import MatchInformation from "./MatchInformation"
-import TeamsInformation from "./TeamsInformation"
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { useState, useEffect } from "react";
+import { useGlobalStore, useShallow } from "@/store";
+import MatchInformation from "./MatchInformation";
+import TeamsInformation from "./TeamsInformation";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   desJoinTeam,
   getTeams,
   joinTeam,
   type TeamReservationReturn,
-} from "@/actions/reservation/club_reservation_action"
-import { useToast } from "@/hooks/use-toast"
-import { Skeleton } from "@/components/ui/skeleton"
-import { XCircle } from "lucide-react"
-import ReprogramationModal from "@/components/reservar_components/ReprogramationModal"
+} from "@/actions/reservation/club_reservation_action";
+import { useToast } from "@/hooks/use-toast";
+import { Skeleton } from "@/components/ui/skeleton";
+import { XCircle } from "lucide-react";
+import ReprogramationModal from "@/components/reservar_components/ReprogramationModal";
 
 interface ModalInfoReservationProps {
-  isOpen: boolean
-  onClose: () => void
-  reservation: TeamReservationReturn
-  isPastReservation?: boolean
+  isOpen: boolean;
+  onClose: () => void;
+  reservation: TeamReservationReturn;
+  isPastReservation?: boolean;
 }
 
-export default function ModalInfoReservation({ isOpen, onClose, reservation, isPastReservation = false }: ModalInfoReservationProps) {
-  const [userTeam, setUserTeam] = useState<string | null>(null)
-  const auth = useGlobalStore(useShallow((state) => state.auth))
-  const queryClient = useQueryClient()
-  const { toast } = useToast()
-  const [showReprogramationModal, setShowReprogramationModal] = useState(false)
- 
-  const [isBooker, setIsBooker] = useState(false)
-  const startDate = new Date(`${reservation.dateReservation}T${reservation.hours.startHour}:00`);
-  const endDate = new Date(`${reservation.dateReservation}T${reservation.hours.endHour}:00`);
-  const numHoursReservation = (endDate.getTime() - startDate.getTime()) / (1000 * 3600);
+export default function ModalInfoReservation({
+  isOpen,
+  onClose,
+  reservation,
+  isPastReservation = false,
+}: ModalInfoReservationProps) {
+  const [userTeam, setUserTeam] = useState<string | null>(null);
+  const auth = useGlobalStore(useShallow((state) => state.auth));
+  const queryClient = useQueryClient();
+  const { toast } = useToast();
+  const [showReprogramationModal, setShowReprogramationModal] = useState(false);
 
-  
+  const [isBooker, setIsBooker] = useState(false);
+  const startDate = new Date(
+    `${reservation.dateReservation}T${reservation.hours.startHour}:00`
+  );
+  const endDate = new Date(
+    `${reservation.dateReservation}T${reservation.hours.endHour}:00`
+  );
+  const numHoursReservation =
+    (endDate.getTime() - startDate.getTime()) / (1000 * 3600);
 
   const {
     data: teams,
@@ -48,85 +61,93 @@ export default function ModalInfoReservation({ isOpen, onClose, reservation, isP
     queryFn: () => getTeams(reservation.idReservation),
     enabled: !!reservation.idReservation,
     retry: 1,
-  })
+  });
 
   useEffect(() => {
     if (auth.name && teams && teams.TeamA.members.includes(auth.name)) {
-      setUserTeam(teams.TeamA.idTeam)
+      setUserTeam(teams.TeamA.idTeam);
     } else if (auth.name && teams && teams.TeamB.members.includes(auth.name)) {
-      setUserTeam(teams.TeamB.idTeam)
+      setUserTeam(teams.TeamB.idTeam);
     } else {
-      setUserTeam(null)
+      setUserTeam(null);
     }
-  }, [teams, auth.name])
+  }, [teams, auth.name]);
 
   useEffect(() => {
-    if(auth.id == reservation.idBooker){
-      setIsBooker(true)
-    } 
-
-  }, [auth.id])
+    if (auth.id == reservation.idBooker) {
+      setIsBooker(true);
+    }
+  }, [auth.id]);
 
   const joinTeamMutation = useMutation({
     mutationFn: (id_team: string) => {
       if (!auth.id) {
-        throw new Error("User ID is null")
+        throw new Error("User ID is null");
       }
       if (isPastReservation) {
-        throw new Error("No se puede unir a un equipo en una reserva pasada")
+        throw new Error("No se puede unir a un equipo en una reserva pasada");
       }
-      return joinTeam(reservation.idReservation, id_team, auth.id)
+      return joinTeam(reservation.idReservation, id_team, auth.id);
     },
 
     onSuccess: (_, id_team) => {
-      queryClient.invalidateQueries({ queryKey: ["teams", reservation.idReservation] })
-      setUserTeam(id_team)
+      queryClient.invalidateQueries({
+        queryKey: ["teams", reservation.idReservation],
+      });
+      setUserTeam(id_team);
       toast({
         title: "Éxito",
         description: "Te has unido al equipo correctamente.",
         variant: "default",
-      })
+      });
     },
     onError: (error: Error) => {
       toast({
         title: "Error al unirse al equipo",
-        description: error.message || "No se pudo unir al equipo. Por favor, intenta de nuevo.",
+        description:
+          error.message ||
+          "No se pudo unir al equipo. Por favor, intenta de nuevo.",
         variant: "destructive",
         duration: 3000,
-      })
+      });
     },
-
-  })
+  });
 
   const leaveTeamMutation = useMutation({
     mutationFn: () => {
       if (!auth.id) {
-        throw new Error("User ID is null")
+        throw new Error("User ID is null");
       }
       if (isPastReservation) {
-        throw new Error("No se puede desunir a un equipo en una reserva pasada")
+        throw new Error(
+          "No se puede desunir a un equipo en una reserva pasada"
+        );
       }
-      return desJoinTeam(reservation.idReservation, auth.id)
+      return desJoinTeam(reservation.idReservation, auth.id);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["teams", reservation.idReservation] })
-      setUserTeam(null)
+      queryClient.invalidateQueries({
+        queryKey: ["teams", reservation.idReservation],
+      });
+      setUserTeam(null);
       toast({
         title: "Éxito",
         description: "Has salido del equipo correctamente.",
         variant: "default",
         duration: 3000,
-      })
+      });
     },
     onError: (error: Error) => {
       toast({
         title: "Error al salir del equipo",
-        description: error.message || "No se pudo salir del equipo. Por favor, intenta de nuevo.",
+        description:
+          error.message ||
+          "No se pudo salir del equipo. Por favor, intenta de nuevo.",
         variant: "destructive",
         duration: 3000,
-      })
+      });
     },
-  })
+  });
 
   const handleReschedule = () => {
     if (isPastReservation) {
@@ -135,27 +156,27 @@ export default function ModalInfoReservation({ isOpen, onClose, reservation, isP
         description: "No se puede reprogramar una reserva pasada.",
         variant: "destructive",
         duration: 3000,
-      })
-      return
+      });
+      return;
     }
-    setShowReprogramationModal(true)
-    console.log("Reprogramar")
-  }
+    setShowReprogramationModal(true);
+    console.log("Reprogramar");
+  };
 
   const handleCancel = () => {
     if (isPastReservation) {
-      throw new Error("No se puede unir a un equipo en una reserva pasada")
+      throw new Error("No se puede unir a un equipo en una reserva pasada");
     }
-    console.log("Cancelar")
-  }
+    console.log("Cancelar");
+  };
 
   const handleJoinTeam = (teamId: string, teamName: string) => {
-    joinTeamMutation.mutate(teamId)
-  }
+    joinTeamMutation.mutate(teamId);
+  };
 
   const handleLeaveTeam = () => {
-    leaveTeamMutation.mutate()
-  }
+    leaveTeamMutation.mutate();
+  };
 
   return (
     <>
@@ -200,7 +221,10 @@ export default function ModalInfoReservation({ isOpen, onClose, reservation, isP
                   teams={teams}
                   onJoinTeam={handleJoinTeam}
                   onLeaveTeam={handleLeaveTeam}
-                  isLoading={joinTeamMutation.status === "pending" || leaveTeamMutation.status === "pending"}
+                  isLoading={
+                    joinTeamMutation.status === "pending" ||
+                    leaveTeamMutation.status === "pending"
+                  }
                   userTeam={userTeam}
                   isPastReservation={isPastReservation}
                 />
@@ -219,11 +243,7 @@ export default function ModalInfoReservation({ isOpen, onClose, reservation, isP
         totalPrice={reservation.totalPrice}
         idField={reservation.idField}
         numHours={numHoursReservation}
-
       />
-
     </>
-
-  )
+  );
 }
-
