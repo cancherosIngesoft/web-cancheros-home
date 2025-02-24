@@ -113,6 +113,7 @@
 
 export interface AddPlayersResponse  {
   message?: string; // Campo opcional
+  success: boolean;
 };
   export async function addPlayersTeam(
     idTeam:string, emailsToAdd:string[], idUserWhoAdd:string):Promise<AddPlayersResponse> {

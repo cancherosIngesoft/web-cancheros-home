@@ -11,11 +11,11 @@ interface PastMatchesPanelProps {
 
 const PastMatchesPanel = ({ idTeam }: PastMatchesPanelProps) => {
     const idUser = useGlobalStore((state) => state.auth.id)
-    console.log("idTeam in pastmatches", idTeam)
+
     const { data: pastMatches, isLoading, isError, failureReason } = useQuery({
         queryKey: ["pastMatches", idTeam],
         queryFn: () => getPastMatches(idTeam, idUser ?? ""),
-        staleTime: 1000 * 60,
+        staleTime: 1000 * 60 *5,
     })
     return (
         <div className="p-6">

@@ -54,6 +54,7 @@ export default function ModalInfoReservation({ isOpen, onClose, reservation, isP
     queryKey: ["teams", reservation.idReservation],
     queryFn: () => getTeams(reservation.idReservation),
     enabled: !!reservation.idReservation,
+    staleTime: 1000 * 60*5,
     retry: 1,
   })
 

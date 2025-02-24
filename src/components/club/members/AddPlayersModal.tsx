@@ -66,8 +66,8 @@ export default function AddPlayersModal({ isOpen, onClose, idTeam, idUserWhoAdd 
       }
       return addPlayersTeam(idTeam, emails, idUserWhoAdd)
     },
-    onSuccess: (response: { message?: string }) => {
-      if(response?.message){
+    onSuccess: (response: { message?: string, success:boolean}) => {
+      if(response.success === false){
         toast({
           title: "Juagadores agregados",
           description: response.message,

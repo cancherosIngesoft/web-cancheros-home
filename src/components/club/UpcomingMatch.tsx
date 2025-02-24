@@ -19,6 +19,7 @@ export default function UpcomingMatch({ idTeam }: UpcomingMatchProps) {
     queryKey: ["upcomingMatch", idTeam, auth.id],
     queryFn: () => getTeamActiveReservation(idTeam, auth.id ?? ""),
     enabled: !!auth.id,
+    staleTime: 1000 * 60 * 5,
     retry: 1,
   })
 

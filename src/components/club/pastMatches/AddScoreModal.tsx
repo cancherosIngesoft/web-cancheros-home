@@ -78,11 +78,11 @@ export default function ScoreModal({
         title: "Marcador agregado",
         description: "El marcador se ha guardado correctamente",
       })
-      console.log("id team",idTeam)
-      queryClient.invalidateQueries({ queryKey: ["pastMatches", idTeam] })
+      
+      
       queryClient.refetchQueries({
         queryKey: ["pastMatches", idTeam],
-        exact: true,
+       
       });
       reset()
       onClose()

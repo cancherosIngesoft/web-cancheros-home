@@ -47,7 +47,7 @@ export async function desJoinTeam(id_reservation: string, id_user:string): Promi
     console.log("desJoinTeam", id_reservation)
     try {
         const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/subequipos/delete_from_subequipo`, {
-            method: "DELETE ",
+            method: "DELETE",
             headers: {
                 "Content-Type": "application/json",
             },
