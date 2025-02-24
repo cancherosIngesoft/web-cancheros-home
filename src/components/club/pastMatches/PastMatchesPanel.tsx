@@ -1,7 +1,7 @@
 import { getPastMatches } from "@/actions/club_management/club_past_matches"
 import { useQuery } from "@tanstack/react-query"
 import CardPastMatch from "./CardPastMatch"
-import { useGlobalStore } from "@/store"
+import { useGlobalStore, useTeamDataStore } from "@/store"
 
 interface PastMatchesPanelProps {
     idTeam: string
@@ -11,10 +11,10 @@ interface PastMatchesPanelProps {
 
 const PastMatchesPanel = ({ idTeam }: PastMatchesPanelProps) => {
     const idUser = useGlobalStore((state) => state.auth.id)
-
+    const teamId =useTeamDataStore((state) => state.idTeam)
     const { data: pastMatches, isLoading, isError, failureReason } = useQuery({
-        queryKey: ["pastMatches", idTeam],
-        queryFn: () => getPastMatches(idTeam, idUser ?? ""),
+        queryKey: ["pastMatches", teamId],
+        queryFn: () => getPastMatches(teamId, idUser ?? ""),
         staleTime: 1000 * 60 *5,
     })
     return (

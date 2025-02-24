@@ -79,7 +79,6 @@ export default function ScoreModal({
         description: "El marcador se ha guardado correctamente",
       })
       
-      
       queryClient.refetchQueries({
         queryKey: ["pastMatches", idTeam],
        
