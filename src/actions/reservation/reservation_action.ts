@@ -6,10 +6,10 @@ export interface ReservationActiveReturn {
   hours: { horaInicio: string; horaFin: string };
   inTeam: boolean;
   idBooker: string;
-  bussinesName: string;
+  businessName: string;
   FieldType: string;
   capacity: number;
-  bussinessDirection: string;
+  businessDirection: string;
   fieldImg?: string;
   totalPrice: number;
   teamName?: string;
@@ -36,25 +36,25 @@ export interface Cancha {
   tipo: string;
 }
 
-const mockReservations: ReservationActiveReturn[] = [
-  {
-    idReservation: "res-001",
-    dateReservation: "2025-02-20",
-    hours: {
-      horaInicio: new Date("2025-02-18T10:00:00").toISOString(),
-      horaFin: new Date("2025-02-18T12:00:00").toISOString(),
-    },
-    inTeam: true,
-    idBooker: "66",
-    bussinesName: "Empresa Ejemplo",
-    FieldType: "Fútbol",
-    capacity: 22,
-    bussinessDirection: "Calle Falsa 123, Ciudad Ejemplo",
-    totalPrice: 100,
-    teamName: "Equipo A",
-    idField: "49",
-  },
-];
+// const mockReservations: ReservationActiveReturn[] = [
+//   {
+//     idReservation: "res-001",
+//     dateReservation: "2025-02-20",
+//     hours: {
+//       horaInicio: new Date("2025-02-18T10:00:00").toISOString(),
+//       horaFin: new Date("2025-02-18T12:00:00").toISOString(),
+//     },
+//     inTeam: true,
+//     idBooker: "66",
+//     bussinesName: "Empresa Ejemplo",
+//     FieldType: "Fútbol",
+//     capacity: 22,
+//     bussinessDirection: "Calle Falsa 123, Ciudad Ejemplo",
+//     totalPrice: 100,
+//     teamName: "Equipo A",
+//     idField: "49",
+//   },
+// ];
 
 export async function getActiveReservation(
   id_user: string

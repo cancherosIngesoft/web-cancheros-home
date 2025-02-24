@@ -290,10 +290,13 @@ export interface ReservaDetails {
 export async function handleBookingAndPayment(
   formData: PaymentFormData,
   reservaDetails: ReservaDetails,
-  userId: number
+  userId: number,
+  isTeam: boolean,
+  idTeam: string,
 ) {
   // 1. Crear la reserva
-  const booking = await createBooking({
+
+  const dataBooking={
     hora_inicio: `${
       new Date(reservaDetails.fecha).toISOString().split("T")[0]
     } ${reservaDetails.horaInicio}:00`,
@@ -301,9 +304,10 @@ export async function handleBookingAndPayment(
       reservaDetails.horaFin
     }:00`,
     id_cancha: Number(reservaDetails.cancha),
-    id_reservante: userId,
-    isTeam: false,
-  });
+    id_reservante: isTeam ? Number(idTeam) : userId,
+    isTeam: isTeam,
+  }
+  const booking = await createBooking(dataBooking);
 
   // 2. Iniciar el pago
   const paymentResult = await initiatePayment(

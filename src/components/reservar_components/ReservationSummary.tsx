@@ -29,13 +29,13 @@ const ReservationSummary: React.FC<ReservationSummaryProps> = ({
       className="pt-4 space-y-4 bg-tertiary-98 border-[1px] border-gray-300 p-6 rounded-md"
     >
       <h3 className="text-xl font-semibold text-tertiary-50">Resumen de la reserva</h3>
-      <div className="flex flex-row gap-6">
-        <div className="flex flex-row items-center gap-2">
+      <div className="flex  flex-col md:flex-row gap-6">
+        <div className="flex flex-col md:flex-row items-center gap-2">
           <CalendarDays className="h-6 w-6 text-tertiary-40" />
           <p className="text-md font-bold">Fecha:</p>
           <p className="text-sm ">{format(selectedDate, "PPP")}</p>
         </div>
-        <div className="flex flex-row items-center gap-2">
+        <div className="flex flex-col md:flex-row items-center gap-2">
           <Clock className="h-6 w-6 text-tertiary-40" />
           <p className="text-md font-bold">Horario:</p>
           <p className="text-sm ">
@@ -45,7 +45,7 @@ const ReservationSummary: React.FC<ReservationSummaryProps> = ({
           </p>
         </div>
       </div>
-      <div className="flex flex-row items-center gap-2">
+      <div className="flex flex-col md:flex-row items-center gap-2">
         <TeamIcon className="h-6 w-6 text-tertiary-40 border-0" />
         <p className="text-md font-bold">Modalidad:</p>
         <p className="text-sm ">
@@ -55,7 +55,7 @@ const ReservationSummary: React.FC<ReservationSummaryProps> = ({
         </p>
       </div>
       <hr className="w-full border-gray-300 border-[1.5px]" />
-      <div className="flex flex-row-reverse items-center">
+      <div className="flex md:flex-row-reverse items-center">
         <p className="font-bold text-lg text-tertiary-30">
           Total:{" "}
           <span className="text-black">
@@ -67,18 +67,19 @@ const ReservationSummary: React.FC<ReservationSummaryProps> = ({
           </span>
         </p>
       </div>
-      <div className="flex flex-row items-center">
+      <div className="flex flex-col md:flex-row items-center">
         <CircleDollarSign className="h-6 w-6 text-primary-70" />
         <p className="font-bold text-xl text-primary-70">
-          Total a pagar para reservar:{" "}
-          <span className="text-black">
+          Total para reservar:{" "}
+          
+        </p>
+        <span className="text-black font-bold">
             {new Intl.NumberFormat("es-CO", {
               style: "currency",
               currency: "COP",
               maximumFractionDigits: 0,
             }).format(paymentAmount)}
           </span>
-        </p>
       </div>
       <p className="text-xs text-gray-500">
         Para poder acceder a la reserva se tiene que pagar la mitad del valor
