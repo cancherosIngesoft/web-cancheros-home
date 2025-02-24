@@ -4,7 +4,6 @@ import type { ReservationActiveReturn } from "@/actions/reservation/reservation_
 import { useSession } from "next-auth/react"
 import LoadingReservation from "@/app/(bookerFlow)/mis_reservas/loading"
 import { useEffect, useState } from "react"
-import { is } from "date-fns/locale"
 
 interface ReservationsListProps {
   isActive: boolean
@@ -18,16 +17,19 @@ export default function ReservationsList({ isActive, reservations, isLoading, is
   const { data: session } = useSession()
   const [loading, setLoading] = useState(true)
   const userId = session?.user?.id ?? ""
- 
 
   useEffect(() => {
-    if(reservations){
-      setLoading(false)
-    }
-    if(isError){
+    if (reservations || isError) {
       setLoading(false)
     }
   }, [reservations, isError])
+
+  // Ordenar las reservas (si existen)
+  const sortedReservations = reservations?.slice().sort((a, b) => {
+    const dateA = new Date(a.hours.horaInicio).getTime()
+    const dateB = new Date(b.hours.horaInicio).getTime()
+    return  dateA-dateB  // Orden descendente
+  })
 
   return loading ? (
     <LoadingReservation />
@@ -36,7 +38,7 @@ export default function ReservationsList({ isActive, reservations, isLoading, is
       <AlertCircle className="h-20 w-20 text-gray-500" />
       <span className="text-xl text-gray-500">Error al cargar las reservas: {error?.message}</span>
     </div>
-  ) : !isLoading && (!reservations || reservations.length === 0) ? (
+  ) : !isLoading && (!sortedReservations || sortedReservations.length === 0) ? (
     <div className="flex flex-col w-full h-full justify-center items-center gap-2 ">
       <AlertCircle className="h-20 w-20 text-gray-500" />
       <span className="text-xl text-gray-500">No hay reservas {isActive ? "activas" : "pasadas"}</span>
@@ -44,8 +46,13 @@ export default function ReservationsList({ isActive, reservations, isLoading, is
     </div>
   ) : (
     <div className="space-y-4">
-      {reservations?.map((reservation) => (
-        <CardReservation key={reservation.idReservation} {...reservation} currentUserId={userId} isActive={isActive} />
+      {sortedReservations?.map((reservation) => (
+        <CardReservation 
+          key={reservation.idReservation} 
+          {...reservation} 
+          currentUserId={userId} 
+          isActive={isActive} 
+        />
       ))}
     </div>
   )

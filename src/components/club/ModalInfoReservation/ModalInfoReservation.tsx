@@ -256,6 +256,8 @@ export default function ModalInfoReservation({ isOpen, onClose, reservation, isP
         totalPrice={reservation.totalPrice}
         idField={reservation.idField}
         numHours={numHoursReservation}
+        date={reservation.dateReservation}
+        hour={startDate.toISOString().split("T")[1].substring(0, 5)+ "-"+ endDate.toISOString().split("T")[1].substring(0, 5)}
 
       />
       <ConfirmationModal
