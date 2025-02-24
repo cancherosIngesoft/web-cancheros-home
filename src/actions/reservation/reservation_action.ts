@@ -14,6 +14,7 @@ export interface ReservationActiveReturn {
   totalPrice: number;
   teamName?: string;
   idField: string;
+  id_referencia_pago: string | null;
 }
 
 export interface Cancha {

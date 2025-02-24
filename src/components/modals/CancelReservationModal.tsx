@@ -20,7 +20,7 @@ interface CancelReservationModalProps {
   onOpenChange: (open: boolean) => void;
   reservationDetails: {
     id: string;
-    paymentId: string;
+    id_referencia_pago: string | null;
     date: string;
   };
 }
@@ -41,7 +41,7 @@ export function CancelReservationModal({
     try {
       const response = await cancelarReserva(
         reservationDetails.id,
-        reservationDetails.paymentId
+        reservationDetails.id_referencia_pago ?? ""
       );
 
       if (!response) {
@@ -74,7 +74,7 @@ export function CancelReservationModal({
                 : "¿Está seguro de que desea cancelar esta reserva?"
               : "No es posible cancelar"}
           </DialogTitle>
-          <DialogDescription className="text-gray-500">
+          <DialogDescription className="text-gray-500 pt-4">
             {avaible
               ? isCanceled
                 ? "La reserva ha sido cancelada exitosamente. Se ha emitido un reembolso de la cantidad de la reserva a la cuenta bancaria con la que se realizó el pago. Si tiene dudas, puede contactar al soporte de Cancheros en nuestra página de contacto."
