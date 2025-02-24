@@ -18,6 +18,7 @@ import { addScoreToMatch } from "../../../actions/club_management/club_past_matc
 import { useTeamDataStore } from "@/store"
 import ShieldTeamAIcon from "@/components/icon/ShieldTeamAIcon"
 import ShieldTeamBIcon from "@/components/icon/ShieldTeamBIcon"
+import { DialogDescription } from "@radix-ui/react-dialog"
 
 
 const scoreSchema = z.object({
@@ -104,6 +105,7 @@ export default function ScoreModal({
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
           <DialogTitle className="text-center">Agregar Marcador</DialogTitle>
+          
         </DialogHeader>
         <form onSubmit={(e) => {
           e.preventDefault()
@@ -181,6 +183,7 @@ export default function ScoreModal({
             )}
           </Button>
         </form>
+        
       </DialogContent>
     </Dialog>
   )

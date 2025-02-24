@@ -173,6 +173,11 @@ export default function AddPlayersModal({ isOpen, onClose, idTeam, idUserWhoAdd 
             {isPending ? "Agregando..." : "Fichar"}
           </Button>
         </form>
+        <div className="text-center">
+          <span
+             className="text-sm text-gray-500 text-center"
+          >Asegurate que las jugadores que agregas ya se encuentren en Cancheros, de lo contrario estos no seran fichados</span>
+        </div>
       </DialogContent>
     </Dialog>
   )
