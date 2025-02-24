@@ -127,7 +127,7 @@ export interface IExistingField extends IField {
 }
 
 
-export const getFieldsById = async (id: string) => {
+export const getFieldsById = async (id: string):Promise<IExistingField[]> => {
   const response = await fetchWithRetry(
     process.env.NEXT_PUBLIC_API_URL + `/api/get_courts/${id}`,
     {

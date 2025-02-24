@@ -1,12 +1,12 @@
 export interface TeamReservationReturn {
   idReservation: string,
   dateReservation: string
-  hours: { startHour: string, endHour: string }
+  hours: { horaInicio: string, horaFin: string }
   idBooker: string
-  bussinesName: string
+  businessName: string
   FieldType: string
   capacity: number
-  bussinessDirection: string,
+  businessDirection: string,
   fieldImg?: string
   totalPrice: number
   geoGraphicalLocation: { lat: number, long: number }
@@ -69,43 +69,43 @@ export async function desJoinTeam(id_reservation: string, id_user:string): Promi
 //      }
 }
 
-const teamReservationsMock: TeamReservationReturn[] = [
-    {
-      idReservation: "res_001",
-      dateReservation: "2025-02-20",
-      hours: { startHour: "18:00", endHour: "20:00" },
-      idBooker: "66",
-      bussinesName: "Cancha Fútbol 5 Bogotá",
-      FieldType: "Fútbol 5",
-      capacity: 10,
-      bussinessDirection: "Carrera 15 # 80-20, Bogotá",
-      fieldImg: "/soccer_photo.png",
-      totalPrice: 120000,
-      geoGraphicalLocation: { lat: 4.6765, long: -74.0488 },
-      isParticipating: false,
-      teamAName: "Leones",
-      teamBName: "Dragones azules",
-      idField:"49"
+// const teamReservationsMock: TeamReservationReturn[] = [
+//     {
+//       idReservation: "res_001",
+//       dateReservation: "2025-02-20",
+//       hours: { startHour: "18:00", endHour: "20:00" },
+//       idBooker: "66",
+//       bussinesName: "Cancha Fútbol 5 Bogotá",
+//       FieldType: "Fútbol 5",
+//       capacity: 10,
+//       bussinessDirection: "Carrera 15 # 80-20, Bogotá",
+//       fieldImg: "/soccer_photo.png",
+//       totalPrice: 120000,
+//       geoGraphicalLocation: { lat: 4.6765, long: -74.0488 },
+//       isParticipating: false,
+//       teamAName: "Leones",
+//       teamBName: "Dragones azules",
+//       idField:"49"
       
-    },
-    {
-      idReservation: "res_002",
-      dateReservation: "2025-02-20",
-      hours: { startHour: "20:30", endHour: "22:30" },
-      idBooker: "66",
-      bussinesName: "Complejo Deportivo El Campín",
-      FieldType: "Fútbol 8",
-      capacity: 16,
-      bussinessDirection: "Calle 57 # 28-20, Bogotá",
-      totalPrice: 180000,
-      geoGraphicalLocation: { lat: 4.6453, long: -74.0785 },
-      isParticipating: true,
-      teamAName: "Leones del Norte",
-      teamBName: " Rojos",
-      idField:"49"
+//     },
+//     {
+//       idReservation: "res_002",
+//       dateReservation: "2025-02-20",
+//       hours: { startHour: "20:30", endHour: "22:30" },
+//       idBooker: "66",
+//       bussinesName: "Complejo Deportivo El Campín",
+//       FieldType: "Fútbol 8",
+//       capacity: 16,
+//       bussinessDirection: "Calle 57 # 28-20, Bogotá",
+//       totalPrice: 180000,
+//       geoGraphicalLocation: { lat: 4.6453, long: -74.0785 },
+//       isParticipating: true,
+//       teamAName: "Leones del Norte",
+//       teamBName: " Rojos",
+//       idField:"49"
       
-    }
-  ];
+//     }
+//   ];
   
   
 

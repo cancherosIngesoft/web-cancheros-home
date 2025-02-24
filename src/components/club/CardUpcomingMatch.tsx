@@ -12,8 +12,8 @@ import { Button } from '../ui/button'
 
 const CardUpcomingMatch = (reservation: TeamReservationReturn) => {
     const [isModalOpen, setIsModalOpen] = useState(false)
-    const startDate = new Date(`${reservation.dateReservation}T${reservation.hours.startHour}:00`);
-    const endDate = new Date(`${reservation.dateReservation}T${reservation.hours.endHour}:00`);
+    const startDate = new Date(reservation.hours.horaInicio);
+    const endDate = new Date(reservation.hours.horaFin);
     const diferenceHours = (endDate.getTime() - startDate.getTime()) / (1000 * 3600);
 
     return (
@@ -65,13 +65,16 @@ const CardUpcomingMatch = (reservation: TeamReservationReturn) => {
                                         target="_blank"
                                         className="hover:underline break-words"
                                     >
-                                        {reservation.bussinessDirection}
+                                        {reservation.businessDirection}
                                     </Link>
                                 </div>
                                 <div className="flex items-center gap-2">
                                     <Clock className="w-4 h-4 flex-shrink-0" />
                                     <span>
-                                        {reservation.hours.startHour} - {reservation.hours.endHour}
+                                        {startDate.toISOString().split("T")[1].substring(0, 5)
+
+                                            + " - " +
+                                            endDate.toISOString().split("T")[1].substring(0, 5)}
                                     </span>
                                 </div>
                                 <div className="flex items-center gap-2">
@@ -109,7 +112,7 @@ const CardUpcomingMatch = (reservation: TeamReservationReturn) => {
                 isOpen={isModalOpen}
                 onClose={() => setIsModalOpen(false)}
                 reservation={reservation}
-                
+
             />
         </>
     )

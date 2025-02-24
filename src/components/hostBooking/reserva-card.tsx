@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import type { Reserva } from "./model";
-import { cancelarReserva } from "@/actions/reservation/reservation_action";
+import { cancelReservation } from "@/actions/reservation/reservation_action";
 import {
   ChevronDown,
   ChevronUp,
@@ -23,6 +23,7 @@ import {
   Users,
   Trophy,
 } from "lucide-react";
+import { useGlobalStore } from "@/store";
 
 interface ReservaCardProps {
   reserva: Reserva;
@@ -31,6 +32,7 @@ interface ReservaCardProps {
 
 export function ReservaCard({ reserva, isActive }: ReservaCardProps) {
   const [isExpanded, setIsExpanded] = useState(false);
+  const idUser = useGlobalStore((state) => state.auth.id);
 
   const puedeModificar =
     isActive &&
@@ -38,7 +40,7 @@ export function ReservaCard({ reserva, isActive }: ReservaCardProps) {
 
   const handleCancelar = async () => {
     if (window.confirm("¿Estás seguro de que quieres cancelar esta reserva?")) {
-      await cancelarReserva(reserva.id);
+      await cancelReservation(reserva.id, idUser??"");
       // Aquí deberías actualizar el estado o recargar los datos
       alert("Reserva cancelada con éxito");
     }

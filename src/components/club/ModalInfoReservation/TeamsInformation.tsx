@@ -25,6 +25,7 @@ export default function TeamsInformation({
   isPastReservation,
 
 }: TeamsInformationProps) {
+  
   return (
     <div className="flex-1 flex flex-col md:border-l-2 md:border-gray-200 h-full">
       <div className={`overflow-hidden  relative ${isPastReservation ? "md:h-[100%]" : "md:h-[90%]"}`}>
@@ -36,7 +37,10 @@ export default function TeamsInformation({
                 <h3 >{teams.teamA.nameTeam}</h3>
                 {teams.teamA.score && teams.teamB.score &&
                   <div className="w-8 h-8 bg-white/50 rounded-md flex justify-center items-center">
-                    <span className={`text-xl ${teams.teamA.score == teams.teamB.score ? "text-yellow-500" : teams.teamA.score > teams.teamB.score ? "text-primary" : "text-destructive"}`}>{teams.teamA.score} </span>
+                    <span className={`text-xl ${teams.teamA.score == teams.teamB.score ? "text-yellow-500" : teams.teamA.score > teams.teamB.score ? "text-primary" : "text-destructive"}`}
+                    >{teams.teamA.score}
+
+                    </span>
                   </div>
                 }
               </div>
@@ -93,7 +97,10 @@ export default function TeamsInformation({
               <div className=" w-4/5 bg-orange-200/70 rounded-lg p-2  flex flex-col-reverse md:flex-row gap-4 items-center justify-center text-center h-contain text-lg sm:text-lg font-bold text-orange-600 ">
                 {teams.teamA.score && teams.teamB.score &&
                   <div className="w-8 h-8 bg-white/50 rounded-md flex justify-center items-center">
-                    <span className={`text-xl ${teams.teamA.score == teams.teamB.score ? "text-yellow-500" : teams.teamA.score < teams.teamB.score ? "text-primary" : "text-destructive"}`}>{teams.teamB.score} </span>
+                    <span className={`text-xl ${teams.teamA.score == teams.teamB.score ? "text-yellow-500" : teams.teamA.score < teams.teamB.score ? "text-primary" : "text-destructive"}`}
+                    >{teams.teamB.score.toString()}
+
+                    </span>
                   </div>
                 }
                 <h3 >{teams.teamB.nameTeam}</h3>

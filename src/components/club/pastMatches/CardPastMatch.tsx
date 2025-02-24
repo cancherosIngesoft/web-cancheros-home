@@ -20,8 +20,8 @@ const CardPastMatch = ({ match }: CardPastMatchProps) => {
   const [showAddResult, setShowAddResult] = useState(false)
   const idCaptain = useTeamDataStore((state) => state.idCaptain)
   const idUser = useGlobalStore((state) => state.auth.id)
-  const startDate = new Date(match.hours.startHour)
-  const endDate = new Date(match.hours.endHour);
+  const startDate = new Date(match.hours.horaInicio)
+  const endDate = new Date(match.hours.horaFin);
 
   const handleAddResult = (e: MouseEvent) => {
     e.preventDefault()
@@ -99,7 +99,7 @@ const CardPastMatch = ({ match }: CardPastMatchProps) => {
               </div>
               <div className="flex flex-row items-center gap-2 col-span-2 md:col-span-1">
                 <MapIcon className="w-4 h-4 text-primary" />
-                <span>{match.bussinesName}</span>
+                <span>{match.businessName}</span>
               </div>
             </div>
           </div>

@@ -26,17 +26,17 @@ export default function MatchInformation({
   isPastReservation
 }: MatchInformationProps) {
 
-  const startDate = new Date(reservation.hours.startHour)
-  const endDate = new Date(reservation.hours.endHour);
+  const startDate = new Date(reservation.hours.horaInicio)
+  const endDate = new Date(reservation.hours.horaFin);
   const diferenceHours = (endDate.getTime() - startDate.getTime()) / (1000 * 3600);
   const diffHours = (endDate.getTime() - new Date().getTime()) / (1000 * 3600)
   const [disabled, setDisabled] = useState(false)
   const [tooltipMessage, setTooltipMessage] = useState("")
- 
+
   const now = new Date()
   useEffect(() => {
     const checkTimeConstraint = () => {
-  
+
 
       if (diffHours < 24) {
         setDisabled(true)
@@ -101,7 +101,7 @@ export default function MatchInformation({
       <div className="space-y-2">
         <h3 className="font-semibold flex items-center gap-2">
           <Users className="h-4 w-4" />
-          Negocio: <span className="font-normal">{reservation.bussinesName}</span>
+          Negocio: <span className="font-normal">{reservation.businessName}</span>
         </h3>
         <div className="flex flex-col sm:flex-row items-start gap-4 sm:items-center mt-2">
           <img
@@ -129,40 +129,44 @@ export default function MatchInformation({
           </div>
         </div>
       </div>
-
-      <div className="space-y-2">
-        <div className="flex items-center gap-2">
-          <MapPin className="h-6 w-6 text-tertiary" />
-          <span className="font-semibold">Ubicación:</span>
-        </div>
-        <div className="w-full h-[200px] sm:h-[250px] md:h-fit">
-          <CustomMap
-            center={{
-              lat: reservation.geoGraphicalLocation.lat,
-              lng: reservation.geoGraphicalLocation.long,
-            }}
-            markers={[
-              {
-                id: reservation.idBooker,
+      {reservation.geoGraphicalLocation.lat && reservation.geoGraphicalLocation.long && (
+        <div className="space-y-2">
+          <div className="flex items-center gap-2">
+            <MapPin className="h-6 w-6 text-tertiary" />
+            <span className="font-semibold">Ubicación:</span>
+          </div>
+          <div className="w-full h-[200px] sm:h-[250px] md:h-fit">
+            <CustomMap
+              center={{
                 lat: reservation.geoGraphicalLocation.lat,
                 lng: reservation.geoGraphicalLocation.long,
-              },
-            ]}
-            showInfoWindow={true}
-            style={{ width: "30vh", height: "30vh" }}
-            gestureHandling="auto"
-          />
+              }}
+              markers={[
+                {
+                  id: reservation.idBooker,
+                  lat: reservation.geoGraphicalLocation.lat,
+                  lng: reservation.geoGraphicalLocation.long,
+                },
+              ]}
+              showInfoWindow={true}
+              style={{ width: "30vh", height: "30vh" }}
+              gestureHandling="auto"
+            />
+          </div>
+          <a
+            href={`https://www.google.com/maps/search/?api=1&query=${reservation.geoGraphicalLocation.lat},${reservation.geoGraphicalLocation.long}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-blue-600 hover:text-blue-800 font-semibold text-sm underline"
+          >
+            📍 Mira cómo llegar en Google Maps
+          </a>
         </div>
-        <a
-          href={`https://www.google.com/maps/search/?api=1&query=${reservation.geoGraphicalLocation.lat},${reservation.geoGraphicalLocation.long}`}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="text-blue-600 hover:text-blue-800 font-semibold text-sm underline"
-        >
-          📍 Mira cómo llegar en Google Maps
-        </a>
-      </div>
-     
+      )
+
+      }
+
+
     </div>
   )
 }

@@ -39,8 +39,8 @@ export default function ModalInfoReservation({ isOpen, onClose, reservation, isP
   const currentTeam = useTeamDataStore(useShallow((state) => state.idTeam))
 
   const [isBooker, setIsBooker] = useState(false)
-  const startDate = new Date(`${reservation.dateReservation}T${reservation.hours.startHour}:00`);
-  const endDate = new Date(`${reservation.dateReservation}T${reservation.hours.endHour}:00`);
+  const startDate = new Date(reservation.hours.horaInicio);
+  const endDate = new Date(reservation.hours.horaFin);
   const numHoursReservation = (endDate.getTime() - startDate.getTime()) / (1000 * 3600);
 
 
@@ -249,7 +249,7 @@ export default function ModalInfoReservation({ isOpen, onClose, reservation, isP
         isOpen={showReprogramationModal}
         onClose={() => setShowReprogramationModal(false)}
         idReservation={reservation.idReservation}
-        businessName={reservation.bussinesName}
+        businessName={reservation.businessName}
         fieldType={reservation.FieldType}
         fieldImg={reservation.fieldImg}
         totalPrice={reservation.totalPrice}
@@ -261,7 +261,7 @@ export default function ModalInfoReservation({ isOpen, onClose, reservation, isP
         isOpen={isOpenConfirmationCancelModal}
         onClose={() => setIsOpenConfirmationCancelModal(false)}
         onConfirm={handleCancel}
-        title={`¿Estás seguro de cancelar la reserva hecha en ${reservation.bussinesName}?`}
+        title={`¿Estás seguro de cancelar la reserva hecha en ${reservation.businessName}?`}
         description="Al cancelar la reserva, se liberará el espacio para que otro usuario pueda reservarlo"
         icon={<CalendarOff className="w-14 h-14 text-red-500" />}
       />
