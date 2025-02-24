@@ -12,6 +12,7 @@ import BallIcon from "../icon/BallIcon";
 import SoccerField from "../icon/SoccerField";
 import TeamShield from "../icon/TeamShield";
 import { PanelClub } from "../club/PanelClub";
+import { useRouter } from "next/navigation";
 
 type NavItem = {
   icon: React.ReactNode;
@@ -20,11 +21,17 @@ type NavItem = {
 
 const navItems: NavItem[] = [
   {
-    icon: <BallIcon className="h-10 w-10 text-tertiary" />,
+    icon: <BallIcon className="md:w-10 md:h-10 w-10 h-10 text-tertiary" />,
     route: "/reservar_cancha",
   },
   {
-    icon: <SoccerField className="h-8 w-8 text-tertiary stroke-4" />,
+    icon: <Image
+    className="md:w-10 md:h-10 w-10 h-10"
+    src="/icons/miscanchas.svg"
+    alt="Logo"
+    width={40}
+    height={40}
+  />,
     route: "/mis_reservas",
   },
 ];
@@ -32,6 +39,7 @@ const navItems: NavItem[] = [
 export const LateralNavBar = () => {
   const [isOpenTeam, setIsOpenTeam] = useState(false);
   const [navbarWidth, setNavbarWidth] = useState(0);
+  const [navbarHeight, setNavbarHeight] = useState(0);
   const navbarRef = useRef<HTMLDivElement>(null);
   const { data: session } = useSession();
   const authUser = useGlobalStore((state) => state.auth);
@@ -39,10 +47,11 @@ export const LateralNavBar = () => {
   useEffect(() => {
     if (navbarRef.current) {
       setNavbarWidth(navbarRef.current.offsetWidth);
+      setNavbarHeight(navbarRef.current.offsetHeight);
     }
   }, []);
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
     signOut({ callbackUrl: "/" });
   };
 
@@ -50,11 +59,13 @@ export const LateralNavBar = () => {
     <>
       <div
         ref={navbarRef}
-        className="flex flex-col justify-center align-center h-full w-full bg-gradient-to-b from-surface from-60% to-primary-80 to-80% py-4 border-r border-neutral-300"
+        className="flex  z-10 flex-row md:flex-col justify-center md:justify-between md:align-center h-full w-full bg-primary-95 md:bg-gradient-to-b from-surface from-60% to-primary-80 to-80% md:py-4  border-t md:border-r border-neutral-300"
       >
+        
+        <section className="flex flex-row md:flex-col items-center justify-center  gap-8  md:gap-4 ">
         <Link
           href="/"
-          className="flex justify-center text-2xl font-bold text-[#1A6B51]"
+          className="md:flex justify-center font-bold text-[#1A6B51] hidden md:mt-4"
         >
           <Image
             src="/LogoWithOutTitle.png"
@@ -63,11 +74,11 @@ export const LateralNavBar = () => {
             height={50}
           />
         </Link>
-        <section className="flex flex-col items-center gap-4 mt-10">
           {authUser?.userRole === "duenio" && (
             <>
               <Link href="/mis_canchas">
                 <Image
+                  className="md:w-10 md:h-10 w-10 h-10"
                   src="/icons/miscanchas.svg"
                   alt="Logo"
                   width={40}
@@ -76,6 +87,7 @@ export const LateralNavBar = () => {
               </Link>
               <Link href="/reservas_negocio">
                 <Image
+                  className="md:w-10 md:h-8 w-8 h-10"
                   src="/icons/booking_logo.svg"
                   alt="Logo"
                   width={40}
@@ -84,9 +96,10 @@ export const LateralNavBar = () => {
               </Link>
               <Link
                 href="/panel_negocio"
-                className="flex items-center justify-center w-[40px] h-[40px]"
+                className="flex items-center justify-center"
               >
                 <Image
+                  className="md:w-10 md:h-10 w-8 h-8"
                   src="/icons/negocios_icon.svg"
                   alt="Panel de Negocio"
                   width={40}
@@ -95,32 +108,36 @@ export const LateralNavBar = () => {
               </Link>
               <Link
                 href="/comisiones"
-                className="flex items-center justify-center w-[40px] h-[40px] hover:text-green-600 transition-colors"
+                className="flex items-center justify-center  hover:text-green-600 transition-colors"
               >
-                <CircleDollarSign className="h-[40px] w-[40px] text-green-800" />
+                <CircleDollarSign className="md:w-10 md:h-10 w-8 h-8 text-green-800" />
               </Link>
             </>
           )}
+
+          {authUser?.userRole === "jugador" && (
+            <div className="flex flex-row md:flex-col justify-center items-center w-full h-full gap-8">
+            {navItems.map((item, index) => (
+                <Link key={index} href={item.route} className="h-fit w-fit">
+                  {item.icon}
+                </Link>
+              ))}
+              <div
+                className=" cursor-pointer"
+                onClick={() => setIsOpenTeam(!isOpenTeam)}
+              >
+                <TeamShield className="md:w-10 md:h-10 w-10 h-10 text-tertiary stroke-4" />
+              </div>
+            </div>
+              
+            
+          )}
         </section>
 
-        {authUser?.userRole === "jugador" && (
-          <div className="flex-grow flex flex-col items-center gap-4">
-            {navItems.map((item, index) => (
-              <Link key={index} href={item.route}>
-                {item.icon}
-              </Link>
-            ))}
-            <div
-              className="w-full h-10 flex flex-row justify-center cursor-pointer"
-              onClick={() => setIsOpenTeam(!isOpenTeam)}
-            >
-              <TeamShield className=" text-tertiary stroke-4" />
-            </div>
-          </div>
-        )}
 
-        <div className="flex flex-col items-center gap-4 mt-auto">
-          <Avatar>
+
+        <div className="flex  flex-row md:flex-col items-center ml-4 md:ml-0 gap-4 ">
+          <Avatar className="hidden md:block">
             {session?.user && session?.user.image ? (
               <AvatarImage
                 src={session?.user?.image}
@@ -135,17 +152,19 @@ export const LateralNavBar = () => {
           <Button
             variant="ghost"
             size="icon"
-            onClick={() => signOut({ callbackUrl: "/" })}
+            onClick={handleLogout}
           >
             <LogOut className="h-6 w-6" />
           </Button>
         </div>
-      </div>
-      <PanelClub
+        <PanelClub
         isOpen={isOpenTeam}
         onClose={() => setIsOpenTeam(false)}
         navbarWidth={navbarWidth}
+        navbarHeight={navbarHeight}
       />
+      </div>
+      
     </>
   );
 };

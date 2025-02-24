@@ -4,10 +4,14 @@ import { Calendar, Clock, Users, MapPin, ImageOff, DollarSign, User, Users2 } fr
 import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
-import type { ReservationActiveReturn } from "@/actions/reservation/reservation_action"
+import { cancelReservation, type ReservationActiveReturn } from "@/actions/reservation/reservation_action"
 import BallIcon from "../icon/BallIcon"
 import ReprogramationModal from "../reservar_components/ReprogramationModal"
 import { useState } from "react"
+import ConfirmationModal from "../modals/ConfirmationModal"
+import { CalendarOff } from 'lucide-react';
+import { useMutation, useQueryClient } from "@tanstack/react-query"
+import { useToast } from "@/hooks/use-toast"
 
 interface CardReservationProps extends ReservationActiveReturn {
     currentUserId: string | undefined
@@ -20,10 +24,10 @@ export default function CardReservation({
     hours,
     inTeam,
     idBooker,
-    bussinesName,
+    businessName,
     FieldType,
     capacity,
-    bussinessDirection,
+    businessDirection,
     fieldImg,
     totalPrice,
     teamName,
@@ -33,10 +37,12 @@ export default function CardReservation({
 }: CardReservationProps) {
 
     const [isOpenReprogramationModal, setIsOpenReprogramationModal] = useState(false)
+    const [isOpenConfirmationCancelModal, setIsOpenConfirmationCancelModal] = useState(false)	
     const startDate = new Date(hours.horaInicio);
     const endDate = new Date(hours.horaFin);
     const numHoursReservation = ((endDate.getTime() - startDate.getTime()) / (1000 * 3600));
-    
+    const { toast} = useToast()
+    const  queryClient  = useQueryClient()
 
     const isLessThan24Hours = () => {
         const reservationDate = new Date(`${dateReservation} ${hours.horaInicio}`)
@@ -48,8 +54,35 @@ export default function CardReservation({
     const disabled = isLessThan24Hours()
     const tooltipMessage = "No es posible realizar cambios cuando quedan menos de 24 horas para la reserva"
 
-   
+    const {
+        mutate: cancel,
+        
+    }=useMutation({
+        mutationFn:()=>{ 
+            if(!currentUserId)  return Promise.reject("Error en los datos")
+            return cancelReservation(idReservation,currentUserId)},
+        onSuccess: () => {
+            queryClient.invalidateQueries({queryKey: ["activeReservations", currentUserId]})
+            toast({
+                title: "Reserva cancelada",
+                description: "La reserva ha sido cancelada exitosamente.",
+                variant: "default",
+            })
+            setIsOpenConfirmationCancelModal(false)
+        },
+        
+        onError: (error:Error) => {
+            console.error(error)
+            toast({
+                title: "Error",
+                description: ` ${error.message} Hubo un problema al cancelar la reserva por favor vuelva a interntarlo`,
+                variant: "destructive",
+            })
+        }
+    })
+
     const handleCancel = () => {
+        cancel()
         console.log("Cancel", idReservation)
     }
 
@@ -58,9 +91,9 @@ export default function CardReservation({
     return (
         <div className="relative flex flex-col items-start gap-4 p-4 border rounded-lg shadow-sm bg-white">
             <div className="flex justify-between items-center w-full">
-                <h2 className="font-bold text-lg text-primary">{bussinesName}</h2>
+                <h2 className="font-bold text-lg text-primary">{businessName}</h2>
                 <div className="flex items-center gap-2">
-                    <DollarSign className="w-5 h-5 text-green-600" />
+                    
                     <span className="font-semibold text-green-600">{new Intl.NumberFormat("es-CO", {
               style: "currency",
               currency: "COP",
@@ -71,7 +104,7 @@ export default function CardReservation({
             <div className="flex items-start gap-4 w-full">
                 <div className="relative w-24 h-24 rounded-lg shrink-0">
                     {fieldImg ? (
-                        <Image src={fieldImg || "/placeholder.svg"} alt={bussinesName} fill className="object-cover rounded-lg" />
+                        <Image src={fieldImg || "/placeholder.svg"} alt={businessName} fill className="object-cover rounded-lg" />
                     ) : (
                         <div className="h-full w-full flex items-center justify-center rounded-lg bg-gray-200">
                             <ImageOff className="h-10 w-10 text-primary-50" />
@@ -84,7 +117,7 @@ export default function CardReservation({
                         <div className="flex flex-col space-y-1">
                             <div className="flex items-center gap-2 text-sm text-muted-foreground">
                                 <MapPin className="w-4 h-4" />
-                                <span>{bussinessDirection}</span>
+                                <span>{businessDirection}</span>
                             </div>
                             <div className="flex items-center gap-2 text-sm text-muted-foreground">
                                 <BallIcon className="w-4 h-4" />
@@ -134,7 +167,7 @@ export default function CardReservation({
                                     <Tooltip>
                                         <TooltipTrigger asChild>
                                             <div>
-                                                <Button variant="destructive" onClick={handleCancel} disabled={disabled} className="w-full">
+                                                <Button variant="destructive" onClick={()=>setIsOpenConfirmationCancelModal(true)} disabled={disabled} className="w-full">
                                                     Cancelar
                                                 </Button>
                                             </div>
@@ -169,12 +202,20 @@ export default function CardReservation({
                 isOpen={isOpenReprogramationModal}
                 onClose={() => setIsOpenReprogramationModal(false)}
                 idReservation={idReservation}
-                businessName={bussinesName}
+                businessName={businessName}
                 fieldType={FieldType}
                 fieldImg={fieldImg}
                 totalPrice={totalPrice}
                 idField={idField}
                 numHours={numHoursReservation}
+            />
+            <ConfirmationModal
+                isOpen={isOpenConfirmationCancelModal}
+                onClose={() => setIsOpenConfirmationCancelModal(false)}
+                onConfirm={handleCancel}
+                title={`¿Estás seguro de cancelar la reserva hecha en ${businessName}?`}
+                description="Al cancelar la reserva, se liberará el espacio para que otro usuario pueda reservarlo"
+                icon= {<CalendarOff className="w-14 h-14 text-red-500" />}
             />
         </div>
     )

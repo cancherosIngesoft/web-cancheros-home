@@ -16,7 +16,7 @@ const TeamPage = () => {
     const NoTeamSelected = () => (
         <Card className="border-0 shadow-none">
             <CardContent className="flex items-center justify-center h-64">
-                <p className="text-xl text-muted-foreground text-center">No has seleccionado ningún equipo aún, ve a al panel de equipos y obesrva el equipos que deseas.</p>
+                <p className="text-xl text-muted-foreground text-center">No has seleccionado ningún equipo aún, ve a al panel de equipos y selecciona el equipo que deseas ver.</p>
             </CardContent>
         </Card>
     )

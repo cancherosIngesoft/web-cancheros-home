@@ -74,7 +74,7 @@ export default function ReservasPorCancha({ canchas }: ReservasPorCanchaProps) {
           </Button>
           {expandedCancha === cancha && (
             <div className="mt-4 space-y-4">
-              <div className="flex items-center space-x-4">
+              <div className="flex flex-col items-start md:flex-row md:items-center gap-4 space-x-4">
                 <Popover>
                   <PopoverTrigger asChild>
                     <Button
@@ -110,7 +110,7 @@ export default function ReservasPorCancha({ canchas }: ReservasPorCanchaProps) {
                     "Buscando..."
                   ) : (
                     <>
-                      <Search className="mr-2 h-4 w-4" />
+                      <Search className="md:mr-2 h-4 w-4" />
                       Buscar Reservas
                     </>
                   )}

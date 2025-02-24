@@ -6,10 +6,10 @@ export interface ReservationActiveReturn {
   hours: { horaInicio: string; horaFin: string };
   inTeam: boolean;
   idBooker: string;
-  bussinesName: string;
+  businessName: string;
   FieldType: string;
   capacity: number;
-  bussinessDirection: string;
+  businessDirection: string;
   fieldImg?: string;
   totalPrice: number;
   teamName?: string;
@@ -36,25 +36,25 @@ export interface Cancha {
   tipo: string;
 }
 
-const mockReservations: ReservationActiveReturn[] = [
-  {
-    idReservation: "res-001",
-    dateReservation: "2025-02-20",
-    hours: {
-      horaInicio: new Date("2025-02-18T10:00:00").toISOString(),
-      horaFin: new Date("2025-02-18T12:00:00").toISOString(),
-    },
-    inTeam: true,
-    idBooker: "66",
-    bussinesName: "Empresa Ejemplo",
-    FieldType: "Fútbol",
-    capacity: 22,
-    bussinessDirection: "Calle Falsa 123, Ciudad Ejemplo",
-    totalPrice: 100,
-    teamName: "Equipo A",
-    idField: "49",
-  },
-];
+// const mockReservations: ReservationActiveReturn[] = [
+//   {
+//     idReservation: "res-001",
+//     dateReservation: "2025-02-20",
+//     hours: {
+//       horaInicio: new Date("2025-02-18T10:00:00").toISOString(),
+//       horaFin: new Date("2025-02-18T12:00:00").toISOString(),
+//     },
+//     inTeam: true,
+//     idBooker: "66",
+//     bussinesName: "Empresa Ejemplo",
+//     FieldType: "Fútbol",
+//     capacity: 22,
+//     bussinessDirection: "Calle Falsa 123, Ciudad Ejemplo",
+//     totalPrice: 100,
+//     teamName: "Equipo A",
+//     idField: "49",
+//   },
+// ];
 
 export async function getActiveReservation(
   id_user: string
@@ -247,10 +247,35 @@ export async function getReservationByHostId(
   }
 }
 
-export async function cancelarReserva(id: string): Promise<void> {
-  // Mock data
-  console.log(`Cancelando reserva ${id}`);
-  // Aquí iría la lógica para cancelar la reserva en el backend
+
+export async function cancelReservation(idReservation:string, idUserWhoIsCanceling:string): Promise<void> {
+  
+  console.log(`Cancelando reserva ${idReservation}, cancelada por ${idUserWhoIsCanceling}`);
+  // try {
+  //   const res = await fetch(
+  //     `${process.env.NEXT_PUBLIC_API_URL}/api/reservations/cancel/`,
+  //     {
+  //       method: "POST",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //       body: JSON.stringify({idReservation, idUserWhoIsCanceling}),
+  //     }
+  //   );
+
+  //   if (!res.ok) {
+  //     const data = await res.json();
+  //     throw new Error(data.message);
+  //   }
+    
+  // } catch (e) {
+  //   if (e instanceof Error) {
+  //     console.error("Error en Cancel Reservation:", e.message);
+  //     throw new Error(e.message);
+  //   } else {
+  //     throw new Error("Error desconocido");
+  //   }
+  // }
 }
 
 export async function reprogramationReservation(

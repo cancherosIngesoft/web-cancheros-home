@@ -29,9 +29,11 @@ export function MapMarker({ marker, index, selectedMarker, setSelectedMarker }: 
   }
   return (
     <div key={index}>
-      <Marker position={marker} icon={"/green_pin.svg"} onClick={() => setSelectedMarker(index)} />
+      <Marker position={marker} icon={"/green_pin.svg"} onClick={() => setSelectedMarker(index)}  />
       {selectedMarker === index && (
         <InfoWindow
+         
+          minWidth={250}
           position={marker}
           onCloseClick={() => setSelectedMarker(null)}
           headerContent={<div className="text-lg font-bold text-primary py-2">{marker.text}</div>}

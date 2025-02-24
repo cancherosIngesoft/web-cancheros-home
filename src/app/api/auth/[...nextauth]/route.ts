@@ -1,5 +1,5 @@
 import NextAuth, { DefaultSession, NextAuthOptions } from "next-auth"
-import { authOptions } from "@/lib/utils"
+import { authOptions } from "@/lib/nextAuthConfig"
 
 
 
