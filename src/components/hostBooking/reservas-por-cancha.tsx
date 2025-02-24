@@ -152,7 +152,11 @@ export default function ReservasPorCancha({ canchas }: ReservasPorCanchaProps) {
                                 }
                               )}
                             </span>
-                            <span>{reserva.reservante? reserva.reservante.nombre: "Reserva hecha por el host"}</span>
+                            <span>
+                              {reserva.reservante
+                                ? reserva.reservante.nombre
+                                : "Reserva hecha por el host"}
+                            </span>
                             <span>
                               {reserva.estado_procesado
                                 ? "Pagada"
@@ -176,7 +180,9 @@ export default function ReservasPorCancha({ canchas }: ReservasPorCanchaProps) {
                                 canchasStore.find(
                                   (c) => c.canchas_id === cancha
                                 )?.nombre_cancha ?? "",
-                              fecha: new Date().toISOString(),
+                              fecha: new Date(
+                                reserva.hora_inicio
+                              ).toISOString(),
                               estado: reserva.estado_procesado
                                 ? "pagada"
                                 : "pendiente",

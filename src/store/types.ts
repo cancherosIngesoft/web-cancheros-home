@@ -37,7 +37,8 @@ export interface HostReservationState {
       id_reservante: number;
       nombre: string;
       tipo_reservante: string;
-    } |null
+    } | null;
+    id_referencia_pago: string | null;
   }[];
   canchas: {
     canchas_id: string;
@@ -107,17 +108,14 @@ export type ReservationData = ReservationState & {
 export interface TeamState {
   idTeam: string;
   idCaptain: string;
-  nameCapitan:string;
-  description:string;
+  nameCapitan: string;
+  description: string;
   numberPlayers: number;
   teamName: string;
-  icon?:string;
-  
+  icon?: string;
 }
 
 export type TeamData = TeamState & {
-  updateTeamData: (
-    payload: Partial<TeamState>
-  ) => void;
+  updateTeamData: (payload: Partial<TeamState>) => void;
   clearTeamData: () => void;
 };

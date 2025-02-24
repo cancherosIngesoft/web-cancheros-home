@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import type { Reserva } from "./model";
-import { cancelReservation } from "@/actions/reservation/reservation_action";
+import { cancelarReserva } from "@/actions/reservation/reservation_action";
 import {
   ChevronDown,
   ChevronUp,
@@ -24,6 +24,8 @@ import {
   Trophy,
 } from "lucide-react";
 import { useGlobalStore } from "@/store";
+import { CancelReservationModal } from "../modals/CancelReservationModal";
+import { isReservationAvailable } from "@/utils/utils";
 
 interface ReservaCardProps {
   reserva: Reserva;
@@ -33,14 +35,15 @@ interface ReservaCardProps {
 export function ReservaCard({ reserva, isActive }: ReservaCardProps) {
   const [isExpanded, setIsExpanded] = useState(false);
   const idUser = useGlobalStore((state) => state.auth.id);
-
+  const [isOpenCancelReservationModal, setIsOpenCancelReservationModal] =
+    useState(false);
   const puedeModificar =
     isActive &&
     new Date(reserva.fecha).getTime() - Date.now() > 24 * 60 * 60 * 1000;
 
   const handleCancelar = async () => {
     if (window.confirm("¿Estás seguro de que quieres cancelar esta reserva?")) {
-      await cancelReservation(reserva.id, idUser??"");
+      await cancelarReserva(reserva.id, reserva.id_referencia_pago ?? "");
       // Aquí deberías actualizar el estado o recargar los datos
       alert("Reserva cancelada con éxito");
     }
@@ -85,6 +88,7 @@ export function ReservaCard({ reserva, isActive }: ReservaCardProps) {
           <DollarSign className="w-4 h-4 mr-2" />
           <span>Valor total: ${reserva.valorTotal}</span>
         </div>
+
         {isExpanded && (
           <>
             {/* {reserva.calificacion && (
@@ -109,18 +113,27 @@ export function ReservaCard({ reserva, isActive }: ReservaCardProps) {
         )}
       </CardContent>
       <CardFooter className="flex justify-between">
-        <Button variant="ghost" onClick={() => setIsExpanded(!isExpanded)}>
-          {isExpanded ? (
-            <>
-              <ChevronUp className="w-4 h-4 mr-2" /> Ver menos
-            </>
-          ) : (
-            <>
-              <ChevronDown className="w-4 h-4 mr-2" /> Ver más
-            </>
-          )}
+        <Button
+          variant="destructive"
+          className=" self-end"
+          onClick={() => setIsOpenCancelReservationModal(true)}
+        >
+          Cancelar
         </Button>
-        {puedeModificar && (
+        {isOpenCancelReservationModal && (
+          <CancelReservationModal
+            avaible={isReservationAvailable(reserva.fecha, "00:00")}
+            open={isOpenCancelReservationModal}
+            onOpenChange={setIsOpenCancelReservationModal}
+            reservationDetails={{
+              id: reserva.id,
+              id_referencia_pago: reserva.id_referencia_pago,
+              date: reserva.fecha,
+            }}
+          />
+        )}
+
+        {/*puedeModificar && (
           <div>
             <Button
               variant="destructive"
@@ -131,7 +144,7 @@ export function ReservaCard({ reserva, isActive }: ReservaCardProps) {
             </Button>
             <Button onClick={handleReprogramar}>Reprogramar</Button>
           </div>
-        )}
+        ) */}
       </CardFooter>
     </Card>
   );

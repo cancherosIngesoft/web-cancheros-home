@@ -141,3 +141,39 @@ export async function fetchWithRetry(
 
   return attemptFetch(initialUrl, retries);
 }
+
+export const isReservationAvailable = (
+  dateReservation: string,
+  horaInicio: string
+) => {
+  let date = "";
+  let time = "";
+
+  if (horaInicio === "00:00") {
+    date = dateReservation.split("T")[0];
+    time = new Date(dateReservation)
+      .toISOString()
+      .split("T")[1]
+      .substring(0, 5);
+  } else {
+    date = dateReservation.split("T")[0];
+    time = new Date(horaInicio).toISOString().split("T")[1].substring(0, 5);
+  }
+
+  const [year, month, day] = date.split("-");
+  const [hours, minutes] = time.split(":");
+
+  const reservationDate = new Date(
+    parseInt(year),
+    parseInt(month) - 1,
+    parseInt(day),
+    parseInt(hours),
+    parseInt(minutes)
+  );
+
+  const currentDate = new Date();
+  const diffInMs = reservationDate.getTime() - currentDate.getTime();
+  const diffInHours = diffInMs / (1000 * 60 * 60);
+
+  return diffInHours >= 24;
+};

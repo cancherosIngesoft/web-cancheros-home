@@ -14,6 +14,7 @@ export interface ReservationActiveReturn {
   totalPrice: number;
   teamName?: string;
   idField: string;
+  id_referencia_pago: string | null;
 }
 
 export interface Cancha {
@@ -130,6 +131,7 @@ interface ReservaBackend {
     nombre: string;
     tipo_reservante: string;
   } | null;
+  id_referencia_pago: string | null;
 }
 
 export async function getReservas(
@@ -247,35 +249,37 @@ export async function getReservationByHostId(
   }
 }
 
+export async function cancelarReserva(
+  reservationId: string,
+  paymentId: string
+): Promise<any> {
+  // Mock data
+  console.log(`Cancelando reserva ${reservationId} con paymentId ${paymentId}`);
 
-export async function cancelReservation(idReservation:string, idUserWhoIsCanceling:string): Promise<void> {
-  
-  console.log(`Cancelando reserva ${idReservation}, cancelada por ${idUserWhoIsCanceling}`);
-  // try {
-  //   const res = await fetch(
-  //     `${process.env.NEXT_PUBLIC_API_URL}/api/reservations/cancel/`,
-  //     {
-  //       method: "POST",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //       },
-  //       body: JSON.stringify({idReservation, idUserWhoIsCanceling}),
-  //     }
-  //   );
+  if (paymentId) {
+    try {
+      const res = await fetch(`/api/payment_gateway/delete/`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ paymentId, reservationId }),
+      });
 
-  //   if (!res.ok) {
-  //     const data = await res.json();
-  //     throw new Error(data.message);
-  //   }
-    
-  // } catch (e) {
-  //   if (e instanceof Error) {
-  //     console.error("Error en Cancel Reservation:", e.message);
-  //     throw new Error(e.message);
-  //   } else {
-  //     throw new Error("Error desconocido");
-  //   }
-  // }
+      if (!res.ok) {
+        const data = await res.json();
+        throw new Error(data.message);
+      }
+
+      console.log("Reserva cancelada exitosamente");
+    } catch (e) {
+      console.error(e);
+    }
+  } else {
+    throw new Error(
+      "No se puede cancelar la reserva. No hay un pago registrado"
+    );
+  }
 }
 
 export async function reprogramationReservation(
@@ -299,7 +303,7 @@ export async function reprogramationReservation(
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({...newHours}),
+        body: JSON.stringify({ ...newHours }),
       }
     );
 
@@ -307,7 +311,6 @@ export async function reprogramationReservation(
       const data = await res.json();
       throw new Error(data.message);
     }
-
   } catch (e) {
     if (e instanceof Error) {
       console.error("Error en get Reservations:", e.message);
