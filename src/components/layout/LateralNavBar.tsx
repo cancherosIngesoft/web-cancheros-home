@@ -157,12 +157,19 @@ export const LateralNavBar = () => {
             <LogOut className="h-6 w-6" />
           </Button>
         </div>
-        <PanelClub
-        isOpen={isOpenTeam}
-        onClose={() => setIsOpenTeam(false)}
-        navbarWidth={navbarWidth}
-        navbarHeight={navbarHeight}
-      />
+
+        {authUser?.userRole === "jugador" && (
+          <PanelClub
+          isOpen={isOpenTeam}
+          onClose={() => setIsOpenTeam(false)}
+          navbarWidth={navbarWidth}
+          navbarHeight={navbarHeight}
+        />
+        )
+
+
+        }
+        
       </div>
       
     </>

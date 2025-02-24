@@ -152,7 +152,7 @@ export default function ReservasPorCancha({ canchas }: ReservasPorCanchaProps) {
                                 }
                               )}
                             </span>
-                            <span>{reserva.reservante.nombre}</span>
+                            <span>{reserva.reservante? reserva.reservante.nombre: "Reserva hecha por el host"}</span>
                             <span>
                               {reserva.estado_procesado
                                 ? "Pagada"

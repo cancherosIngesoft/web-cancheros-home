@@ -129,7 +129,7 @@ interface ReservaBackend {
     id_reservante: number;
     nombre: string;
     tipo_reservante: string;
-  };
+  } | null;
 }
 
 export async function getReservas(

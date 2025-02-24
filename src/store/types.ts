@@ -37,7 +37,7 @@ export interface HostReservationState {
       id_reservante: number;
       nombre: string;
       tipo_reservante: string;
-    };
+    } |null
   }[];
   canchas: {
     canchas_id: string;

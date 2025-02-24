@@ -13,7 +13,7 @@ export default function Layout({
       </nav>
 
       {/* Contenido principal */}
-      <main className="flex-1 pb-20 pt-8 md:pb-0   md:h-full overflow-auto p-6 md:p-8 z-0">
+      <main className="flex-1 pb-20 pt-8 md:pb-6   md:h-full overflow-auto p-6 md:p-8 z-0">
         {children}
       </main>
     </div>
