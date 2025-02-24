@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { useMutation } from "@tanstack/react-query"
+import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { X, UserPlus2 } from "lucide-react"
 import { useForm, useFieldArray } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -40,6 +40,7 @@ interface AddPlayersModalProps {
 export default function AddPlayersModal({ isOpen, onClose, idTeam, idUserWhoAdd }: AddPlayersModalProps) {
   const [currentEmail, setCurrentEmail] = useState("")
 
+  const queryClient = useQueryClient()
   const {
     control,
     handleSubmit,
@@ -65,12 +66,23 @@ export default function AddPlayersModal({ isOpen, onClose, idTeam, idUserWhoAdd 
       }
       return addPlayersTeam(idTeam, emails, idUserWhoAdd)
     },
-    onSuccess: () => {
-      toast({
-        title: "Jugadores agregados",
-        description: "Los jugadores han sido agregados exitosamente al club",
-        variant: "default",
-      })
+    onSuccess: (response: { message?: string, success:boolean}) => {
+      if(response.success === false){
+        toast({
+          title: "Juagadores agregados",
+          description: response.message,
+          variant: "alert",
+        })
+        
+      }else{
+        toast({
+          title: "Jugadores agregados",
+          description: "Los jugadores han sido agregados exitosamente al club",
+          variant: "default",
+        })
+      }
+      
+      queryClient.refetchQueries({queryKey:["players", idTeam]})
       remove() // Remove all fields at once
       onClose()
     },
@@ -161,6 +173,11 @@ export default function AddPlayersModal({ isOpen, onClose, idTeam, idUserWhoAdd 
             {isPending ? "Agregando..." : "Fichar"}
           </Button>
         </form>
+        <div className="text-center">
+          <span
+             className="text-sm text-gray-500 text-center"
+          >Asegurate que las jugadores que agregas ya se encuentren en Cancheros, de lo contrario estos no seran fichados</span>
+        </div>
       </DialogContent>
     </Dialog>
   )

@@ -59,8 +59,8 @@ const HostReservationModal = ({ show, handleClose, idHost }: BookerReservationMo
         mutationFn: (values: z.infer<typeof formSchema>) => {
             if (!selectedHours || !idHost) return Promise.reject("Error en los datos")
             const newHours = {
-                startDateAndHour: `${new Date(values.date).toISOString().split("T")[0]} ${selectedHours[0].hora_inicio}:00`,
-                endDateAndHour: `${new Date(values.date).toISOString().split("T")[0]} ${selectedHours[selectedHours.length - 1].hora_fin}:00`,
+                hora_inicio: `${new Date(values.date).toISOString().split("T")[0]} ${selectedHours[0].hora_inicio}:00`,
+                hora_fin: `${new Date(values.date).toISOString().split("T")[0]} ${selectedHours[selectedHours.length - 1].hora_fin}:00`,
             }
 
             return CreateHostReservation(selectedField!.id_field, idHost!, newHours)

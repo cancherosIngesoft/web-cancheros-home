@@ -129,7 +129,7 @@ interface ReservaBackend {
     id_reservante: number;
     nombre: string;
     tipo_reservante: string;
-  };
+  } | null;
 }
 
 export async function getReservas(
@@ -281,7 +281,7 @@ export async function cancelReservation(idReservation:string, idUserWhoIsCanceli
 export async function reprogramationReservation(
   idReservation: string,
   idUser: string,
-  newHours: { startDateAndHour: string; endDateAndHour: string }
+  newHours: { hora_inicio: string; hora_fin: string }
 ): Promise<void> {
   // Mock data
   console.log(
@@ -291,29 +291,29 @@ export async function reprogramationReservation(
       newHours,
     })}`
   );
-  // try {
-  //   const res = await fetch(
-  //     `${process.env.NEXT_PUBLIC_API_URL}/api/reservations/reprogramation/`,
-  //     {
-  //       method: "POST",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //       },
-  //       body: JSON.stringify({idReservation, idUser, newHours}),
-  //     }
-  //   );
+  try {
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/api/booking/reschedule/${idReservation}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({...newHours}),
+      }
+    );
 
-  //   if (!res.ok) {
-  //     const data = await res.json();
-  //     throw new Error(data.message);
-  //   }
+    if (!res.ok) {
+      const data = await res.json();
+      throw new Error(data.message);
+    }
 
-  // } catch (e) {
-  //   if (e instanceof Error) {
-  //     console.error("Error en get Reservations:", e.message);
-  //     throw new Error(e.message);
-  //   } else {
-  //     throw new Error("Error desconocido");
-  //   }
-  // }
+  } catch (e) {
+    if (e instanceof Error) {
+      console.error("Error en get Reservations:", e.message);
+      throw new Error(e.message);
+    } else {
+      throw new Error("Error desconocido");
+    }
+  }
 }
