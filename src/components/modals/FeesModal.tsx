@@ -1,15 +1,10 @@
 import { Dialog } from "@headlessui/react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Input } from "../ui/input";
-import { format } from "date-fns";
-import { handleBookingAndPayment } from "@/actions/book_field/booking_actions";
 import { useGlobalStore } from "@/store";
 import { useToast } from "@/hooks/use-toast";
-import {
-  PaymentFormData,
-  ReservaDetails,
-} from "@/actions/book_field/booking_actions";
+import { PaymentFormData } from "@/actions/book_field/booking_actions";
 import { handleFeePayment } from "@/actions/payment/payment_actions";
 interface FeesModalProps {
   isOpen: boolean;
