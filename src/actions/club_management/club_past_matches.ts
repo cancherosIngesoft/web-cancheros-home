@@ -66,11 +66,11 @@ export async function addScoreToMatch(
     try {
 
         const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/partido/add_marcador`, {
-            method: "POST",
+            method: "PATCH",
             headers: {
                 "Content-Type": "application/json",
             },
-            body: JSON.stringify({  idReservation, score })
+            body: JSON.stringify({ idReservation:Number(idReservation), score })
         });
 
         if (!res.ok) {

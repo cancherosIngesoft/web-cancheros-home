@@ -25,7 +25,7 @@ export async function joinTeam(id_reservation: string, id_subTeam:string, id_use
             headers: {
                 "Content-Type": "application/json",
             },
-            body: JSON.stringify({id_reservation, id_subTeam, id_user}),
+            body: JSON.stringify({id_reservation:Number(id_reservation), id_subTeam:Number(id_subTeam), id_user:Number(id_user)}),
         });
 
         if (!res.ok) {
@@ -45,28 +45,28 @@ export async function joinTeam(id_reservation: string, id_subTeam:string, id_use
 
 export async function desJoinTeam(id_reservation: string, id_user:string): Promise<void> {
     console.log("desJoinTeam", id_reservation)
-//     try {
-//         const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/reservations/team/join_team}`, {
-//             method: "POST",
-//             headers: {
-//                 "Content-Type": "application/json",
-//             },
-//             body: JSON.stringify({id_reservation,id_team}),
-//         });
+    try {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/subequipos/delete_from_subequipo`, {
+            method: "DELETE ",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({id_reservation:Number(id_reservation),id_user:Number(id_user)}),
+        });
 
-//         if (!res.ok) {
-//             const data = await res.json();
-//             throw new Error(data.message);
-//         }
+        if (!res.ok) {
+            const data = await res.json();
+            throw new Error(data.message);
+        }
         
-//     } catch (e) {
-//         if (e instanceof Error) {
-//             console.error("Error on join Team:", e.message);
-//             throw new Error(e.message);
-//         } else {
-//             throw new Error("Error desconocido");
-//         }
-//      }
+    } catch (e) {
+        if (e instanceof Error) {
+            console.error("Error on join Team:", e.message);
+            throw new Error(e.message);
+        } else {
+            throw new Error("Error desconocido");
+        }
+     }
 }
 
 // const teamReservationsMock: TeamReservationReturn[] = [
