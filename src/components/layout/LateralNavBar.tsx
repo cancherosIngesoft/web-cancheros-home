@@ -128,13 +128,13 @@ export const LateralNavBar = () => {
                 onClick={() => setIsOpenTeam(!isOpenTeam)}
               >
                 <TeamShield className="md:w-10 md:h-10 w-10 h-10 text-tertiary stroke-4" />
-                <Link
-                  href="/notificaciones"
-                  className="flex items-center justify-center  hover:text-green-600 transition-colors"
-                >
-                  <Bell className="md:w-10 md:h-10 w-8 h-8 text-green-800" />
-                </Link>
               </div>
+              <Link
+                href="/notificaciones"
+                className="flex items-center justify-center  hover:text-green-600 transition-colors mt-2"
+              >
+                <Bell className="md:w-10 md:h-10 w-8 h-8 text-green-800" />
+              </Link>
             </div>
           )}
         </section>

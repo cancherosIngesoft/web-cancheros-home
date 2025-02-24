@@ -131,6 +131,7 @@ interface ReservaBackend {
     nombre: string;
     tipo_reservante: string;
   } | null;
+  id_referencia_pago: string | null;
 }
 
 export async function getReservas(
@@ -254,30 +255,31 @@ export async function cancelarReserva(
 ): Promise<any> {
   // Mock data
   console.log(`Cancelando reserva ${reservationId} con paymentId ${paymentId}`);
-  /*
-  try {
-    const res = await fetch(`/api/payment_gateway/delete/`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ paymentId, reservationId }),
-    });
 
-    if (!res.ok) {
-      const data = await res.json();
-      throw new Error(data.message);
+  if (paymentId) {
+    try {
+      const res = await fetch(`/api/payment_gateway/delete/`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ paymentId, reservationId }),
+      });
+
+      if (!res.ok) {
+        const data = await res.json();
+        throw new Error(data.message);
+      }
+
+      console.log("Reserva cancelada exitosamente");
+    } catch (e) {
+      console.error(e);
     }
-
-    console.log("Reserva cancelada exitosamente");
-  } catch (e) {
-    console.error(e);
+  } else {
+    throw new Error(
+      "No se puede cancelar la reserva. No hay un pago registrado"
+    );
   }
-
-  */
-  return {
-    message: "Reserva cancelada exitosamente",
-  };
 }
 
 export async function reprogramationReservation(
@@ -301,7 +303,7 @@ export async function reprogramationReservation(
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({...newHours}),
+        body: JSON.stringify({ ...newHours }),
       }
     );
 
@@ -309,7 +311,6 @@ export async function reprogramationReservation(
       const data = await res.json();
       throw new Error(data.message);
     }
-
   } catch (e) {
     if (e instanceof Error) {
       console.error("Error en get Reservations:", e.message);

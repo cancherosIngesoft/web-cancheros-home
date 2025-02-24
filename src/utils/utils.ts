@@ -146,9 +146,19 @@ export const isReservationAvailable = (
   dateReservation: string,
   horaInicio: string
 ) => {
-  // Extraer fecha y hora del formato ISO
-  const date = dateReservation.split("T")[0];
-  const time = new Date(horaInicio).toISOString().split("T")[1].substring(0, 5);
+  let date = "";
+  let time = "";
+
+  if (horaInicio === "00:00") {
+    date = dateReservation.split("T")[0];
+    time = new Date(dateReservation)
+      .toISOString()
+      .split("T")[1]
+      .substring(0, 5);
+  } else {
+    date = dateReservation.split("T")[0];
+    time = new Date(horaInicio).toISOString().split("T")[1].substring(0, 5);
+  }
 
   const [year, month, day] = date.split("-");
   const [hours, minutes] = time.split(":");
@@ -160,9 +170,10 @@ export const isReservationAvailable = (
     parseInt(hours),
     parseInt(minutes)
   );
+
   const currentDate = new Date();
   const diffInMs = reservationDate.getTime() - currentDate.getTime();
-  // Convertir a horas (1 hora = 3600000 ms)
   const diffInHours = diffInMs / (1000 * 60 * 60);
+
   return diffInHours >= 24;
 };

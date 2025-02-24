@@ -35,7 +35,6 @@ export function CancelReservationModal({
   const [isCanceled, setIsCanceled] = useState(false);
   const [reason, setReason] = useState("");
   const { toast } = useToast();
-
   const handleCancelReservation = async () => {
     setIsLoading(true);
     try {
@@ -114,7 +113,15 @@ export function CancelReservationModal({
             </Button>
           )}
           {isCanceled && (
-            <Button variant="outline" onClick={() => onOpenChange(false)}>
+            <Button
+              variant="outline"
+              onClick={() => {
+                onOpenChange(false);
+                if (typeof window !== "undefined") {
+                  window.location.reload();
+                }
+              }}
+            >
               Volver
             </Button>
           )}
