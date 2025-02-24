@@ -20,7 +20,8 @@ const CardPastMatch = ({ match }: CardPastMatchProps) => {
   const [showAddResult, setShowAddResult] = useState(false)
   const idCaptain = useTeamDataStore((state) => state.idCaptain)
   const idUser = useGlobalStore((state) => state.auth.id)
-
+  const startDate = new Date(match.hours.startHour)
+  const endDate = new Date(match.hours.endHour);
 
   const handleAddResult = (e: MouseEvent) => {
     e.preventDefault()
@@ -33,6 +34,7 @@ const CardPastMatch = ({ match }: CardPastMatchProps) => {
     match.score[1].score !== undefined;
 
   const getScoreColor = (teamIndex: number) => {
+    
     if (!match.score) return '';
     const teamAScore = match.score[0].score;
     const teamBScore = match.score[1].score;
@@ -93,7 +95,7 @@ const CardPastMatch = ({ match }: CardPastMatchProps) => {
               </div>
               <div className="flex flex-row items-center gap-2">
                 <Clock className="w-4 h-4 text-primary" />
-                <span>{match.hours.startHour + " - " + match.hours.endHour}</span>
+                <span>{startDate.toISOString().split("T")[1].substring(0, 5)} - {endDate.toISOString().split("T")[1].substring(0, 5)}</span>
               </div>
               <div className="flex flex-row items-center gap-2 col-span-2 md:col-span-1">
                 <MapIcon className="w-4 h-4 text-primary" />

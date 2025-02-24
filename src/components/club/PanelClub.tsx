@@ -57,8 +57,11 @@ export function PanelClub({ isOpen, onClose, navbarWidth,navbarHeight }: ClubsPa
           left: isClient && window.innerWidth < 768 ? "0" : `${navbarWidth}px`, // Ajuste para móviles
           bottom: isClient && window.innerWidth < 768 ? `${navbarHeight}px` : "0", // Ajuste para móviles
         }}
-        className={`fixed md:top-0 w-full h-[75vh] md:h-full md:w-[25vw]  bg-surface shadow-lg transform transition-all duration-300 ease-in-out py-4 ${isOpen ? "translate-y-0 md:translate-x-0 opacity-100 " : "translate-y-[120vh] md:-translate-x-[40vw] opacity-0  "
-          } `}
+        className={`fixed md:top-0 w-full h-[75vh] md:h-full md:w-[25vw] bg-surface shadow-lg transform transition-all duration-300 ease-in-out py-4 ${
+          isOpen
+            ? "translate-y-0 md:translate-x-0 opacity-100" 
+            : "translate-y-[120vh] md:translate-y-0 md:-translate-x-[40vw] opacity-0" 
+        }`}
       >
         <div className="flex flex-col h-full w-full p-4">
           <div className="flex items-center justify-between mb-6">

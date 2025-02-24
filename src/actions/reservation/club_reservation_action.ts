@@ -140,20 +140,20 @@ export async function getTeamActiveReservation(id_team: string, id_user:string):
 }
 
 export interface TeamsReturn{
-    TeamA: { idTeam: string, teamName: string, members: string[],score?:number }
-    TeamB: { idTeam: string, teamName: string, members: string[],score?:number }
+    teamA: { idTeam: string, nameTeam: string, members: string[],score?:number }
+    teamB: { idTeam: string, nameTeam: string, members: string[],score?:number }
 }
 
 const teamsMock: TeamsReturn = {
-    TeamA: { 
+    teamA: { 
         idTeam: "team_201", 
-        teamName: "Leones del Norte", 
+        nameTeam: "Leones del Norte", 
         members: ["David Herrera", "Santiago López", "Pedro Castillo"],
         score:2
       },
-      TeamB: { 
+      teamB: { 
         idTeam: "team_202", 
-        teamName: "Dragones Rojos", 
+        nameTeam: "Dragones Rojos", 
         members: ["David Herrera Palacios feo muy largo", "Santiago López", "Pedro Castillo", "Pedro Castillo","David Herrera", "Santiago López", "Pedro Castillo", "Pedro Castillo", "Pedro Castillo","David Herrera", "Santiago López",] ,
         score:3
       }

@@ -125,35 +125,65 @@ const pastMatchesMock: ReturnPastMatches[] = [
 ];
 
 export async function getPastMatches(
-    idTeam: string): Promise<ReturnPastMatches[]> {
+  idTeam: string,
+  idUser: string
+): Promise<ReturnPastMatches[]> {
+  console.log("get pastMatches", idTeam);
 
-    console.log("get pastMatches", idTeam)
-    return pastMatchesMock
+  try {
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/api/partido/past_matches_ordered/${idTeam}/${idUser}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
 
-    // try {
+    if (!res.ok) {
+      const data = await res.json();
+      throw new Error(data.message);
+    }
 
-    //   const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/clubs/past_matches/${idTeam}`, {
-    //     method: "GET",
-    //     headers: {
-    //       "Content-Type": "application/json",
-    //     },
-    //   });
-
-    //   if (!res.ok) {
-    //     const data = await res.json();
-    //     throw new Error(data.message);
-    //   }
-
-    //   // Devolver la respuesta del servidor
-    //   return await res.json();
-    // } catch (e) {
-    //   if (e instanceof Error) {
-    //     console.error("Error en obtener Clubes:", e.message);
-    //     throw new Error(e.message);
-    //   } else {
-    //     throw new Error("Error desconocido");
-    //   }
-    // }
+    // Obtener y mapear la respuesta del servidor
+    const data = await res.json();
+    return data.map((match: any) => ({
+      idReservation: match.idReservation.toString(),
+      dateReservation: match.dateReservation,
+      hours: {
+        startHour: match.hours.horaInicio,
+        endHour: match.hours.horaFin,
+      },
+      idBooker: match.idBooker.toString(),
+      bussinesName: match.businessName,
+      FieldType: match.FieldType,
+      capacity: match.capacity,
+      bussinessDirection: match.businessDirection,
+      fieldImg: match.fieldImg,
+      totalPrice: match.totalPrice,
+      geoGraphicalLocation: {
+        lat: match.geoGraphicalLocation.lat,
+        long: match.geoGraphicalLocation.long,
+      },
+      isParticipating: match.isParticipating,
+      teamAName: match.teamAName,
+      teamBName: match.teamBName,
+      idField: match.idField.toString(),
+      score: match.score.map((score: any) => ({
+        teamName: score.teamName,
+        teamId: score.teamId.toString(),
+        score: score.score,
+      })),
+    }));
+  } catch (e) {
+    if (e instanceof Error) {
+      console.error("Error en obtener partidos pasados:", e.message);
+      throw new Error(e.message);
+    } else {
+      throw new Error("Error desconocido");
+    }
+  }
 }
 
 export async function addScoreToMatch(

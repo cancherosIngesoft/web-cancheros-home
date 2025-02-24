@@ -26,8 +26,8 @@ export default function MatchInformation({
   isPastReservation
 }: MatchInformationProps) {
 
-  const startDate = new Date(`${reservation.dateReservation}T${reservation.hours.startHour}:00`);
-  const endDate = new Date(`${reservation.dateReservation}T${reservation.hours.endHour}:00`);
+  const startDate = new Date(reservation.hours.startHour)
+  const endDate = new Date(reservation.hours.endHour);
   const diferenceHours = (endDate.getTime() - startDate.getTime()) / (1000 * 3600);
   const diffHours = (endDate.getTime() - new Date().getTime()) / (1000 * 3600)
   const [disabled, setDisabled] = useState(false)
@@ -120,7 +120,7 @@ export default function MatchInformation({
             <div className="flex items-center gap-2">
               <Clock className="h-6 w-6 text-tertiary" />
               <span className="font-semibold">Hora</span>
-              {reservation.hours.startHour} - {reservation.hours.endHour}
+              {startDate.toISOString().split("T")[1].substring(0, 5)} - {endDate.toISOString().split("T")[1].substring(0, 5)}
             </div>
             <div className="flex items-center gap-2">
               <Timer className="h-6 w-6 text-tertiary" />

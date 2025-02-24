@@ -58,10 +58,10 @@ export default function ModalInfoReservation({ isOpen, onClose, reservation, isP
   })
 
   useEffect(() => {
-    if (auth.name && teams && teams.TeamA.members.includes(auth.name)) {
-      setUserTeam(teams.TeamA.idTeam)
-    } else if (auth.name && teams && teams.TeamB.members.includes(auth.name)) {
-      setUserTeam(teams.TeamB.idTeam)
+    if (auth.name && teams && teams.teamA.members.includes(auth.name)) {
+      setUserTeam(teams.teamA.idTeam)
+    } else if (auth.name && teams && teams.teamB.members.includes(auth.name)) {
+      setUserTeam(teams.teamB.idTeam)
     } else {
       setUserTeam(null)
     }
