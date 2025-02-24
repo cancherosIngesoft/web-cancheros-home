@@ -63,6 +63,7 @@ export default function ModalInfoReservation({
     queryKey: ["teams", reservation.idReservation],
     queryFn: () => getTeams(reservation.idReservation),
     enabled: !!reservation.idReservation,
+    staleTime: 1000 * 60 * 5,
     retry: 1,
   });
 
@@ -273,6 +274,12 @@ export default function ModalInfoReservation({
         totalPrice={reservation.totalPrice}
         idField={reservation.idField}
         numHours={numHoursReservation}
+        date={reservation.dateReservation}
+        hour={
+          startDate.toISOString().split("T")[1].substring(0, 5) +
+          "-" +
+          endDate.toISOString().split("T")[1].substring(0, 5)
+        }
       />
       <ConfirmationModal
         isOpen={isOpenConfirmationCancelModal}

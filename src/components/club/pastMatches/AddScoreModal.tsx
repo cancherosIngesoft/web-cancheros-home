@@ -18,6 +18,7 @@ import { addScoreToMatch } from "../../../actions/club_management/club_past_matc
 import { useTeamDataStore } from "@/store"
 import ShieldTeamAIcon from "@/components/icon/ShieldTeamAIcon"
 import ShieldTeamBIcon from "@/components/icon/ShieldTeamBIcon"
+import { DialogDescription } from "@radix-ui/react-dialog"
 
 
 const scoreSchema = z.object({
@@ -68,7 +69,7 @@ export default function ScoreModal({
   const { mutate: addScore, isPending } = useMutation({
     mutationFn: (data: ScoreFormData) => {
       const scoreData = [
-        data.teamBScore,
+        data.teamAScore,
         data.teamBScore,
       ]
       return addScoreToMatch(idTeam, idReservation, scoreData)
@@ -78,7 +79,11 @@ export default function ScoreModal({
         title: "Marcador agregado",
         description: "El marcador se ha guardado correctamente",
       })
-      queryClient.invalidateQueries({ queryKey: ["pastMatches", idTeam] })
+      
+      queryClient.refetchQueries({
+        queryKey: ["pastMatches", idTeam],
+       
+      });
       reset()
       onClose()
     },
@@ -100,6 +105,7 @@ export default function ScoreModal({
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
           <DialogTitle className="text-center">Agregar Marcador</DialogTitle>
+          
         </DialogHeader>
         <form onSubmit={(e) => {
           e.preventDefault()
@@ -177,6 +183,7 @@ export default function ScoreModal({
             )}
           </Button>
         </form>
+        
       </DialogContent>
     </Dialog>
   )

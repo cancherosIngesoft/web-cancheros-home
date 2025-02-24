@@ -36,31 +36,36 @@ export const GenericCard = ({ field }: { field: IFieldCard }) => {
   return (
     <Card className="h-full flex flex-col justify-center items-center">
       <CardHeader>
-        <CardTitle className="mb-4">{field.nombre}</CardTitle>
-        <CardContent>
+        <CardTitle>{field.nombre}</CardTitle>
+      </CardHeader>
+      <CardContent className="flex w-full flex-col gap-2 items-center">
+        <div className="w-[80%] h-24 aspect-video">
           <Image
             src={getFirstNoNullImage(field) || "/no_image.png"}
             alt={field.nombre}
+
             width={200}
             height={200}
-            className="mb-2"
+            className="w-full h-full object-cover"
           />
-          <section className="flex flex-col gap-2 items-start">
-            <p><b>Precio:</b> ${field.precio}</p>
-            <p><b>Capacidad:</b> {field.capacidad}</p>
-            <p><b>Tipo:</b> {field.tipo}</p>
-            <div>
-              <EditIcon onClick={handleEditClick} />
-            </div>
-          </section>
-        </CardContent>
-      </CardHeader>
+        </div>
+ 
+        <section className="flex flex-col gap-2 items-start w-full mt-4">
+          <p><b>Precio:</b> ${field.precio}</p>
+          <p><b>Capacidad:</b> {field.capacidad}</p>
+          <p><b>Tipo:</b> {field.tipo}</p>
+          <div>
+            <EditIcon onClick={handleEditClick} />
+          </div>
+        </section>
+      </CardContent>
+
       <CardFooter>
-        <AddFieldModal 
-          open={open} 
-          onOpenChange={setOpen} 
-          existingField={fieldData as IExistingField} 
-          isEdit={true} 
+        <AddFieldModal
+          open={open}
+          onOpenChange={setOpen}
+          existingField={fieldData as IExistingField}
+          isEdit={true}
         />
       </CardFooter>
     </Card>

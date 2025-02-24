@@ -9,14 +9,14 @@ export async function middleware(req: NextRequest) {
   // Permitir acceso a rutas de autenticación
   if (
     pathname.startsWith("/api/auth") ||
-    pathname === "/login" ||
+    pathname === "/signin" ||
     pathname === "/"
   ) {
     return NextResponse.next();
   }
 
   if (!token) {
-    return NextResponse.redirect(new URL("/auth/singin", req.url));
+    return NextResponse.redirect(new URL("/auth/signin", req.url));
   }
 
   const userRole = token.role as string;

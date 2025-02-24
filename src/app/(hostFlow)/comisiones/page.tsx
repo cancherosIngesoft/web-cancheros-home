@@ -76,7 +76,7 @@ export default function PanelComisiones() {
   };
 
   return (
-    <div className="flex flex-col items-start justify-start h-screen w-[90vw] ml-[5vw] py-6 space-y-8">
+    <div className="flex flex-col items-start justify-start h-screen  py-6 space-y-8">
       <CommissionExplainer
         open={isExplainOpen}
         onOpenChange={setIsExplainOpen}

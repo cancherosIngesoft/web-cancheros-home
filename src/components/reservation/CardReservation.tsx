@@ -228,6 +228,12 @@ export default function CardReservation({
           totalPrice={totalPrice}
           idField={idField}
           numHours={numHoursReservation}
+          hour={
+            startDate.toISOString().split("T")[1].substring(0, 5) +
+            "-" +
+            endDate.toISOString().split("T")[1].substring(0, 5)
+          }
+          date={dateReservation}
         />
         {/*
         <ConfirmationModal

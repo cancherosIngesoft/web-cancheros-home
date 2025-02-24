@@ -4,7 +4,7 @@ import { useQuery } from "@tanstack/react-query"
 
 import CardUpcomingMatch from "./CardUpcomingMatch"
 import { Skeleton } from "@/components/ui/skeleton"
-import { useGlobalStore, useShallow } from "@/store"
+import { useGlobalStore, useShallow, useTeamDataStore } from "@/store"
 import { getTeamActiveReservation } from "@/actions/reservation/club_reservation_action"
 
 
@@ -13,12 +13,15 @@ interface UpcomingMatchProps {
 }
 
 export default function UpcomingMatch({ idTeam }: UpcomingMatchProps) {
-  const auth = useGlobalStore(useShallow((state) => state.auth));
-
+ 
+  const teamId = useTeamDataStore((state) => state.idTeam)
+  const idUser = useGlobalStore((state) => state.auth?.id)
+  
   const { data, isLoading, isError, error } = useQuery({
-    queryKey: ["upcomingMatch", idTeam, auth.id],
-    queryFn: () => getTeamActiveReservation(idTeam, auth.id ?? ""),
-    enabled: !!auth.id,
+    queryKey: ["upcomingMatch", teamId, idUser],
+    queryFn: () => getTeamActiveReservation(teamId, idUser ?? ""),
+    enabled: !!idUser,
+    staleTime: 1000 * 60 * 5,
     retry: 1,
   })
 
