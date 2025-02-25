@@ -124,12 +124,12 @@ export default function FinancialDashboard() {
   };
 
   return (
-    <div className="flex flex-col items-start justify-start h-screen w-[90vw] ml-[5vw] py-6 space-y-8">
+    <div className="flex flex-col items-start justify-start h-screen w-full  py-6 space-y-8">
       {/* Header */}
       <div className="space-y-2">
         <div className="flex items-center gap-2">
           <ChartBarIcon className="h-8 w-8 text-green-700" />
-          <h1 className="text-2xl font-bold text-green-700">Notificaciones</h1>
+          <h1 className="text-3xl font-bold text-green-700">Notificaciones</h1>
         </div>
         <p className="text-muted-foreground text-sm text-gray-500">
           ¡Bienvenido/a a tu panel de notificaciones! Desde aquí podrás
