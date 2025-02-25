@@ -39,10 +39,13 @@ export default function pageMisCanchas() {
             <h1 className="text-2xl font-bold text-[#1A6B51]">TUS CANCHAS</h1>
           </div>
 
-          <Button variant="default" onClick={() => {
-            clearStore("field");
-            setIsModalOpen(true);
-          }}>
+          <Button
+            variant="default"
+            onClick={() => {
+              clearStore("field");
+              setIsModalOpen(true);
+            }}
+          >
             Agregar Cancha
           </Button>
         </div>
@@ -51,11 +54,9 @@ export default function pageMisCanchas() {
             Registra las canchas de tu complejo deportivo y ajusta su
             disponibilidad para recibir reservas.
           </p>
-
         </div>
       </section>
       <div className="w-full flex justify-center">
-
         <AddFieldModal open={isModalOpen} onOpenChange={setIsModalOpen} />
         <article className="flex flex-col items-center gap-4 mt-4">
           {isLoading ? (
@@ -64,16 +65,14 @@ export default function pageMisCanchas() {
             </div>
           ) : fields.length > 0 ? (
             <Carousel className="w-full flex gap-4 overflow-x-auto overflow-y-hidden items-center max-h-[24rem] p-2 border-2 border-gray-100 rounded-lg max-w-[80vw]">
-              
-                {fields.map((field) => (
-                  <CarouselItem
-                    key={field.id_cancha}
-                    className="flex-none w-[300px] h-[22rem]"
-                  >
-                    <GenericCard field={field} />
-                  </CarouselItem>
-                ))}
-              
+              {fields.map((field) => (
+                <CarouselItem
+                  key={field.id_cancha}
+                  className="flex-none w-[300px] h-[22rem]"
+                >
+                  <GenericCard field={field} />
+                </CarouselItem>
+              ))}
             </Carousel>
           ) : (
             <>
@@ -101,9 +100,7 @@ export default function pageMisCanchas() {
             </>
           )}
         </article>
-
       </div>
-
     </article>
   );
 }
