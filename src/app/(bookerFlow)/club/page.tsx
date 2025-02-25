@@ -11,7 +11,7 @@ import ClubPlayers from "@/components/club/members/ClubPlayers"
 import PastMatchesPanel from "@/components/club/pastMatches/PastMatchesPanel"
 
 const TeamPage = () => {
-    const { teamName,idTeam } = useTeamDataStore()
+    const { teamName, idTeam } = useTeamDataStore()
 
     const NoTeamSelected = () => (
         <Card className="border-0 shadow-none">
@@ -21,15 +21,21 @@ const TeamPage = () => {
         </Card>
     )
 
-    
+
 
     return (
         <div className="w-full h-full">
-            <Tabs defaultValue="mi-club" className="w-full">
-                <TabsList className="w-full justify-start mb-0">
-                    <TabsTrigger value="mi-club">Mi club</TabsTrigger>
-                    <TabsTrigger value="partidos-pasados">Partidos pasados</TabsTrigger>
-                    <TabsTrigger value="jugadores">Jugadores</TabsTrigger>
+            <Tabs defaultValue="mi-club" className="w-full m-0" >
+                <TabsList className="grid w-full grid-cols-3 h-12 flex-shrink-0 gap-2 px-2 m-0">
+                    <TabsTrigger
+                        className="data-[state=active]:bg-green-100 h-8 data-[state=active]:text-green-700 text-xs sm:text-sm md:text-base py-2 sm:py-3"
+                        value="mi-club">Mi club</TabsTrigger>
+                    <TabsTrigger
+                        className="data-[state=active]:bg-green-100 h-8 data-[state=active]:text-green-700 text-xs sm:text-sm md:text-base py-2 sm:py-3"
+                        value="partidos-pasados">Partidos pasados</TabsTrigger>
+                    <TabsTrigger
+                        className="data-[state=active]:bg-green-100 h-8 data-[state=active]:text-green-700 text-xs sm:text-sm md:text-base py-2 sm:py-3"
+                        value="jugadores">Jugadores</TabsTrigger>
                 </TabsList>
                 {teamName ?
                     <div className="w-full h-full pb-20 md:pb-0">
@@ -43,7 +49,7 @@ const TeamPage = () => {
                         </TabsContent>
 
                         <TabsContent value="jugadores">
-                            <ClubPlayers idTeam={idTeam} teamName={teamName}/>
+                            <ClubPlayers idTeam={idTeam} teamName={teamName} />
                         </TabsContent>
                     </div> :
                     <NoTeamSelected />

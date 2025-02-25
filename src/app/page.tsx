@@ -1,16 +1,48 @@
 "use client";
 import { signIn, signOut, useSession } from "next-auth/react";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Footer from "@/components/layout/footer";
 import Navbar from "@/components/layout/navbar";
 import { Button } from "@/components/ui/button";
 
 import Image from "next/image";
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { useRouter } from "next/navigation";
 
+
+const valuesData = [
+  {
+    icon: "/icons/soccer_ball.svg",
+    title: "Empatía",
+    definition: `La empatía nos permite comprender las necesidades de jugadores 
+    y propietarios de canchas, creando soluciones efectivas para organizar partidos y 
+    gestionar reservas, basadas en retos reales de organizar partidos `
+  },
+  {
+    icon: "/icons/handShake.svg",
+    title: "Respeto",
+    definition: "Creemos en el respeto como pilar fundamental de las relaciones, tanto en la cancha como fuera de ella. Nuestra plataforma promueve un trato justo y honesto, estableciendo reglas claras en las reservas y pagos para evitar malentendidos."
+  },
+  {
+    icon: "/icons/football_team.svg",
+    title: "Fraternidad",
+    definition: "El fútbol amateur es, ante todo, un acto de comunidad y amistad. En Cancheros, fomentamos esta energía al fortalecer los lazos entre jugadores y dueños de canchas."
+  },
+  {
+    icon: "/icons/liberty.svg",
+    title: "Libertad",
+    definition: `En Cancheros, promovemos la libertad al permitir a los 
+    usuarios tomar decisiones sobre dónde y cuándo jugar, con información 
+    actualizada y opciones accesibles. Eliminamos las barreras 
+    logísticas, empoderando a los jugadores para que organicen sus partidos.
+    A su vez, los propietarios de canchas tienen la libertad de 
+    gestionar las reservas de sus canchas de manera sencilla.
+`
+  }
+];
 export default function Home() {
+  const [activeIndex, setActiveIndex] = useState<number | null>(null);
   const { data: session } = useSession();
   const router = useRouter();
   const handleSingIn = () => {
@@ -207,51 +239,91 @@ export default function Home() {
           viewport={{ once: true }}
           className="flex flex-col items-center justify-center min-h-[600px] py-16"
         >
-          <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold bg-gradient-to-t from-green-900 to-green-500 text-transparent bg-clip-text mb-16">
+          <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold bg-gradient-to-t from-green-900 to-green-500 text-transparent bg-clip-text mb-8">
             Nuestros valores
           </h1>
-          <div className="flex flex-col md:grid md:grid-cols-3 gap-12 md:gap-x-24 md:gap-y-16 items-center max-w-6xl mx-auto">
-            <div className="flex flex-col items-center justify-center">
-              <Image
-                src="/icons/soccer_ball.svg"
-                alt="Soccer ball"
-                width={120}
-                height={120}
-                className="w-24 md:w-32 lg:w-40 h-auto"
-              />
-              <p className="text-lg font-bold text-black mt-4">Empatía</p>
-            </div>
-            <div className="flex flex-col items-center justify-center">
-              <Image
-                src="/icons/soccer_stadium.svg"
-                alt="Soccer stadium"
-                width={150}
-                height={150}
-                className="w-24 md:w-32 lg:w-40 h-auto"
-              />
-              <p className="text-lg font-bold text-black mt-4">Comunidad</p>
-            </div>
-            <div className="flex flex-col items-center justify-center">
-              <Image
-                src="/icons/football_team.svg"
-                alt="Valor 1"
-                width={150}
-                height={150}
-                className="w-24 md:w-32 lg:w-40 h-auto"
-              />
-              <p className="text-lg font-bold text-black mt-4">Fraternidad</p>
-            </div>
-            <div className="md:col-span-3 flex justify-center w-full">
-              <div className="flex flex-col items-center justify-center">
-                <Image
-                  src="/icons/liberty.svg"
-                  alt="Liberty"
-                  width={150}
-                  height={150}
-                  className="w-24 md:w-32 lg:w-40 h-auto"
-                />
-                <p className="text-lg font-bold text-black mt-4">Libertad</p>
-              </div>
+
+          <div className="flex flex-col items-center justify-center min-h-[600px] py-8">
+            <div className="flex flex-col md:grid md:grid-cols-3 gap-8 md:gap-x-20 md:gap-y-8 items-center max-w-6xl mx-auto w-full px-4">
+              {valuesData.map((value, index) => (
+                <motion.div
+                  key={value.title}
+                  className={`flex flex-col items-center justify-center ${index === 3 ? "md:col-span-3" : ""}`}
+                  layout
+                  transition={{ type: "tween", duration: 0.3 }}
+                >
+                  <motion.div
+                    className="flex flex-col items-center justify-center cursor-pointer w-full"
+                    onClick={() => setActiveIndex(activeIndex === index ? null : index)}
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    layout
+                  >
+                    <motion.div
+                      className="relative w-24 md:w-36 lg:w-44 h-24 md:h-36 lg:h-44 rounded-full md:p-4 shadow-lg"
+                      animate={{
+                        y: activeIndex === index ? -20 : 0
+                      }}
+                      transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                    >
+                      <Image
+                        src={value.icon}
+                        alt={value.title}
+                        width={150}
+                        height={150}
+                        className="w-full h-full object-contain p-4"
+                      />
+                    </motion.div>
+
+                    <motion.p
+                      className="text-lg font-bold text-black mt-4"
+                      animate={{ color: activeIndex === index ? "#1A6B51" : "#000" }}
+                      transition={{ duration: 0.2 }}
+                    >
+                      {value.title}
+                    </motion.p>
+                  </motion.div>
+
+                  <AnimatePresence mode="wait">
+                    {activeIndex === index && (
+                     <motion.div
+                     className="w-full max-w-md md:max-w-xl bg-white rounded-lg shadow-lg p-6 mt-4 overflow-hidden"
+                     initial={{ 
+                       opacity: 0, 
+                       y: -10, 
+                       height: 0 
+                     }}
+                     animate={{ 
+                       opacity: 1, 
+                       y: 0,
+                       height: 200, // Altura fija en píxeles
+                       transition: { 
+                         type: "spring", 
+                         stiffness: 200,
+                         damping: 20 
+                       }
+                     }}
+                     exit={{ 
+                       opacity: 0, 
+                       y: -10, 
+                       height: 0,
+                       transition: { 
+                         duration: 0.2,
+                         ease: "easeIn" 
+                       } 
+                     }}
+                     layout
+                   >
+                     <div className="overflow-y-auto h-[184px]"> {/* 200 - 16px de padding */}
+                       <p className="text-gray-600 text-center">
+                         {value.definition}
+                       </p>
+                     </div>
+                   </motion.div>
+                    )}
+                  </AnimatePresence>
+                </motion.div>
+              ))}
             </div>
           </div>
         </motion.section>
