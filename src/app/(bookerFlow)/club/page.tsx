@@ -25,7 +25,7 @@ const TeamPage = () => {
 
     return (
         <div className="w-full h-full">
-            <Tabs defaultValue="mi-club" className="w-full m-0" >
+            <Tabs className="w-full h-full flex flex-col">
                 <TabsList className="grid w-full grid-cols-3 h-12 flex-shrink-0 gap-2 px-2 m-0">
                     <TabsTrigger
                         className="data-[state=active]:bg-green-100 h-8 data-[state=active]:text-green-700 text-xs sm:text-sm md:text-base py-2 sm:py-3"
@@ -38,7 +38,7 @@ const TeamPage = () => {
                         value="jugadores">Jugadores</TabsTrigger>
                 </TabsList>
                 {teamName ?
-                    <div className="w-full h-full pb-20 md:pb-0">
+                    <div className="w-full flex-1 min-h-0">
                         <TabsContent value="mi-club" className="space-y-6">
                             <TeamInfo />
                             <UpcomingMatch idTeam={idTeam} />
