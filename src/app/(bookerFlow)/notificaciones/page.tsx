@@ -1,142 +1,275 @@
 "use client";
 
-import { useForm } from "react-hook-form";
-import { BarChartIcon as ChartBarIcon, Search } from "lucide-react";
-
-import { Button } from "@/components/ui/button";
-import { Calendar } from "@/components/ui/calendar";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import GenericReservaCard from "@/components/reservar_components/genericReservaCard";
 import { useEffect, useState } from "react";
-import {
-  getCanchas,
-  getOcupationAndIncomes,
-  getReservas,
-  getReservationByHostId,
-} from "@/actions/reservation/reservation_action";
+import { Bell } from "lucide-react";
 import { useGlobalStore } from "@/store";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Card, CardContent } from "@/components/ui/card";
+import {
+  getCalifications,
+  getNotifications,
+  Calification,
+  Notification,
+  setCalification,
+  setMarcador,
+} from "@/actions/notifications/notification_actions";
+import CalificationCard from "@/components/notifications/calificationCard";
+import NotificationCard from "@/components/notifications/notificationCard";
+import NotificationModal from "@/components/modals/notificationModal";
+import CalificationModal from "@/components/modals/calificationModal";
+import { useNotificationStorage } from "@/hooks/useNotificationStorage";
+import { useToast } from "@/hooks/use-toast";
 
-// Definir el tipo para los filtros
-type FilterFormValues = {
-  cancha: string;
-  mes: string;
-  año: string;
-};
-
-export default function FinancialDashboard() {
-  const [hostCanchas, setHostCanchas] = useState<any[]>([]);
-  const [totalIngresos, setTotalIngresos] = useState(0);
-  const [tasaOcupacion, setTasaOcupacion] = useState(0);
-  const [reservas, setReservas] = useState<any[]>([]);
+export default function NotificationPage() {
+  const [notifications, setNotifications] = useState<Notification[]>([]);
+  const [califications, setCalifications] = useState<Calification[]>([]);
+  const [isModalNotificationOpen, setIsModalNotificationOpen] = useState(false);
+  const [isModalCalificationOpen, setIsModalCalificationOpen] = useState(false);
+  const [selectedIdEstablecimiento, setSelectedIdEstablecimiento] = useState(0);
+  const [selectedIdPartido, setSelectedIdPartido] = useState(0);
   const [loading, setLoading] = useState(false);
-  const { register, handleSubmit, watch, setValue } =
-    useForm<FilterFormValues>();
   const user = useGlobalStore((state) => state.auth);
+  const {
+    getDeletedCalifications,
+    getDeletedNotifications,
+    addDeletedCalification,
+    addDeletedNotification,
+  } = useNotificationStorage();
+  const { toast } = useToast();
 
   useEffect(() => {
-    const fetchHostCanchas = async () => {
-      if (user.id) {
-        setLoading(true);
-        const canchas = await getCanchas(user.id || "");
-        setHostCanchas(canchas);
-        setLoading(false);
-        const reservas = await getReservationByHostId(
-          user.id,
-          "2",
-          "2025",
-          new Date().toISOString().split("T")[0]
-        );
+    const fetchUserNotifications = async () => {
+      if (!user.id) return null;
+      setLoading(true);
+      const califications = await getCalifications(user.id);
+      const notifications = await getNotifications(user.id);
+      setLoading(false);
 
-        if (reservas.length > 0) {
-          const reservas_data = reservas.map((reserva) => ({
-            id: "Cliente " + reserva.idBooker,
-            field: "Cancha " + reserva.idField,
-            user: "Dueño " + user.id,
-            date: new Date().toISOString().split("T")[0],
-            location: "Tu Negocio",
-            amount: 0,
-            status: "Pagado",
-          }));
-          setReservas(reservas_data);
-        } else {
-          setReservas([]);
-        }
-        if (canchas.length > 0) {
-          const { use_porcentage, total_profit } = await getOcupationAndIncomes(
-            user.id || "",
-            canchas[0].canchas_id,
-            "2",
-            "2025"
-          );
-          setTasaOcupacion(use_porcentage || 0);
-          setTotalIngresos(total_profit || 0);
-        }
+      // Filtrar calificaciones eliminadas
+      const deletedCalifications = getDeletedCalifications();
+      if (califications.length > 0) {
+        const filteredCalifications = califications.filter(
+          (cal: Calification) =>
+            !deletedCalifications.includes(cal.id_establecimiento)
+        );
+        setCalifications(filteredCalifications);
+      }
+
+      // Filtrar notificaciones eliminadas
+      const deletedNotifications = getDeletedNotifications();
+      if (notifications.length > 0) {
+        const filteredNotifications = notifications.filter(
+          (not: Notification) => {
+            // Verificar si el id_noti_stats está en la lista de eliminados
+            return !deletedNotifications.includes(not.id_noti_stats);
+          }
+        );
+        setNotifications(filteredNotifications);
       }
     };
-    fetchHostCanchas();
+    fetchUserNotifications();
   }, [user.id]);
 
-  const onSubmit = async (data: FilterFormValues) => {
-    if (!user.id) return;
-    const { use_porcentage, total_profit } = await getOcupationAndIncomes(
-      user.id || "",
-      data.cancha,
-      data.mes,
-      data.año
+  const handleRejectCalification = (id_establecimiento: number) => {
+    addDeletedCalification(id_establecimiento);
+    setCalifications((prev) =>
+      prev.filter((cal) => cal.id_establecimiento !== id_establecimiento)
     );
-    setTasaOcupacion(use_porcentage || 0);
-    setTotalIngresos(total_profit || 0);
-    setLoading(true);
-    const reservas = await getReservationByHostId(
-      user.id,
-      data.mes,
-      data.año,
-      new Date().toISOString().split("T")[0]
-    );
-    if (reservas.length > 0) {
-      const reservas_data = reservas.map((reserva) => ({
-        id: "Cliente " + reserva.idBooker,
-        field: "Cancha " + reserva.idField,
-        user: "Dueño " + user.id,
-        date: new Date().toISOString().split("T")[0],
-        location: "Tu Negocio",
-        amount: 0,
-        status: "Pagado",
-      }));
-      setReservas(reservas_data);
-    } else {
-      setReservas([]);
+  };
+
+  const handleRejectNotification = (id_reserva: number) => {
+    // Encontrar la notificación para obtener el id_noti_stats
+    const notification = notifications.find((n) => n.id_reserva === id_reserva);
+    if (notification) {
+      addDeletedNotification(notification.id_noti_stats);
+      setNotifications((prev) =>
+        prev.filter((not) => not.id_reserva !== id_reserva)
+      );
     }
-    setLoading(false);
+  };
+
+  const handleScoreSubmit = async (scores: number[]) => {
+    try {
+      await setMarcador(selectedIdPartido, scores);
+      toast({
+        title: "Marcador actualizado correctamente",
+        description: "El resultado ha sido registrado con éxito",
+        variant: "default",
+      });
+      // Ocultar la notificación después de enviar el marcador
+      const notification = notifications.find(
+        (n) => n.id_reserva === selectedIdPartido
+      );
+      if (notification) {
+        addDeletedNotification(notification.id_noti_stats);
+        setNotifications((prev) =>
+          prev.filter((not) => not.id_noti_stats !== notification.id_noti_stats)
+        );
+      }
+      setIsModalNotificationOpen(false);
+    } catch (error) {
+      console.error(error);
+      toast({
+        title: "Error al actualizar el marcador",
+        description: "Por favor intenta nuevamente",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const handleCalificationSubmit = async ({
+    stars,
+    comment,
+  }: {
+    stars: number;
+    comment: string;
+  }) => {
+    try {
+      await setCalification(selectedIdEstablecimiento, comment, stars);
+      toast({
+        title: "Calificación enviada correctamente",
+        description: "Tu reseña ha sido registrada con éxito",
+        variant: "default",
+      });
+      // Ocultar la calificación después de enviarla
+      addDeletedCalification(selectedIdEstablecimiento);
+      setCalifications((prev) =>
+        prev.filter(
+          (cal) => cal.id_establecimiento !== selectedIdEstablecimiento
+        )
+      );
+      setIsModalCalificationOpen(false);
+    } catch (error) {
+      console.error(error);
+      toast({
+        title: "Error al enviar la calificación",
+        description: "Por favor intenta nuevamente",
+        variant: "destructive",
+      });
+    }
   };
 
   return (
-    <div className="flex flex-col items-start justify-start h-screen w-[90vw] ml-[5vw] py-6 space-y-8">
+    <div className="flex flex-col h-[calc(100vh-2rem)] w-full max-w-[90vw] mx-auto py-4 overflow-hidden">
       {/* Header */}
-      <div className="space-y-2">
+      <div className="space-y-2 border border-gray-200 rounded-md p-4 flex-shrink-0">
         <div className="flex items-center gap-2">
-          <ChartBarIcon className="h-8 w-8 text-green-700" />
-          <h1 className="text-2xl font-bold text-green-700">Notificaciones</h1>
+          <Bell className="h-8 w-8 text-green-700" />
+          <h1 className="text-3xl font-bold text-green-700">Notificaciones</h1>
         </div>
         <p className="text-muted-foreground text-sm text-gray-500">
-          ¡Bienvenido/a a tu panel de notificaciones! Desde aquí podrás
-          visualizar tus notificaciones y estar al tanto de las últimas
-          actualizaciones.
+          Aquí podrás ver tus notificaciones para calificar tus reservas o
+          aceptar ir a partidos ¡Mantén todo bajo control!
         </p>
       </div>
+
+      {/* Tabs */}
+      <Tabs
+        defaultValue="reservas"
+        className="flex-1 flex flex-col mt-6 overflow-hidden"
+      >
+        <TabsList className="grid w-full grid-cols-2 flex-shrink-0 gap-2 px-2">
+          <TabsTrigger
+            value="reservas"
+            className="data-[state=active]:bg-green-100 data-[state=active]:text-green-700 text-xs sm:text-sm md:text-base py-2 sm:py-3"
+          >
+            Notificaciones Reservas
+          </TabsTrigger>
+          <TabsTrigger
+            value="partidos"
+            className="data-[state=active]:bg-green-100 data-[state=active]:text-green-700 text-xs sm:text-sm md:text-base py-2 sm:py-3"
+          >
+            Notificaciones Partidos
+          </TabsTrigger>
+        </TabsList>
+
+        <TabsContent
+          value="reservas"
+          className="flex-1 overflow-y-auto mt-4 pr-2"
+        >
+          <div className="grid gap-4">
+            {loading ? (
+              [...Array(3)].map((_, index) => (
+                <Skeleton key={index} className="h-[100px] w-full" />
+              ))
+            ) : califications.length > 0 ? (
+              califications.map((calification, index) => (
+                <CalificationCard
+                  key={index}
+                  id_establecimiento={calification.id_establecimiento}
+                  id_user={calification.id_user}
+                  onSelectReservation={(id_establecimiento) => {
+                    setSelectedIdEstablecimiento(id_establecimiento);
+                    setIsModalCalificationOpen(true);
+                  }}
+                  onReject={handleRejectCalification}
+                />
+              ))
+            ) : (
+              <Card className="bg-gray-50">
+                <CardContent className="flex flex-col items-center justify-center py-8">
+                  <Bell className="h-12 w-12 text-gray-400 mb-4" />
+                  <p className="text-gray-500 text-center">
+                    No hay notificaciones de reservas por el momento
+                  </p>
+                </CardContent>
+              </Card>
+            )}
+          </div>
+        </TabsContent>
+
+        <TabsContent
+          value="partidos"
+          className="flex-1 overflow-y-auto mt-4 pr-2"
+        >
+          <div className="grid gap-4">
+            {loading ? (
+              [...Array(3)].map((_, index) => (
+                <Skeleton key={index} className="h-[100px] w-full" />
+              ))
+            ) : notifications.length > 0 ? (
+              notifications.map((notification, index) => (
+                <NotificationCard
+                  key={index}
+                  partido={notification.partido}
+                  onSelectNotification={(idNotification) => {
+                    setSelectedIdPartido(idNotification);
+                    setIsModalNotificationOpen(true);
+                  }}
+                  idNotification={notification.id_reserva}
+                  onReject={handleRejectNotification}
+                />
+              ))
+            ) : (
+              <Card className="bg-gray-50">
+                <CardContent className="flex flex-col items-center justify-center py-8">
+                  <Bell className="h-12 w-12 text-gray-400 mb-4" />
+                  <p className="text-gray-500 text-center">
+                    No hay notificaciones de partidos por el momento
+                  </p>
+                </CardContent>
+              </Card>
+            )}
+          </div>
+        </TabsContent>
+      </Tabs>
+      {isModalNotificationOpen && (
+        <NotificationModal
+          isOpen={isModalNotificationOpen}
+          onClose={() => setIsModalNotificationOpen(false)}
+          onSubmit={handleScoreSubmit}
+          idReservation={selectedIdPartido.toString()}
+        />
+      )}
+      {isModalCalificationOpen && (
+        <CalificationModal
+          isOpen={isModalCalificationOpen}
+          onClose={() => setIsModalCalificationOpen(false)}
+          onSubmit={handleCalificationSubmit}
+          id_establecimiento={selectedIdEstablecimiento}
+        />
+      )}
     </div>
   );
 }
