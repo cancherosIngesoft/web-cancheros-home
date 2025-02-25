@@ -54,7 +54,12 @@ interface AddFieldModalProps {
   isEdit?: boolean;
 }
 
-export function AddFieldModal({ open, onOpenChange, existingField, isEdit }: AddFieldModalProps) {
+export function AddFieldModal({
+  open,
+  onOpenChange,
+  existingField,
+  isEdit,
+}: AddFieldModalProps) {
   const [images, setImages] = useState<{ preview: string; base64: string }[]>(
     []
   );
@@ -89,11 +94,12 @@ export function AddFieldModal({ open, onOpenChange, existingField, isEdit }: Add
           field_capacity: existingField.capacidad,
           field_description: existingField.descripcion,
           field_price: existingField.precio,
-          field_schedule: existingField.field_schedule_?.map(h => ({
-            day: h.dia,
-            startTime: h.hora_inicio,
-            endTime: h.hora_fin
-          })) || []
+          field_schedule:
+            existingField.field_schedule_?.map((h) => ({
+              day: h.dia,
+              startTime: h.hora_inicio,
+              endTime: h.hora_fin,
+            })) || [],
         });
       } else {
         // Limpiar form y estado para nueva cancha
@@ -107,14 +113,14 @@ export function AddFieldModal({ open, onOpenChange, existingField, isEdit }: Add
 
   // Efecto para limpiar el estado cuando el modal se cierra
   useEffect(() => {
-      if (!open) {
-        clearForm();
-      }
+    if (!open) {
+      clearForm();
+    }
   }, [open]);
 
   // Función para limpiar todos los estados
   const clearForm = () => {
-    useGlobalStore.getState().clearStore("field"); 
+    useGlobalStore.getState().clearStore("field");
     setImages([]);
     setDisplayPrice("");
     reset(); // Limpia el formulario
@@ -207,7 +213,7 @@ export function AddFieldModal({ open, onOpenChange, existingField, isEdit }: Add
           setIsLoading(false);
           return;
         }
-  
+
         if (!field.field_schedule || field.field_schedule.length === 0) {
           toast({
             title: "Error",
@@ -243,6 +249,9 @@ export function AddFieldModal({ open, onOpenChange, existingField, isEdit }: Add
             title: "Éxito",
             description: "Cancha actualizada correctamente",
           });
+          if (window !== undefined) {
+            window.location.reload();
+          }
         } else {
           // Llamada a endpoint de creación
           await registerField(
@@ -267,7 +276,7 @@ export function AddFieldModal({ open, onOpenChange, existingField, isEdit }: Add
     } catch (error) {
       toast({
         title: "Error",
-        description: isEdit 
+        description: isEdit
           ? "Hubo un error al actualizar la cancha"
           : "Hubo un error al guardar la cancha",
         variant: "destructive",
@@ -431,8 +440,8 @@ export function AddFieldModal({ open, onOpenChange, existingField, isEdit }: Add
                           minValue: (value) => {
                             const numValue = parseCOP(value.toString());
                             return (
-                              numValue >= 2000 ||
-                              "El precio debe ser mayor a 2000"
+                              numValue >= 10000 ||
+                              "El precio debe ser mayor a 10000"
                             );
                           },
                           isNumber: (value) =>
@@ -466,12 +475,12 @@ export function AddFieldModal({ open, onOpenChange, existingField, isEdit }: Add
             </TabsContent>
 
             <TabsContent value="schedule">
-              <ScheduleSelector 
-                existingSchedules={existingField?.field_schedule_?.map(h => ({
+              <ScheduleSelector
+                existingSchedules={existingField?.field_schedule_?.map((h) => ({
                   day: h.dia,
                   startTime: h.hora_inicio,
-                  endTime: h.hora_fin
-                }))} 
+                  endTime: h.hora_fin,
+                }))}
                 isEdit={isEdit}
               />
             </TabsContent>
@@ -495,8 +504,10 @@ export function AddFieldModal({ open, onOpenChange, existingField, isEdit }: Add
                   <span className="animate-spin mr-2">🕒</span>
                   {isEdit ? "Actualizando..." : "Guardando..."}
                 </>
+              ) : isEdit ? (
+                "Actualizar"
               ) : (
-                isEdit ? "Actualizar" : "Guardar"
+                "Guardar"
               )}
             </Button>
           </div>
