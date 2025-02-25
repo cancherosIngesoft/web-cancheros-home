@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getToken } from "next-auth/jwt";
-import { authOptions } from "@/lib/utils";
+import { authOptions } from "@/lib/nextAuthConfig";
 
 export async function middleware(req: NextRequest) {
   const token = await getToken({ req, secret: authOptions.secret });
@@ -9,20 +9,20 @@ export async function middleware(req: NextRequest) {
   // Permitir acceso a rutas de autenticación
   if (
     pathname.startsWith("/api/auth") ||
-    pathname === "/login" ||
+    pathname === "/signin" ||
     pathname === "/"
   ) {
     return NextResponse.next();
   }
 
   if (!token) {
-    return NextResponse.redirect(new URL("/api/auth/signin/auth0", req.url));
+    return NextResponse.redirect(new URL("/auth/signin", req.url));
   }
 
   const userRole = token.role as string;
   // Definir rutas específicas para cada rol
   const roleRoutes: Record<string, string | string[]> = {
-    aficionado: ["/reservar_cancha", "/mis_reservas"],
+    aficionado: ["/reservar_cancha", "/mis_reservas", "/club"],
     admin: "/panel_solicitudes",
     duenio: ["/panel_negocio", "/mis_canchas", "/reservas_negocio"],
   };
@@ -47,7 +47,7 @@ export async function middleware(req: NextRequest) {
       }
     }
   } else {
-    return NextResponse.redirect(new URL("/api/auth/signin/auth0", req.url));
+    return NextResponse.redirect(new URL("/auth/signin", req.url));
   }
 
   return NextResponse.next();

@@ -16,12 +16,12 @@ export default function RegisterBusinessPage() {
     useRegistroHost();
   const [isLoading, setIsLoading] = useState(false);
   return (
-    <div className="container mx-auto py-10 border border-gray-200 rounded-lg  self-center">
+    <div className=" py-10 m-10 border border-gray-200 rounded-lg   ">
       <StepIndicator currentStep={currentStep} />
 
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="max-w-2xl mx-auto h-90vh"
+        className="max-w-2xl mx-auto "
       >
         {currentStep === 0 && <WelcomeStep />}
         {/* Step 1 : Información personal */}

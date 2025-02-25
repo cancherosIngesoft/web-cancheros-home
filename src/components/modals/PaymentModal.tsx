@@ -4,12 +4,13 @@ import { useForm } from "react-hook-form";
 import { Input } from "../ui/input";
 import { format } from "date-fns";
 import { handleBookingAndPayment } from "@/actions/book_field/booking_actions";
-import { useGlobalStore } from "@/store";
+import { useGlobalStore, useReservationStore, useTeamDataStore } from "@/store";
 import { useToast } from "@/hooks/use-toast";
 import {
   PaymentFormData,
   ReservaDetails,
 } from "@/actions/book_field/booking_actions";
+import TeamInfo from "../club/TeamInfo";
 interface PaymentModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -33,6 +34,7 @@ export default function PaymentModal({
   >("Cargando");
 
   const auth = useGlobalStore((state) => state.auth);
+  const reservation = useReservationStore((state) => state.reservationInfo);
 
   const onSubmit = async (data: PaymentFormData) => {
     setIsLoading(true);
@@ -42,13 +44,16 @@ export default function PaymentModal({
       const result = await handleBookingAndPayment(
         data,
         reservaDetails,
-        Number(auth?.id)
+        Number(auth?.id),
+        reservation.inTeam,
+        reservation.teamId
       );
 
       setCurrentStep("Pagando");
       toast({
         title: "Reserva creada",
         description: "Ahora puedes pagar la reserva",
+        
       });
 
       if (result.init_point) {

@@ -16,7 +16,7 @@ const TeamPage = () => {
     const NoTeamSelected = () => (
         <Card className="border-0 shadow-none">
             <CardContent className="flex items-center justify-center h-64">
-                <p className="text-xl text-muted-foreground text-center">No has seleccionado ningún equipo aún, ve a al panel de equipos y obesrva el equipos que deseas.</p>
+                <p className="text-xl text-muted-foreground text-center">No has seleccionado ningún equipo aún, ve a al panel de equipos y selecciona el equipo que deseas ver.</p>
             </CardContent>
         </Card>
     )
@@ -32,7 +32,7 @@ const TeamPage = () => {
                     <TabsTrigger value="jugadores">Jugadores</TabsTrigger>
                 </TabsList>
                 {teamName ?
-                    <>
+                    <div className="w-full h-full pb-20 md:pb-0">
                         <TabsContent value="mi-club" className="space-y-6">
                             <TeamInfo />
                             <UpcomingMatch idTeam={idTeam} />
@@ -45,7 +45,7 @@ const TeamPage = () => {
                         <TabsContent value="jugadores">
                             <ClubPlayers idTeam={idTeam} teamName={teamName}/>
                         </TabsContent>
-                    </> :
+                    </div> :
                     <NoTeamSelected />
 
                 }

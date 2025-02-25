@@ -9,6 +9,7 @@ interface TimeSlotProps {
 export function TimeSlot({ time, isSelected, onClick }: TimeSlotProps) {
     return (
         <button
+        type="button"
             onClick={onClick}
             className={`w-28 px-1 py-2 rounded-lg border-2 transition-all duration-200 text-center 
           ${isSelected

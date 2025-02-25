@@ -6,14 +6,15 @@ export interface ReservationActiveReturn {
   hours: { horaInicio: string; horaFin: string };
   inTeam: boolean;
   idBooker: string;
-  bussinesName: string;
+  businessName: string;
   FieldType: string;
   capacity: number;
-  bussinessDirection: string;
+  businessDirection: string;
   fieldImg?: string;
   totalPrice: number;
   teamName?: string;
   idField: string;
+  id_referencia_pago: string | null;
 }
 
 export interface Cancha {
@@ -36,25 +37,25 @@ export interface Cancha {
   tipo: string;
 }
 
-const mockReservations: ReservationActiveReturn[] = [
-  {
-    idReservation: "res-001",
-    dateReservation: "2025-02-20",
-    hours: {
-      horaInicio: new Date("2025-02-18T10:00:00").toISOString(),
-      horaFin: new Date("2025-02-18T12:00:00").toISOString(),
-    },
-    inTeam: true,
-    idBooker: "66",
-    bussinesName: "Empresa Ejemplo",
-    FieldType: "Fútbol",
-    capacity: 22,
-    bussinessDirection: "Calle Falsa 123, Ciudad Ejemplo",
-    totalPrice: 100,
-    teamName: "Equipo A",
-    idField: "49",
-  },
-];
+// const mockReservations: ReservationActiveReturn[] = [
+//   {
+//     idReservation: "res-001",
+//     dateReservation: "2025-02-20",
+//     hours: {
+//       horaInicio: new Date("2025-02-18T10:00:00").toISOString(),
+//       horaFin: new Date("2025-02-18T12:00:00").toISOString(),
+//     },
+//     inTeam: true,
+//     idBooker: "66",
+//     bussinesName: "Empresa Ejemplo",
+//     FieldType: "Fútbol",
+//     capacity: 22,
+//     bussinessDirection: "Calle Falsa 123, Ciudad Ejemplo",
+//     totalPrice: 100,
+//     teamName: "Equipo A",
+//     idField: "49",
+//   },
+// ];
 
 export async function getActiveReservation(
   id_user: string
@@ -129,7 +130,8 @@ interface ReservaBackend {
     id_reservante: number;
     nombre: string;
     tipo_reservante: string;
-  };
+  } | null;
+  id_referencia_pago: string | null;
 }
 
 export async function getReservas(
@@ -247,16 +249,43 @@ export async function getReservationByHostId(
   }
 }
 
-export async function cancelarReserva(id: string): Promise<void> {
+export async function cancelarReserva(
+  reservationId: string,
+  paymentId: string
+): Promise<any> {
   // Mock data
-  console.log(`Cancelando reserva ${id}`);
-  // Aquí iría la lógica para cancelar la reserva en el backend
+  console.log(`Cancelando reserva ${reservationId} con paymentId ${paymentId}`);
+
+  if (paymentId) {
+    try {
+      const res = await fetch(`/api/payment_gateway/delete/`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ paymentId, reservationId }),
+      });
+
+      if (!res.ok) {
+        const data = await res.json();
+        throw new Error(data.message);
+      }
+
+      console.log("Reserva cancelada exitosamente");
+    } catch (e) {
+      console.error(e);
+    }
+  } else {
+    throw new Error(
+      "No se puede cancelar la reserva. No hay un pago registrado"
+    );
+  }
 }
 
 export async function reprogramationReservation(
   idReservation: string,
   idUser: string,
-  newHours: { startDateAndHour: string; endDateAndHour: string }
+  newHours: { hora_inicio: string; hora_fin: string }
 ): Promise<void> {
   // Mock data
   console.log(
@@ -266,29 +295,28 @@ export async function reprogramationReservation(
       newHours,
     })}`
   );
-  // try {
-  //   const res = await fetch(
-  //     `${process.env.NEXT_PUBLIC_API_URL}/api/reservations/reprogramation/`,
-  //     {
-  //       method: "POST",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //       },
-  //       body: JSON.stringify({idReservation, idUser, newHours}),
-  //     }
-  //   );
+  try {
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/api/booking/reschedule/${idReservation}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ ...newHours }),
+      }
+    );
 
-  //   if (!res.ok) {
-  //     const data = await res.json();
-  //     throw new Error(data.message);
-  //   }
-
-  // } catch (e) {
-  //   if (e instanceof Error) {
-  //     console.error("Error en get Reservations:", e.message);
-  //     throw new Error(e.message);
-  //   } else {
-  //     throw new Error("Error desconocido");
-  //   }
-  // }
+    if (!res.ok) {
+      const data = await res.json();
+      throw new Error(data.message);
+    }
+  } catch (e) {
+    if (e instanceof Error) {
+      console.error("Error en get Reservations:", e.message);
+      throw new Error(e.message);
+    } else {
+      throw new Error("Error desconocido");
+    }
+  }
 }

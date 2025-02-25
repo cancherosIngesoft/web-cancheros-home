@@ -3,9 +3,10 @@
 import * as React from "react"
 import * as ToastPrimitives from "@radix-ui/react-toast"
 import { cva, type VariantProps } from "class-variance-authority"
-import { X } from "lucide-react"
+import { AlertTriangle, X, XCircle } from "lucide-react"
 
 import { cn } from "@/lib/utils"
+import BallIcon from "../icon/BallIcon"
 
 const ToastProvider = ToastPrimitives.Provider
 
@@ -29,10 +30,10 @@ const toastVariants = cva(
   {
     variants: {
       variant: {
-        default: "border-2 border-exito bg-white text-foreground",
-        alert: "border-2 border-alerta bg-white text-foreground",
+        default: "border-2 bg-gradient-to-r from-white from-20% to-primary-90  to-902% text-black",
+        alert: "border-2 border-alerta bg-yellow-100 text-yellow-700",
         destructive:
-          "destructive group border-destructive bg-destructive text-destructive-foreground",
+          "destructive border-destructive bg-red-100 text-destructive",
       },
     },
     defaultVariants: {
@@ -45,13 +46,27 @@ const Toast = React.forwardRef<
   React.ElementRef<typeof ToastPrimitives.Root>,
   React.ComponentPropsWithoutRef<typeof ToastPrimitives.Root> &
     VariantProps<typeof toastVariants>
->(({ className, variant, ...props }, ref) => {
+>(({ className, variant, children, ...props }, ref) => {
   return (
     <ToastPrimitives.Root
       ref={ref}
       className={cn(toastVariants({ variant }), className)}
+      duration={5000}
       {...props}
-    />
+    >
+      <div className="flex items-center gap-3">
+        {/* Iconos según la variante */}
+        {variant === "default" && <BallIcon className="h-8 w-8 text-green-600" />}
+        {variant === "alert" && <AlertTriangle className="h-6 w-6 text-yellow-600" />}
+        {variant === "destructive" && <XCircle className="h-6 w-6 text-red-600" />}
+        
+        <div className="flex-1">
+          {children}
+        </div>
+        
+        <ToastClose />
+      </div>
+    </ToastPrimitives.Root>
   )
 })
 Toast.displayName = ToastPrimitives.Root.displayName

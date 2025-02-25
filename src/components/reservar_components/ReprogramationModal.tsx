@@ -43,6 +43,8 @@ interface ReprogramacionModalProps {
   idField: string
   numHours: number
   isInTeam?: boolean
+  hour:string
+  date:string
 }
 
 const ReprogramationModal = ({
@@ -55,7 +57,9 @@ const ReprogramationModal = ({
   totalPrice,
   idField,
   numHours,
-  isInTeam=false
+  isInTeam=false,
+  date,
+  hour
 }: ReprogramacionModalProps) => {
   const idUser = useGlobalStore((state) => state.auth?.id)
   const idTeam = useTeamDataStore((state) => state.idTeam)
@@ -118,8 +122,8 @@ const ReprogramationModal = ({
     mutationFn: () => {
       if (!selectedDate?.date || !selectedHours || !idUser) return Promise.reject("Error en los datos")
       const newHours = {
-        startDateAndHour: `${new Date(selectedDate.date).toISOString().split("T")[0]} ${selectedHours[0].hora_inicio}:00`,
-        endDateAndHour: `${new Date(selectedDate.date).toISOString().split("T")[0]} ${selectedHours[selectedHours.length - 1].hora_fin}:00`,
+        hora_inicio: `${new Date(selectedDate.date).toISOString().split("T")[0]} ${selectedHours[0].hora_inicio}:00`,
+        hora_fin: `${new Date(selectedDate.date).toISOString().split("T")[0]} ${selectedHours[selectedHours.length - 1].hora_fin}:00`,
       }
 
       return reprogramationReservation(idReservation, idUser, newHours)
@@ -132,9 +136,9 @@ const ReprogramationModal = ({
       })
       //Para recargar las reservas y que se actualice las vista
       if(isInTeam){
-        queryClient.invalidateQueries({ queryKey: ["upcomingMatch", idTeam, idUser] })
+        queryClient.refetchQueries({ queryKey: ["upcomingMatch", idTeam, idUser] })
       }else{
-        queryClient.invalidateQueries({ queryKey: ["activeReservations", idUser] })
+        queryClient.refetchQueries({ queryKey: ["activeReservations", idUser] })
 
       }
       setSelectedHours(null)
@@ -188,9 +192,7 @@ const ReprogramationModal = ({
             </DialogTitle>
             <DialogDescription>
               Selecciona una nueva fecha y hora para tu reserva{" "}
-              <span className="font-semibold text-yellow-400">
-                (si reprogramas la reserva, ya no podras cancelarla)
-              </span>
+             
             </DialogDescription>
           </DialogHeader>
 
@@ -213,10 +215,10 @@ const ReprogramationModal = ({
                     </div>
                   )}
                 </div>
-                <div className="flex flex-col">
-                  <p className="font-bold">
+                <div className="flex flex-col gap-2">
+                  <p className="font-bold text-tertiary-25">
                     Precio:{" "}
-                    <span className="font-normal">
+                    <span className="font-medium text-black">
                       {new Intl.NumberFormat("es-CO", {
                         style: "currency",
                         currency: "COP",
@@ -224,8 +226,14 @@ const ReprogramationModal = ({
                       }).format(totalPrice)}
                     </span>
                   </p>
-                  <p className="font-bold">
-                    Tipo de cancha: <span className="font-normal">{fieldType}</span>
+                  <p className="font-bold text-tertiary-25 ">
+                    Tipo de cancha: <span className="font-normal text-black">{fieldType}</span>
+                  </p>
+                  <p className="font-bold text-tertiary-25">
+                    Fecha: <span className="font-normal text-black">{date}</span>
+                  </p>
+                  <p className="font-bold text-tertiary-25">
+                    Hora: <span className="font-normal text-black">{hour}</span>
                   </p>
                 </div>
               </div>
@@ -257,6 +265,7 @@ const ReprogramationModal = ({
                         setSelectedHours(null)
                       }}
                       initialFocus
+                      disabled={(date) => date < new Date() || date < new Date("1900-01-01")}
                     />
                   </PopoverContent>
                 </Popover>
@@ -304,15 +313,17 @@ const ReprogramationModal = ({
           </div>
         </DialogContent>
       </Dialog>
-
-      <ConfirmationModal
+      {isSelectionValid && selectedDate &&
+        <ConfirmationModal
         isOpen={isConfirmationModalOpen}
         title="¿Estás seguro de reprogramar la reserva?"
-        description="Recuerda que si reprogramas la reserva, ya no podrás cancelarla."
+        description={`La reserva será reprogramada para el ${selectedDate?.date?.toISOString().split("T")[0]} y en en el horario ${selectedHours?.[0].hora_inicio} - ${selectedHours?.[selectedHours.length - 1].hora_fin}`}
         onClose={() => setIsConfirmationModalOpen(false)}
         onConfirm={onSubmit}
         icon={<CalendarClock className="h-8 w-8 text-yellow-500" />}
       />
+      }        
+      
     </>
   )
 }

@@ -59,6 +59,7 @@ export default function FinancialDashboard() {
           "2025",
           new Date().toISOString().split("T")[0]
         );
+
         if (reservas.length > 0) {
           const reservas_data = reservas.map((reserva) => ({
             id: "Cliente " + reserva.idBooker,
@@ -72,6 +73,16 @@ export default function FinancialDashboard() {
           setReservas(reservas_data);
         } else {
           setReservas([]);
+        }
+        if (canchas.length > 0) {
+          const { use_porcentage, total_profit } = await getOcupationAndIncomes(
+            user.id || "",
+            canchas[0].canchas_id,
+            "2",
+            "2025"
+          );
+          setTasaOcupacion(use_porcentage || 0);
+          setTotalIngresos(total_profit || 0);
         }
       }
     };
@@ -113,7 +124,7 @@ export default function FinancialDashboard() {
   };
 
   return (
-    <div className="flex flex-col items-start justify-start h-screen w-[90vw] ml-[5vw] py-6 space-y-8">
+    <div className="flex flex-col items-start justify-start h-screen w-full py-6 space-y-8">
       {/* Header */}
       <div className="space-y-2">
         <div className="flex items-center gap-2">
@@ -212,10 +223,14 @@ export default function FinancialDashboard() {
         <Card>
           <CardHeader className="space-y-1">
             <CardTitle className="text-3xl font-bold">
-              {totalIngresos.toLocaleString("es-CO", {
-                style: "currency",
-                currency: "COP",
-              })}
+              {loading ? (
+                <Skeleton className="h-8 w-24" />
+              ) : (
+                totalIngresos.toLocaleString("es-CO", {
+                  style: "currency",
+                  currency: "COP",
+                })
+              )}
             </CardTitle>
             <p className="text-sm text-muted-foreground">Ingresos totales</p>
           </CardHeader>
@@ -224,7 +239,11 @@ export default function FinancialDashboard() {
         <Card>
           <CardHeader className="space-y-1">
             <CardTitle className="text-3xl font-bold">
-              {tasaOcupacion.toFixed(1)}%
+              {loading ? (
+                <Skeleton className="h-8 w-24" />
+              ) : (
+                tasaOcupacion.toFixed(1) + "%"
+              )}
             </CardTitle>
             <p className="text-sm text-muted-foreground">Tasa de ocupación</p>
           </CardHeader>

@@ -30,7 +30,7 @@ const CardPlayer = ({ player }: { player: ReturnPlayersClub }) => {
             return deleteMember(idTeam, idUser, idUserWhoDelete);
         },
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ["players", idTeam] })
+            queryClient.refetchQueries({queryKey:["players", idTeam]})
             toast({
                 title: "Usuario eliminado",
                 description: "el usuario ha sido eliminado del club correctamente",
@@ -64,7 +64,7 @@ const CardPlayer = ({ player }: { player: ReturnPlayersClub }) => {
                 )}
             </div>
             <div>
-                {auth.id == idCaptain &&
+                {auth.id == idCaptain && player.isCaptain === false &&
                     <Button
                         size="icon"
                         className="bg-destructive/30 hover:bg-destructive/70 text-destructive"

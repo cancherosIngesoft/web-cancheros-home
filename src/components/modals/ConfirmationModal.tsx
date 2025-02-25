@@ -34,7 +34,7 @@ const ConfirmationModal: React.FC<ConfirmationModalProps> = ({
       <AlertDialogContent>
         <AlertDialogHeader className="text-center flex flex-col justify-center items-center">
         {Icon }
-          <AlertDialogTitle>{title}</AlertDialogTitle>
+          <AlertDialogTitle className='text-center'>{title}</AlertDialogTitle>
           
           <AlertDialogDescription>{description}</AlertDialogDescription>
         </AlertDialogHeader>

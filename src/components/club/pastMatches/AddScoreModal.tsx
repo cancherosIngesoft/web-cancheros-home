@@ -18,20 +18,21 @@ import { addScoreToMatch } from "../../../actions/club_management/club_past_matc
 import { useTeamDataStore } from "@/store"
 import ShieldTeamAIcon from "@/components/icon/ShieldTeamAIcon"
 import ShieldTeamBIcon from "@/components/icon/ShieldTeamBIcon"
+import { DialogDescription } from "@radix-ui/react-dialog"
 
 
 const scoreSchema = z.object({
   teamAScore: z.coerce
-    .number({ 
+    .number({
       required_error: "El marcador es requerido",
-      invalid_type_error: "El marcador debe ser un número" 
+      invalid_type_error: "El marcador debe ser un número"
     })
     .min(0, "El marcador debe ser un número positivo")
     .max(99, "El marcador no puede ser mayor a 99"),
   teamBScore: z.coerce
-    .number({ 
+    .number({
       required_error: "El marcador es requerido",
-      invalid_type_error: "El marcador debe ser un número" 
+      invalid_type_error: "El marcador debe ser un número"
     })
     .min(0, "El marcador debe ser un número positivo")
     .max(99, "El marcador no puede ser mayor a 99"),
@@ -42,7 +43,7 @@ type ScoreFormData = z.infer<typeof scoreSchema>
 interface ScoreModalProps {
   isOpen: boolean
   onClose: () => void
-  score: {teamName: string, teamId: string, score: number | undefined}[]
+  score: { teamName: string, teamId: string, score: number | undefined }[]
   idReservation: string
 }
 
@@ -61,15 +62,15 @@ export default function ScoreModal({
   } = useForm<ScoreFormData>({
     resolver: zodResolver(scoreSchema),
   })
-  const idTeam =useTeamDataStore((state) => state.idTeam)
+  const idTeam = useTeamDataStore((state) => state.idTeam)
 
   const queryClient = useQueryClient()
 
   const { mutate: addScore, isPending } = useMutation({
-    mutationFn:(data: ScoreFormData) => {
+    mutationFn: (data: ScoreFormData) => {
       const scoreData = [
-        { teamName: score[0].teamName, teamId: score[0].teamId, score: data.teamAScore },
-        { teamName: score[1].teamName, teamId: score[1].teamId, score: data.teamBScore },
+        data.teamAScore,
+        data.teamBScore,
       ]
       return addScoreToMatch(idTeam, idReservation, scoreData)
     },
@@ -78,7 +79,11 @@ export default function ScoreModal({
         title: "Marcador agregado",
         description: "El marcador se ha guardado correctamente",
       })
-      queryClient.invalidateQueries({ queryKey: ["pastMatches", idTeam] })
+      
+      queryClient.refetchQueries({
+        queryKey: ["pastMatches", idTeam],
+       
+      });
       reset()
       onClose()
     },
@@ -100,12 +105,13 @@ export default function ScoreModal({
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
           <DialogTitle className="text-center">Agregar Marcador</DialogTitle>
+          
         </DialogHeader>
         <form onSubmit={(e) => {
           e.preventDefault()
           e.stopPropagation()
           handleSubmit(onSubmit)(e)
-        }}  className="space-y-6">
+        }} className="space-y-6">
           <div className="flex gap-6 items-center">
             <div className="space-y-2 flex-1">
               <div className="text-center text-destructive font-semibold">
@@ -158,7 +164,7 @@ export default function ScoreModal({
                   </p>
                 )}
               </div>
-              
+
             </div>
           </div>
 
@@ -177,6 +183,7 @@ export default function ScoreModal({
             )}
           </Button>
         </form>
+        
       </DialogContent>
     </Dialog>
   )

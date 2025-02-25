@@ -25,6 +25,7 @@ export default function TeamsInformation({
   isPastReservation,
 
 }: TeamsInformationProps) {
+  
   return (
     <div className="flex-1 flex flex-col md:border-l-2 md:border-gray-200 h-full">
       <div className={`overflow-hidden  relative ${isPastReservation ? "md:h-[100%]" : "md:h-[90%]"}`}>
@@ -33,17 +34,20 @@ export default function TeamsInformation({
           <div className=" bg-[url(/CampinAzul.jpg)] bg-cover  md:h-full">
             <div className=" p-4 w-full h-full gap-2 flex flex-col items-center rounded-lg md:h-full">
               <div className=" w-4/5 bg-blue-200/70 rounded-lg p-2  flex flex-col md:flex-row gap-4 items-center justify-center text-center h-contain text-lg sm:text-lg font-bold text-blue-600 ">
-                <h3 >{teams.TeamA.teamName}</h3>
-                {teams.TeamA.score && teams.TeamB.score &&
+                <h3 >{teams.teamA.nameTeam}</h3>
+                {teams.teamA.score && teams.teamB.score &&
                   <div className="w-8 h-8 bg-white/50 rounded-md flex justify-center items-center">
-                    <span className={`text-xl ${teams.TeamA.score == teams.TeamB.score ? "text-yellow-500" : teams.TeamA.score > teams.TeamB.score ? "text-primary" : "text-destructive"}`}>{teams.TeamA.score} </span>
+                    <span className={`text-xl ${teams.teamA.score == teams.teamB.score ? "text-yellow-500" : teams.teamA.score > teams.teamB.score ? "text-primary" : "text-destructive"}`}
+                    >{teams.teamA.score}
+
+                    </span>
                   </div>
                 }
               </div>
 
               <div className="flex-1 flex flex-col w-full md:h-[22rem] md:flex-none space-y-1 bg-blue-600/30 rounded-lg p-2 justify-between border-2 border-blue-600">
                 <div className="flex flex-col gap-1 overflow-y-auto max-h-80 ">
-                  {teams.TeamA.members.map((member: string, index: number) => (
+                  {teams.teamA.members.map((member: string, index: number) => (
                     <div
                       key={index}
                       className="text-xs text-center p-2 flex flex-row items-center gap-2 bg-blue-600/80 text-white font-semibold rounded"
@@ -57,10 +61,10 @@ export default function TeamsInformation({
                   <Button
                     className="mt-4 w-full border-blue-500 border-2 bg-transparent hover:bg-blue-700 font-bold text-white bg-blue-500"
                     variant="outline"
-                    onClick={() => onJoinTeam(teams.TeamA.idTeam, teams.TeamA.teamName)}
+                    onClick={() => onJoinTeam(teams.teamA.idTeam, teams.teamA.nameTeam)}
                     disabled={isLoading || userTeam !== null}
                   >
-                    {isLoading ? "Cargando..." : userTeam === teams.TeamA.idTeam ? "Unido" : "Unirme"}
+                    {isLoading ? "Cargando..." : userTeam === teams.teamA.idTeam ? "Unido" : "Unirme"}
                   </Button>
                 }
 
@@ -91,17 +95,20 @@ export default function TeamsInformation({
           <div className=" bg-[url(/CampinRojo.jpg)] bg-cover  md:h-full">
             <div className=" gap-2 p-4 w-full h-full  flex flex-col items-center rounded-lg md:h-full">
               <div className=" w-4/5 bg-orange-200/70 rounded-lg p-2  flex flex-col-reverse md:flex-row gap-4 items-center justify-center text-center h-contain text-lg sm:text-lg font-bold text-orange-600 ">
-                {teams.TeamA.score && teams.TeamB.score &&
+                {teams.teamA.score && teams.teamB.score &&
                   <div className="w-8 h-8 bg-white/50 rounded-md flex justify-center items-center">
-                    <span className={`text-xl ${teams.TeamA.score == teams.TeamB.score ? "text-yellow-500" : teams.TeamA.score < teams.TeamB.score ? "text-primary" : "text-destructive"}`}>{teams.TeamB.score} </span>
+                    <span className={`text-xl ${teams.teamA.score == teams.teamB.score ? "text-yellow-500" : teams.teamA.score < teams.teamB.score ? "text-primary" : "text-destructive"}`}
+                    >{teams.teamB.score.toString()}
+
+                    </span>
                   </div>
                 }
-                <h3 >{teams.TeamB.teamName}</h3>
+                <h3 >{teams.teamB.nameTeam}</h3>
 
               </div>
               <div className="flex-1  md:h-[22rem] md:flex-none flex flex-col w-full space-y-1 bg-orange-600/30 rounded-lg p-2 justify-between border-2 border-orange-600">
                 <div className="flex flex-col gap-1 overflow-y-auto max-h-80">
-                  {teams.TeamB.members.map((member, index) => (
+                  {teams.teamB.members.map((member, index) => (
                     <div
                       key={index}
                       className="text-xs text-center p-2 flex flex-row items-center gap-2 bg-orange-400/80 text-white font-semibold rounded"
@@ -115,10 +122,10 @@ export default function TeamsInformation({
                   <Button
                     className="mt-4 w-full border-orange-500 border-2 bg-transparent hover:bg-orange-600 hover:text-white font-bold text-white bg-orange-300"
                     variant="outline"
-                    onClick={() => onJoinTeam(teams.TeamB.idTeam, teams.TeamB.teamName)}
+                    onClick={() => onJoinTeam(teams.teamB.idTeam, teams.teamB.nameTeam)}
                     disabled={isLoading || userTeam !== null}
                   >
-                    {isLoading ? "Cargando..." : userTeam === teams.TeamB.idTeam ? "Unido" : "Unirme"}
+                    {isLoading ? "Cargando..." : userTeam === teams.teamB.idTeam ? "Unido" : "Unirme"}
                   </Button>
                 }
 

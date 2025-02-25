@@ -1,7 +1,7 @@
 "use client"
 
 import { getClubPlayers, LeaveClub } from "@/actions/club_management/club_players_actions"
-import { useQuery } from "@tanstack/react-query"
+import { useQuery, useQueryClient } from "@tanstack/react-query"
 import CardPlayer from "./CardPlayer"
 import { Button } from "@/components/ui/button"
 import { Skeleton } from "@/components/ui/skeleton"
@@ -10,7 +10,7 @@ import { useState } from "react"
 
 import { useShallow } from "zustand/react/shallow"
 import { useRouter } from "next/navigation"
-import { useGlobalStore } from "@/store"
+import { useGlobalStore, useTeamDataStore } from "@/store"
 import { useToast } from "@/hooks/use-toast"
 import ConfirmationModal from "@/components/modals/ConfirmationModal"
 import { FilePen } from 'lucide-react';
@@ -27,6 +27,7 @@ const ClubPlayers = ({ idTeam, teamName }: ClubPlayersProps) => {
   const router = useRouter()
   const auth = useGlobalStore(useShallow((state) => state.auth))
   const [isOpenAddPlayersModal, setIsOpenAddPlayersModal] = useState(false)
+  const idCaptain = useTeamDataStore((state) => state.idCaptain);
 
   const {
     data: players,
@@ -39,6 +40,8 @@ const ClubPlayers = ({ idTeam, teamName }: ClubPlayersProps) => {
     staleTime: 1000 * 60,
     retry: 2,
   })
+
+  const queryClient = useQueryClient()
 
   const handleLeaveClub = () => {
     setIsModalOpen(true)
@@ -56,6 +59,7 @@ const ClubPlayers = ({ idTeam, teamName }: ClubPlayersProps) => {
         description: "Has salido del club exitosamente",
         variant: "default",
       })
+      queryClient.refetchQueries({ queryKey: ["clubs", auth.id] })
       router.push("/reservar_cancha")
     } catch (error) {
       toast({
@@ -86,14 +90,20 @@ const ClubPlayers = ({ idTeam, teamName }: ClubPlayersProps) => {
         <span className="text-sm text-gray-400">{players?.length} jugadores</span>
         <hr className="flex-1 border-2 border-gray-300 rounded-lg" />
       </div>
-      <Button variant="outline"
-        className="border-2 flex flex-row p-0 border-primary w-40 h-12 text-primary font-bold mt-4"
-        onClick={() => setIsOpenAddPlayersModal(true)}
-      >
-        <FilePen className="min-w-6 min-h-6" />
-        Realizar fichajes
+      {auth.id == idCaptain && (
 
-      </Button>
+        <Button variant="outline"
+          className="border-2 flex flex-row p-0 border-primary w-40 h-12 text-primary font-bold mt-4"
+          onClick={() => setIsOpenAddPlayersModal(true)}
+        >
+          <FilePen className="min-w-6 min-h-6" />
+          Realizar fichajes
+
+        </Button>
+      )
+
+      }
+
       <div className="flex flex-col mt-2 w-full gap-2">
         {isLoading &&
           Array.from({ length: 5 }).map((_, index) => <Skeleton key={index} className="w-full h-12 bg-gray-300" />)}
@@ -112,15 +122,15 @@ const ClubPlayers = ({ idTeam, teamName }: ClubPlayersProps) => {
         onClose={() => setIsModalOpen(false)}
         onConfirm={confirmLeaveClub}
         title="Salir del Club"
-        description="¿Estás seguro de que quieres salir de este club? Esta acción no se puede deshacer."
+        description="¿Estás seguro de que quieres salir de este club? Si eres el capitan, uno de los jugadores sera promovido a capitan de manera aleatoria"
         icon={<LogOut className="w-16 h-16 text-destructive my-4" />}
       />
       <AddPlayersModal
         isOpen={isOpenAddPlayersModal}
-        onClose={() => setIsOpenAddPlayersModal(false)} 
-        idTeam={idTeam} 
+        onClose={() => setIsOpenAddPlayersModal(false)}
+        idTeam={idTeam}
         idUserWhoAdd={auth.id}
-        />
+      />
     </div>
   )
 }

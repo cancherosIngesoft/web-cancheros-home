@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button"
 import { Shield, X } from "lucide-react"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { CreateClubModal } from "./CreateClubModal"
 import CustomShield from "../icon/CustomShield"
 import CreateTeamShieldIcon from "../icon/CreateTeamShield"
@@ -25,11 +25,14 @@ interface ClubsPanelProps {
   isOpen: boolean
   onClose: () => void
   navbarWidth: number
+  navbarHeight: number 
 }
 
-export function PanelClub({ isOpen, onClose, navbarWidth }: ClubsPanelProps) {
+export function PanelClub({ isOpen, onClose, navbarWidth,navbarHeight }: ClubsPanelProps) {
   const { data: session } = useSession()
   const userId = session?.user?.id ?? ""
+  const [isClient, setIsClient] = useState(false);
+
   const {
     data: clubs,
     isLoading,
@@ -42,13 +45,23 @@ export function PanelClub({ isOpen, onClose, navbarWidth }: ClubsPanelProps) {
     retry: 1,
   })
   const [isCreateClubOpen, setIsCreateClubOpen] = useState(false)
+  useEffect(() => {
+    // Este código solo se ejecuta en el navegador
+    setIsClient(true);
+  }, []);
 
   return (
     <>
       <div
-        style={{ left: `${navbarWidth}px` }}
-        className={`fixed top-0 h-full w-[25vw] z-10 bg-surface shadow-lg transform transition-all duration-300 ease-in-out py-4 ${isOpen ? "translate-x-0 opacity-100 " : "-translate-x-[40vw] opacity-0  "
-          } `}
+        style={{
+          left: isClient && window.innerWidth < 768 ? "0" : `${navbarWidth}px`, // Ajuste para móviles
+          bottom: isClient && window.innerWidth < 768 ? `${navbarHeight}px` : "0", // Ajuste para móviles
+        }}
+        className={`fixed md:top-0 w-full h-[75vh] md:h-full md:w-[25vw] bg-surface shadow-lg transform transition-all duration-300 ease-in-out py-4 ${
+          isOpen
+            ? "translate-y-0 md:translate-x-0 opacity-100" 
+            : "translate-y-[120vh] md:translate-y-0 md:-translate-x-[40vw] opacity-0" 
+        }`}
       >
         <div className="flex flex-col h-full w-full p-4">
           <div className="flex items-center justify-between mb-6">
