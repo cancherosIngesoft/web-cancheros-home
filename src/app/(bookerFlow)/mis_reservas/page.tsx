@@ -52,12 +52,18 @@ function MisReservasContent() {
         </Link>
       </div>
 
-      <Tabs defaultValue="active" className="w-full flex-col justify-center align-center">
-        <TabsList className="w-full mb-6 h-10 bg-white">
-          <TabsTrigger className="flex-1 font-semibold" value="active">
+      <Tabs defaultValue="active" className="flex-1 flex flex-col overflow-hidden">
+        <TabsList className="w-full flex flex-row flex-shrink-0 gap-2 px-2 items-center h-12">
+          <TabsTrigger
+
+            className="data-[state=active]:bg-green-100 h-8 data-[state=active]:text-green-700 text-xs sm:text-sm md:text-base py-2 sm:py-3"
+            value="active">
             Reservas Activas
           </TabsTrigger>
-          <TabsTrigger className="flex-1 font-semibold" value="past">
+          <TabsTrigger
+
+            className="data-[state=active]:bg-green-100 h-8 data-[state=active]:text-green-700 text-xs sm:text-sm md:text-base py-2 sm:py-3"
+            value="past">
             Reservas Pasadas
           </TabsTrigger>
         </TabsList>
@@ -77,7 +83,7 @@ function MisReservasContent() {
             isLoading={pastReservationsLoading}
             isError={pastReservationsError}
             error={pastReservationsFailureReason}
-            
+
           />
         </TabsContent>
       </Tabs>

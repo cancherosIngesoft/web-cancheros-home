@@ -29,9 +29,9 @@ const CardPastMatch = ({ match }: CardPastMatchProps) => {
     setShowAddResult(true)
   }
  
-  const hasValidScore = match.score &&
-    match.score[0].score !== undefined &&
-    match.score[1].score !== undefined;
+  const hasValidScore = match.score && match.score.length>0 &&
+    match.score[0]?.score !== undefined &&
+    match.score[1]?.score !== undefined;
 
   const getScoreColor = (teamIndex: number) => {
     
@@ -117,7 +117,8 @@ const CardPastMatch = ({ match }: CardPastMatchProps) => {
         isPastReservation={true}
       />
       <AddScoreModal
-        score={match.score}
+        teamAName={match.teamAName}
+        teamBName={match.teamBName}
         idReservation={match.idReservation}
         isOpen={showAddResult}
         onClose={() => setShowAddResult(false)} />

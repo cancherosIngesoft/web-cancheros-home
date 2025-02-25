@@ -43,8 +43,8 @@ interface ClubAttributes {
   
       
       if (logo) {
-        const logoBlob = processBase64Image(logo, "logo.jpg", "image/jpeg");
-        formData.append("file", logoBlob, "logo.jpg");
+        const logoBlob = processBase64Image(logo, `logo${name}.jpg`, "image/jpeg");
+        formData.append("file", logoBlob, `logo${name}.jpg`);
       }else{
         formData.append("file",  new File([], "empty.jpg", { type: "image/jpeg" })); // no funciona como deberia
 

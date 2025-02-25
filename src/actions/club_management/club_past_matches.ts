@@ -14,7 +14,7 @@ export interface ReturnPastMatches {
     teamAName: string,
     teamBName: string,
     idField: string,
-    score: { teamName: string, teamId: string, score: number | undefined }[];
+    score: { teamName: string| undefined, teamId: string |undefined, score: number | undefined }[];
 
 }
 

@@ -43,14 +43,16 @@ type ScoreFormData = z.infer<typeof scoreSchema>
 interface ScoreModalProps {
   isOpen: boolean
   onClose: () => void
-  score: { teamName: string, teamId: string, score: number | undefined }[]
+  teamAName:string
+  teamBName:string
   idReservation: string
 }
 
 export default function ScoreModal({
   isOpen,
   onClose,
-  score,
+  teamAName,
+  teamBName,
   idReservation,
 }: ScoreModalProps) {
   const { toast } = useToast()
@@ -115,7 +117,7 @@ export default function ScoreModal({
           <div className="flex gap-6 items-center">
             <div className="space-y-2 flex-1">
               <div className="text-center text-destructive font-semibold">
-                {score[0].teamName}
+                {teamAName}
               </div>
               <div className="flex justify-center">
                 <div className="w-14 h-14 bg-destructive/10 rounded-full flex items-center justify-center">
@@ -142,7 +144,7 @@ export default function ScoreModal({
 
             <div className="space-y-2 flex-1">
               <div className="text-center text-primary font-semibold">
-                {score[1].teamName}
+                {teamBName}
               </div>
               <div className="flex justify-center">
                 <div className="w-14 h-14 bg-primary/10 rounded-full flex items-center justify-center">
