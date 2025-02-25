@@ -1,7 +1,6 @@
 import { IFieldState } from "@/store/types";
 import { fetchWithRetry } from "@/utils/utils";
 
-
 const formatt_data = (data: IFieldState) => {
   const jsonData = {
     nombre: data.field_name,
@@ -65,30 +64,44 @@ export async function registerField(fieldData: IFieldState, id: string) {
   }
 }
 
+const format_update_data = (data: IFieldState) => {
+  return {
+    nombre: data.field_name,
+    tipo: data.field_type,
+    capacidad: data.field_capacity,
+    descripcion: data.field_description,
+    precio: data.field_price,
+    field_schedule: data.field_schedule.map((schedule) => ({
+      day: schedule.day,
+      startTime: schedule.startTime,
+      endTime: schedule.endTime,
+    })),
+  };
+};
+
 export async function updateField(fieldData: IFieldState, id: string) {
   try {
-    console.log(fieldData);
-    return true;
-    /*
-    const formattedData = formatt_data(fieldData);
+    const formattedData = format_update_data(fieldData);
 
     const response = await fetchWithRetry(
-      process.env.NEXT_PUBLIC_API_URL + `/api/register_courts/${id}`,
+      process.env.NEXT_PUBLIC_API_URL + `/api/edit_courts/${id}`,
       {
-        method: "POST",
-        body: formattedData,
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formattedData),
       }
     );
 
     if (!response.ok) {
       const error = await response.json();
-      throw new Error(error.message || "Error al registrar la cancha");
+      throw new Error(error.message || "Error al actualizar la cancha");
     }
 
     return await response.json();
-    */
   } catch (error) {
-    console.error("Register field error:", error);
+    console.error("Update field error:", error);
     throw error;
   }
 }
@@ -126,8 +139,7 @@ export interface IExistingField extends IField {
   }[];
 }
 
-
-export const getFieldsById = async (id: string):Promise<IExistingField[]> => {
+export const getFieldsById = async (id: string): Promise<IExistingField[]> => {
   const response = await fetchWithRetry(
     process.env.NEXT_PUBLIC_API_URL + `/api/get_courts/${id}`,
     {
@@ -142,10 +154,10 @@ export const getFieldsById = async (id: string):Promise<IExistingField[]> => {
   }
   return responseJson.courts.map((court: IExistingField) => ({
     ...court,
-    field_schedule_: court.field_schedule?.map(schedule => ({
+    field_schedule_: court.field_schedule?.map((schedule) => ({
       dia: schedule.dia,
       hora_inicio: schedule.hora_inicio,
-      hora_fin: schedule.hora_fin
+      hora_fin: schedule.hora_fin,
     })),
   }));
 };

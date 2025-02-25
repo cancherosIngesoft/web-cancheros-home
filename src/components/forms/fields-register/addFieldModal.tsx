@@ -243,7 +243,7 @@ export function AddFieldModal({
               canchas_id: [existingField.id_cancha.toString()],
               id_establecimiento: existingField.id_establecimiento,
             },
-            auth.id.toString()
+            existingField.id_cancha.toString()
           );
           toast({
             title: "Éxito",
