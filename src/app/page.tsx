@@ -47,14 +47,14 @@ export default function Home() {
         className="hero-section relative h-screen w-full flex items-center justify-center"
         style={{
           backgroundImage:
-            "linear-gradient(rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.3)), url('/hero-soccer.jpg')",
+            "linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('/hero-soccer.jpg')",
           backgroundSize: "cover",
           backgroundPosition: "center",
           backgroundRepeat: "no-repeat",
           backgroundAttachment: "fixed",
         }}
       >
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent to-[#1A6B51]/20" />
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent to-[#1A6B51]/40" />
 
         <motion.div
           initial={{ y: 50, opacity: 0 }}
@@ -62,28 +62,28 @@ export default function Home() {
           transition={{ duration: 1, delay: 0.5 }}
           className="relative z-10 text-center px-4 max-w-5xl"
         >
-          <h1 className="text-4xl md:text-5xl lg:text-7xl font-bold bg-gradient-to-t from-green-900 to-green-500 text-transparent bg-clip-text mb-6">
-            Reserva canchas de fútbol en Bogotá
+          <h1 className="text-4xl md:text-5xl lg:text-7xl font-bold text-white mb-6">
+            La forma más inteligente de reservar canchas
           </h1>
-          <p className="text-base md:text-lg lg:text-xl text-black mb-8 max-w-3xl mx-auto font-medium">
-            Encuentra canchas de fútbol sintético en Bogotá de acuerdo a lo que
-            necesites y realiza tu reserva de forma directa, sin esperas. Únete,
-            crea tu equipo y disfruta de esta pasión que nos une.
+          <p className="text-base md:text-lg lg:text-xl text-gray-200 mb-8 max-w-3xl mx-auto">
+            Únete a la comunidad deportiva más grande de Bogotá. Reserva
+            canchas, organiza partidos y conecta con otros jugadores, todo en un
+            solo lugar.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 justify-center">
             <Button
               variant="default"
-              className="text-base lg:text-lg px-8"
+              className="text-base lg:text-lg px-8 bg-green-500 hover:bg-green-600"
               onClick={handleSingIn}
             >
-              Iniciar sesión
+              Comenzar ahora
             </Button>
             <Button
               variant="outline"
-              className="text-base lg:text-lg px-8"
+              className="text-base lg:text-lg px-8 text-black border-white hover:bg-white/10 hover:text-white"
               onClick={() => router.push("/registro_host")}
             >
-              Trabaja con nosotros
+              Registrar mi cancha
             </Button>
           </div>
         </motion.div>
@@ -95,23 +95,63 @@ export default function Home() {
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
           viewport={{ once: true }}
-          className="flex flex-col md:flex-row items-center justify-center min-h-[600px] w-full py-16 gap-8"
+          className="grid grid-cols-2 md:grid-cols-4 gap-8 py-16 w-full"
         >
-          <p className="text-base lg:text-lg w-full md:w-1/2">
-            Sabemos lo difícil que es encontrar y reservar canchas para
-            disfrutar de nuestra mayor pasión, por eso en CANCHEROS queremos que
-            este proceso sea mucho más rápido para jugadores y dueños de las
-            canchas. Crea tus clubes e incluye a tus amigos aficionados del
-            fútbol en un solo lugar.
-          </p>
-          <div className="w-full md:w-1/2">
-            <Image
-              src="/soccer_photo.png"
-              alt="Cancheros"
-              width={800}
-              height={800}
-              className="w-full h-auto"
-            />
+          {[
+            { number: "1000+", label: "Usuarios activos" },
+            { number: "50+", label: "Canchas registradas" },
+            { number: "5000+", label: "Reservas exitosas" },
+            { number: "4.8/5", label: "Calificación promedio" },
+          ].map((stat, index) => (
+            <div key={index} className="text-center">
+              <h3 className="text-3xl md:text-4xl font-bold text-green-600 mb-2">
+                {stat.number}
+              </h3>
+              <p className="text-gray-600">{stat.label}</p>
+            </div>
+          ))}
+        </motion.section>
+
+        <motion.section
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+          viewport={{ once: true }}
+          className="py-16 w-full"
+        >
+          <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">
+            Todo lo que necesitas en un solo lugar
+          </h2>
+          <div className="grid md:grid-cols-3 gap-8">
+            {[
+              {
+                icon: "⚡",
+                title: "Reservas instantáneas",
+                description:
+                  "Encuentra y reserva canchas en tiempo real, sin llamadas ni esperas.",
+              },
+              {
+                icon: "💳",
+                title: "Pagos seguros",
+                description:
+                  "Realiza pagos de forma segura y recibe confirmación instantánea.",
+              },
+              {
+                icon: "📱",
+                title: "Gestión simple",
+                description:
+                  "Administra tus reservas, equipos y partidos desde cualquier dispositivo.",
+              },
+            ].map((feature, index) => (
+              <div
+                key={index}
+                className="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow"
+              >
+                <div className="text-4xl mb-4">{feature.icon}</div>
+                <h3 className="text-xl font-semibold mb-2">{feature.title}</h3>
+                <p className="text-gray-600">{feature.description}</p>
+              </div>
+            ))}
           </div>
         </motion.section>
 
@@ -120,18 +160,43 @@ export default function Home() {
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
           viewport={{ once: true }}
-          className="flex flex-col items-center justify-center min-h-[400px] py-16 px-4"
+          className="py-16 w-full bg-gray-50 -mx-4 px-4"
         >
-          <div className="relative text-center">
-            <p className="text-xl md:text-2xl font-bold text-black">
-              Porque solo nosotros entendemos lo que significa este deporte,
-              <br className="hidden md:block" />
-              somos más que jugadores, somos
-            </p>
-            <p className="text-2xl md:text-3xl font-bold text-green-500 relative z-10">
-              CANCHEROS
-            </p>
-            <div className="absolute top-1/2 left-1/2 w-3/4 h-24 bg-green-200 rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2 opacity-50"></div>
+          <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">
+            Lo que dicen nuestros usuarios
+          </h2>
+          <div className="grid md:grid-cols-3 gap-8">
+            {[
+              {
+                quote:
+                  "Cancheros ha revolucionado la forma en que organizamos nuestros partidos semanales. ¡Es increíblemente fácil de usar!",
+                author: "Carlos R.",
+                role: "Capitán de equipo",
+              },
+              {
+                quote:
+                  "Como dueño de canchas, he visto un aumento significativo en las reservas desde que me uní a la plataforma.",
+                author: "Andrea M.",
+                role: "Propietaria de complejo deportivo",
+              },
+              {
+                quote:
+                  "La mejor parte es poder ver la disponibilidad en tiempo real y hacer reservas instantáneas.",
+                author: "Juan D.",
+                role: "Jugador frecuente",
+              },
+            ].map((testimonial, index) => (
+              <div key={index} className="bg-white p-8 rounded-xl shadow-md">
+                <div className="mb-4">⭐⭐⭐⭐⭐</div>
+                <p className="text-gray-600 mb-4 italic">
+                  "{testimonial.quote}"
+                </p>
+                <div>
+                  <p className="font-semibold">{testimonial.author}</p>
+                  <p className="text-sm text-gray-500">{testimonial.role}</p>
+                </div>
+              </div>
+            ))}
           </div>
         </motion.section>
 
@@ -221,6 +286,31 @@ export default function Home() {
                 transformando la experiencia del fútbol local.
               </p>
             </div>
+          </div>
+        </motion.section>
+
+        <motion.section
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+          viewport={{ once: true }}
+          className="w-full py-16 bg-gradient-to-r from-green-600 to-green-800 text-white rounded-xl mb-16"
+        >
+          <div className="text-center max-w-3xl mx-auto px-4">
+            <h2 className="text-3xl md:text-4xl font-bold mb-6">
+              ¿Listo para revolucionar tu experiencia futbolística?
+            </h2>
+            <p className="text-lg mb-8">
+              Únete a miles de jugadores que ya están disfrutando de una forma
+              más inteligente de jugar fútbol.
+            </p>
+            <Button
+              variant="default"
+              className="text-base lg:text-lg px-8 bg-white text-green-700 hover:bg-gray-100 hover:text-black"
+              onClick={handleSingIn}
+            >
+              Comenzar ahora
+            </Button>
           </div>
         </motion.section>
       </main>
