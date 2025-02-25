@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { useMutation } from "@tanstack/react-query"
+import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { Shield, Upload, Loader2 } from "lucide-react"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -16,6 +16,7 @@ import { useSession } from "next-auth/react"
 import { z } from "zod"
 import { compressImage } from "@/utils/utils"
 import CustomShield from "../icon/CustomShield"
+import { useGlobalStore } from "@/store"
 
 export const createClubSchema = z.object({
   name: z.string().min(1, "El nombre es obligatorio"),
@@ -36,7 +37,9 @@ export function CreateClubModal({ isOpen, onClose }: CreateClubModalProps) {
   const { data: session } = useSession()
   const [previewUrl, setPreviewUrl] = useState<string>("")
   const { toast } = useToast()
+  const idUser =useGlobalStore((state) => state.auth.id);
 
+  const queryClient = useQueryClient()
   const {
     register,
     handleSubmit,
@@ -54,6 +57,7 @@ export function CreateClubModal({ isOpen, onClose }: CreateClubModalProps) {
         title: "Club creado exitosamente",
         description: "Tu club ha sido creado correctamente",
       })
+      queryClient.refetchQueries({queryKey:["clubs",idUser]})
       handleClose()
     },
     onError: (error: Error) => {

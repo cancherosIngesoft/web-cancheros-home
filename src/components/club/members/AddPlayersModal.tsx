@@ -69,7 +69,7 @@ export default function AddPlayersModal({ isOpen, onClose, idTeam, idUserWhoAdd 
     onSuccess: (response: { message?: string, success:boolean}) => {
       if(response.success === false){
         toast({
-          title: "Juagadores agregados",
+          title: "Jugadores agregados",
           description: response.message,
           variant: "alert",
         })

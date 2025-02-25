@@ -40,7 +40,7 @@ const BussinessInfo = ({ id }: { id: string }) => {
                 initial={{ x: 300, opacity: 0 }}
                 animate={{ x: 0, opacity: 1 }}
                 exit={{ x: 300, opacity: 0 }}
-                className="relative w-full h-full p-4"
+                className="relative w-full h-full p-0 md:p-4"
             >
                 <Button
                     onClick={clearBussinessID}
