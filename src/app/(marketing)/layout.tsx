@@ -1,6 +1,6 @@
 import Footer from "@/components/layout/footer";
 import Navbar from "@/components/layout/navbar";
-import type { Metadata } from "next";
+
 
 // Layout de marketing - Solo para rutas dentro de (marketing)
 export default function MarketingLayout({
@@ -11,7 +11,7 @@ export default function MarketingLayout({
   return (
     <>
       <Navbar />
-      <div className="marketing-layout">{children}</div>
+      <div className="w-full max-w-screen">{children}</div>
       <Footer />
     </>
   );
