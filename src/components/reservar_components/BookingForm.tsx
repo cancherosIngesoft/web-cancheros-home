@@ -1,4 +1,4 @@
-import { use, useEffect, useState } from "react";
+import { use, useEffect, useMemo, useState } from "react";
 import { format } from "date-fns";
 import {
   CalendarIcon,
@@ -109,13 +109,22 @@ const BookingForm: React.FC<BookingFormProps> = ({ selectedField }) => {
 
   const reservationInfo = useReservationStore((state) => state.reservationInfo);
   const businessStore = useBussinessStore((state) => state.bussinessID);
+
+
   const handleHourToggle = (franja: SchedulesToBook) => {
-    setSelectedHours((prev) =>
-      prev?.includes(franja)
-        ? prev.filter((h) => h !== franja)
-        : [...(prev || []), franja]
-    );
-  };
+    setSelectedHours((prev) => {
+      if (!prev) return [franja]
+
+      const isSelected = prev.some((h) => h.hora_inicio === franja.hora_inicio)
+
+      if (isSelected) {
+        return prev.filter((h) => h.hora_inicio !== franja.hora_inicio)
+      } else {
+        const newSelection = [...prev, franja].sort((a, b) => a.hora_inicio.localeCompare(b.hora_inicio))
+        return newSelection
+      }
+    })
+  }
 
   const handleDateChange = (date: Date | undefined) => {
     const result = dateSchema.safeParse(date);
@@ -158,6 +167,20 @@ const BookingForm: React.FC<BookingFormProps> = ({ selectedField }) => {
     setSelectedHours(null);
   }, [selectedField]);
 
+  const areHoursConsecutive = (hours: SchedulesToBook[]): boolean => {
+    for (let i = 1; i < hours.length; i++) {
+      if (hours[i].hora_inicio !== hours[i - 1].hora_fin) {
+        return false
+      }
+    }
+    return true
+  }
+
+  const isSelectionValid = useMemo(() => {
+    return selectedHours && areHoursConsecutive(selectedHours)
+  }, [selectedHours])
+
+
   return (
     <div className="space-y-4 mt-4">
       {selectedField && (
@@ -173,9 +196,8 @@ const BookingForm: React.FC<BookingFormProps> = ({ selectedField }) => {
             <PopoverTrigger asChild>
               <Button
                 variant="outline"
-                className={`${
-                  errorDate !== "" ? "border-destructive" : ""
-                } w-full justify-start text-left font-normal`}
+                className={`${errorDate !== "" ? "border-destructive" : ""
+                  } w-full justify-start text-left font-normal`}
               >
                 <CalendarIcon className="mr-2 h-4 w-4" />
                 {selectedDate?.date ? (
@@ -194,6 +216,7 @@ const BookingForm: React.FC<BookingFormProps> = ({ selectedField }) => {
                   setSelectedHours(null);
                 }}
                 initialFocus
+                disabled={(date) => date < new Date() || date < new Date("1900-01-01")}
               />
             </PopoverContent>
           </Popover>
@@ -238,6 +261,9 @@ const BookingForm: React.FC<BookingFormProps> = ({ selectedField }) => {
               ))}
             </div>
           )}
+          {!isSelectionValid && selectedHours && (
+            <p className="text-sm text-destructive">Por favor, seleccione horas consecutivas.</p>
+          )}
         </motion.div>
       )}
 
@@ -251,13 +277,14 @@ const BookingForm: React.FC<BookingFormProps> = ({ selectedField }) => {
             cancha: reservationInfo.field?.id_field as string,
             horas: reservationInfo.hours?.length ?? 0,
             horaInicio: reservationInfo.hours?.[0].hora_inicio ?? "",
-            horaFin: reservationInfo.hours?.[0].hora_fin ?? "",
+            horaFin: reservationInfo.hours?.[reservationInfo.hours.length-1].hora_fin ?? "",
             total: reservationInfo?.price ?? 0,
           }}
         ></PaymentModal>
       )}
 
-      {selectedField &&
+      {isSelectionValid &&
+        selectedField &&
         selectedDate &&
         selectedHours &&
         selectedHours.length > 0 && (
@@ -302,7 +329,7 @@ const BookingForm: React.FC<BookingFormProps> = ({ selectedField }) => {
                       <div className="h-10 bg-gray-300 animate-pulse rounded-md" />
                     ) : isErrorTeams ? (
                       <ErrorGetInfo
-                        retry={() => {}}
+                        retry={() => { }}
                         error={failureReasonTeams}
                       />
                     ) : userTeams && userTeams.length > 0 ? (
@@ -356,7 +383,12 @@ const BookingForm: React.FC<BookingFormProps> = ({ selectedField }) => {
               selectedTeam={selectedTeam}
               selectedField={selectedField}
             />
-            <Button className="w-full font-bold" size="lg" onClick={onSubmit}>
+            <Button
+              className="w-full font-bold"
+              size="lg" onClick={onSubmit}
+              disabled={!isSelectionValid}
+
+            >
               Reservar
             </Button>
           </div>

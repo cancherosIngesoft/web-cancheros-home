@@ -53,6 +53,7 @@ export default function PaymentModal({
       toast({
         title: "Reserva creada",
         description: "Ahora puedes pagar la reserva",
+        
       });
 
       if (result.init_point) {

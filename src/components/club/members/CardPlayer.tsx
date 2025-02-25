@@ -64,7 +64,7 @@ const CardPlayer = ({ player }: { player: ReturnPlayersClub }) => {
                 )}
             </div>
             <div>
-                {auth.id == idCaptain &&
+                {auth.id == idCaptain && player.isCaptain === false &&
                     <Button
                         size="icon"
                         className="bg-destructive/30 hover:bg-destructive/70 text-destructive"

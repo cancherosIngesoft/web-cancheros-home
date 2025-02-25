@@ -32,7 +32,7 @@ const TeamPage = () => {
                     <TabsTrigger value="jugadores">Jugadores</TabsTrigger>
                 </TabsList>
                 {teamName ?
-                    <>
+                    <div className="w-full h-full pb-20 md:pb-0">
                         <TabsContent value="mi-club" className="space-y-6">
                             <TeamInfo />
                             <UpcomingMatch idTeam={idTeam} />
@@ -45,7 +45,7 @@ const TeamPage = () => {
                         <TabsContent value="jugadores">
                             <ClubPlayers idTeam={idTeam} teamName={teamName}/>
                         </TabsContent>
-                    </> :
+                    </div> :
                     <NoTeamSelected />
 
                 }

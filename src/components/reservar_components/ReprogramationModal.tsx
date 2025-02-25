@@ -192,9 +192,7 @@ const ReprogramationModal = ({
             </DialogTitle>
             <DialogDescription>
               Selecciona una nueva fecha y hora para tu reserva{" "}
-              <span className="font-semibold text-yellow-400">
-                (si reprogramas la reserva, ya no podras cancelarla)
-              </span>
+             
             </DialogDescription>
           </DialogHeader>
 
@@ -267,6 +265,7 @@ const ReprogramationModal = ({
                         setSelectedHours(null)
                       }}
                       initialFocus
+                      disabled={(date) => date < new Date() || date < new Date("1900-01-01")}
                     />
                   </PopoverContent>
                 </Popover>
@@ -314,15 +313,17 @@ const ReprogramationModal = ({
           </div>
         </DialogContent>
       </Dialog>
-
-      <ConfirmationModal
+      {isSelectionValid && selectedDate &&
+        <ConfirmationModal
         isOpen={isConfirmationModalOpen}
         title="¿Estás seguro de reprogramar la reserva?"
-        description="Recuerda que si reprogramas la reserva, ya no podrás cancelarla."
+        description={`La reserva será reprogramada para el ${selectedDate?.date?.toISOString().split("T")[0]} y en en el horario ${selectedHours?.[0].hora_inicio} - ${selectedHours?.[selectedHours.length - 1].hora_fin}`}
         onClose={() => setIsConfirmationModalOpen(false)}
         onConfirm={onSubmit}
         icon={<CalendarClock className="h-8 w-8 text-yellow-500" />}
       />
+      }        
+      
     </>
   )
 }

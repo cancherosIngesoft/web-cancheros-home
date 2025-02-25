@@ -1,7 +1,7 @@
 "use client"
 
 import { getClubPlayers, LeaveClub } from "@/actions/club_management/club_players_actions"
-import { useQuery } from "@tanstack/react-query"
+import { useQuery, useQueryClient } from "@tanstack/react-query"
 import CardPlayer from "./CardPlayer"
 import { Button } from "@/components/ui/button"
 import { Skeleton } from "@/components/ui/skeleton"
@@ -41,6 +41,8 @@ const ClubPlayers = ({ idTeam, teamName }: ClubPlayersProps) => {
     retry: 2,
   })
 
+  const queryClient = useQueryClient()
+
   const handleLeaveClub = () => {
     setIsModalOpen(true)
   }
@@ -57,6 +59,7 @@ const ClubPlayers = ({ idTeam, teamName }: ClubPlayersProps) => {
         description: "Has salido del club exitosamente",
         variant: "default",
       })
+      queryClient.refetchQueries({ queryKey: ["clubs", auth.id] })
       router.push("/reservar_cancha")
     } catch (error) {
       toast({
@@ -119,7 +122,7 @@ const ClubPlayers = ({ idTeam, teamName }: ClubPlayersProps) => {
         onClose={() => setIsModalOpen(false)}
         onConfirm={confirmLeaveClub}
         title="Salir del Club"
-        description="¿Estás seguro de que quieres salir de este club? Esta acción no se puede deshacer."
+        description="¿Estás seguro de que quieres salir de este club? Si eres el capitan, uno de los jugadores sera promovido a capitan de manera aleatoria"
         icon={<LogOut className="w-16 h-16 text-destructive my-4" />}
       />
       <AddPlayersModal

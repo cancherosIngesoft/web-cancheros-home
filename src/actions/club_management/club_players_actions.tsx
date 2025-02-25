@@ -50,31 +50,31 @@
     console.log("leave",idTeam)
 
 
-    // try {
+    try {
 
-    //   const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/clubs/leave/`, {
-    //     method: "POST",
-    //     headers: {
-    //       "Content-Type": "application/json",
-    //     },
-    //     body: JSON.stringify({idTeam, idUser})
-    //   });
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/delete_member`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({idTeam, idUserToDelete:idUser})
+      });
   
-    //   if (!res.ok) {
-    //     const data = await res.json();
-    //     throw new Error(data.message);
-    //   }
+      if (!res.ok) {
+        const data = await res.json();
+        throw new Error(data.Error);
+      }
   
-    //   // Devolver la respuesta del servidor
-    //   return await res.json();
-    // } catch (e) {
-    //   if (e instanceof Error) {
-    //     console.error("Error en al salir del equipo:", e.message);
-    //     throw new Error(e.message);
-    //   } else {
-    //     throw new Error("Error desconocido");
-    //   }
-    // }
+      // Devolver la respuesta del servidor
+      return await res.json();
+    } catch (e) {
+      if (e instanceof Error) {
+        console.error("Error en al salir del equipo:", e.message);
+        throw new Error(e.message);
+      } else {
+        throw new Error("Error desconocido");
+      }
+    }
   }
 
   export async function deleteMember(
