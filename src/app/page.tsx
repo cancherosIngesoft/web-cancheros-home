@@ -38,19 +38,20 @@ export default function Home() {
   }, []);
 
   return (
-    <div className="overflow-x-hidden">
+    <div className="overflow-x-hidden  w-full">
       <Navbar />
       <motion.section
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 1 }}
-        className="hero-section relative h-screen flex items-center justify-center"
+        className="hero-section relative h-screen max-w-full flex items-center justify-center"
         style={{
           backgroundImage:
             "linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('/hero-soccer.jpg')",
           backgroundSize: "cover",
           backgroundPosition: "center",
           backgroundRepeat: "no-repeat",
+          backgroundAttachment: "fixed",
         }}
       >
         <div className="absolute inset-0 bg-gradient-to-b from-transparent to-[#1A6B51]/40" />
@@ -59,12 +60,12 @@ export default function Home() {
           initial={{ y: 50, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ duration: 1, delay: 0.5 }}
-          className="relative z-10 text-center px-4 w-full"
+          className="relative z-10 text-center px-4 max-w-full"
         >
-          <h1 className="text-3xl md:text-4xl lg:text-6xl font-bold text-white mb-6 px-4">
+          <h1 className="text-4xl md:text-5xl lg:text-7xl font-bold text-white mb-6">
             La forma más inteligente de reservar canchas
           </h1>
-          <p className="text-sm md:text-base lg:text-lg text-gray-200 mb-8 max-w-3xl mx-auto px-2">
+          <p className="text-base md:text-lg lg:text-xl text-gray-200 mb-8 max-w-3xl mx-auto">
             Únete a la comunidad deportiva más grande de Bogotá. Reserva
             canchas, organiza partidos y conecta con otros jugadores, todo en un
             solo lugar.
@@ -72,14 +73,14 @@ export default function Home() {
           <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 justify-center">
             <Button
               variant="default"
-              className="text-base lg:text-lg px-6 bg-green-500 hover:bg-green-600"
+              className="text-base lg:text-lg px-8 h-12 font-semibold  bg-green-500 hover:bg-green-600"
               onClick={handleSingIn}
             >
               Comenzar ahora
             </Button>
             <Button
               variant="outline"
-              className="text-base lg:text-lg px-6 border-white hover:bg-white/10 hover:text-white"
+              className="text-base  h-12 font-semibold lg:text-lg px-8 border-primary text-primary-50 border-2 hover:bg-white/10 hover:text-white"
               onClick={() => router.push("/registro_host")}
             >
               Registrar mi cancha
@@ -88,14 +89,13 @@ export default function Home() {
         </motion.div>
       </motion.section>
 
-      <main className="flex flex-col items-center justify-center max-w-7xl mx-auto px-4 w-full">
-        {/* Sección de estadísticas */}
+      <main className="flex flex-col items-center justify-center max-w-7xl mx-auto px-4">
         <motion.section
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
           viewport={{ once: true }}
-          className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8 py-16 w-full"
+          className="grid grid-cols-2 md:grid-cols-4 gap-8 py-16 w-full"
         >
           {[
             { number: "1000+", label: "Usuarios activos" },
@@ -103,16 +103,15 @@ export default function Home() {
             { number: "5000+", label: "Reservas exitosas" },
             { number: "4.8/5", label: "Calificación promedio" },
           ].map((stat, index) => (
-            <div key={index} className="text-center p-2">
-              <h3 className="text-2xl md:text-3xl font-bold text-green-600 mb-2">
+            <div key={index} className="text-center">
+              <h3 className="text-3xl md:text-4xl font-bold text-green-600 mb-2">
                 {stat.number}
               </h3>
-              <p className="text-sm md:text-base text-gray-600">{stat.label}</p>
+              <p className="text-gray-600">{stat.label}</p>
             </div>
           ))}
         </motion.section>
 
-        {/* Sección de características */}
         <motion.section
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -120,7 +119,7 @@ export default function Home() {
           viewport={{ once: true }}
           className="py-16 w-full"
         >
-          <h2 className="text-2xl md:text-3xl font-bold text-center mb-12">
+          <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">
             Todo lo que necesitas en un solo lugar
           </h2>
           <div className="grid md:grid-cols-3 gap-8">
@@ -156,7 +155,6 @@ export default function Home() {
           </div>
         </motion.section>
 
-        {/* Sección de testimonios */}
         <motion.section
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -164,7 +162,7 @@ export default function Home() {
           viewport={{ once: true }}
           className="py-16 w-full bg-gray-50 -mx-4 px-4"
         >
-          <h2 className="text-2xl md:text-3xl font-bold text-center mb-12">
+          <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">
             Lo que dicen nuestros usuarios
           </h2>
           <div className="grid md:grid-cols-3 gap-8">
@@ -202,7 +200,6 @@ export default function Home() {
           </div>
         </motion.section>
 
-        {/* Sección de valores */}
         <motion.section
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -210,7 +207,7 @@ export default function Home() {
           viewport={{ once: true }}
           className="flex flex-col items-center justify-center min-h-[600px] py-16"
         >
-          <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold bg-gradient-to-t from-green-900 to-green-500 text-transparent bg-clip-text mb-16">
+          <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold bg-gradient-to-t from-green-900 to-green-500 text-transparent bg-clip-text mb-16">
             Nuestros valores
           </h1>
           <div className="flex flex-col md:grid md:grid-cols-3 gap-12 md:gap-x-24 md:gap-y-16 items-center max-w-6xl mx-auto">
@@ -259,7 +256,6 @@ export default function Home() {
           </div>
         </motion.section>
 
-        {/* Sección de misión y visión */}
         <motion.section
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -293,7 +289,6 @@ export default function Home() {
           </div>
         </motion.section>
 
-        {/* Sección de llamado a la acción */}
         <motion.section
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -302,10 +297,10 @@ export default function Home() {
           className="w-full py-16 bg-gradient-to-r from-green-600 to-green-800 text-white rounded-xl mb-16"
         >
           <div className="text-center max-w-3xl mx-auto px-4">
-            <h2 className="text-2xl md:text-3xl font-bold mb-6">
+            <h2 className="text-3xl md:text-4xl font-bold mb-6">
               ¿Listo para revolucionar tu experiencia futbolística?
             </h2>
-            <p className="text-base mb-8">
+            <p className="text-lg mb-8">
               Únete a miles de jugadores que ya están disfrutando de una forma
               más inteligente de jugar fútbol.
             </p>

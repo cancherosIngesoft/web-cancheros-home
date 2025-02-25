@@ -6,7 +6,7 @@ export default function BookerLayout({
     children: React.ReactNode;
 }>) {
     return (
-        <div className="flex flex-col-reverse md:flex-row h-screen w-screen">
+        <div className="flex flex-col-reverse md:flex-row h-full w-full">
             {/* Barra lateral */}
             <nav className="fixed w-full h-16 md:relative md:top-0 md:left-0 md:h-full md:w-16 z-20">
                 <LateralNavBar />
