@@ -3,21 +3,8 @@ import Loading from "@/app/(bookerFlow)/reservar_cancha/loading";
 import SelectBussiness from "@/components/reservar_components/SelectBussiness";
 import { Suspense } from "react";
 
-export default async function reservar_cancha() {
-  let allTheBussiness;
-
-  try {
-    allTheBussiness = await getBussiness();
-  } catch (error) {
-    console.error("Error fetching pending requests:", error);
-    // Opcionalmente, puedes retornar contenido alternativo aquí
-    return (
-      <div>
-        <h1>Error</h1>
-        <p>Hubo un problema al cargar los negocios.</p>
-      </div>
-    );
-  }
+export default  function reservar_cancha() {
+  
 
   return (
     <div className="flex  flex-col items-center justify-center ">
@@ -33,7 +20,7 @@ export default async function reservar_cancha() {
       </div>
 
       <div className="md:px-6 w-full">
-        <SelectBussiness initialBusinesses={allTheBussiness} />
+        <SelectBussiness />
       </div>
     </div>
   );
