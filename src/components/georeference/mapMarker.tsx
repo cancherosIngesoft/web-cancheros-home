@@ -27,6 +27,13 @@ export function MapMarker({ marker, index, selectedMarker, setSelectedMarker }: 
 
     changeBusssinessID(id)
   }
+  const toPesos=(price:string)=>{
+    return new Intl.NumberFormat("es-CO", {
+      style: "currency",
+      currency: "COP",
+      maximumFractionDigits: 0,
+    }).format(Number(price))
+  }
   return (
     <div key={index}>
       <Marker position={marker} icon={"/green_pin.svg"} onClick={() => setSelectedMarker(index)}  />
@@ -48,7 +55,12 @@ export function MapMarker({ marker, index, selectedMarker, setSelectedMarker }: 
               </div>
               <div className="flex items-center mb-2">
                 <DollarSign size={20} className="text-green-400 mr-1" />
-                <span className="font-medium">{marker.priceRange ? marker.priceRange[0]+ " - " + marker.priceRange[1]: 'N/A'}</span>
+                <span className="font-medium">{marker.priceRange ? 
+                toPesos(marker.priceRange[0])
+                + 
+                " - " + 
+                
+                toPesos(marker.priceRange[1]): 'N/A'}</span>
               </div>
               
               <div className="flex justify-center w-full">
