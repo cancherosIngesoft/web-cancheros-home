@@ -29,7 +29,7 @@ const miembrosEquipo: Miembro[] = [
     funcion: 'Desarrollador Backend',
     scrumMaster: 'Scrum Master 3',
     descripcion: 'Apasionado por la programación y el fútbol',
-    equipoFavorito: 'Bmerica de Cali',
+    equipoFavorito: 'America de Cali',
     logoEquipoFavoritoUrl: '/AmericaDeCali.png',
     linkedinUrl: 'https://www.linkedin.com/in/miguelparrado/',
   },
@@ -70,33 +70,25 @@ const SobreNosotros = () => {
             Plataforma líder en Bogotá para reservar canchas de fútbol.
             Simplificamos la organización de partidos mientras generamos oportunidades económicas para propietarios.
           </p>
+          <h2 className="text-3xl font-bold text-green-800 mb-6">Historia.....</h2>
+          <p className="text-lg text-gray-700 mb-6">
+            Nacimos como una aplicacion guiada por una pasion y un incorformismo en la forma en como se reservaban las canchas de futbol en Bogota. 
+            Entre nuestro grupo de amigos mas de una vez nos vimos enfrentados a la dificultad de reservar una cancha de futbol, ya sea por la falta 
+            de disponibilidad, la falta de informacion o la falta de un sistema de reservas que nos permitiera hacerlo de manera rapida y sencilla,
+            ademas de las demoras entre que los dueños de cancha respondian los mensajes para solo conocer la disponibilidad de la cancha.
+            <br />
+            De ese problema es que nacio la idea Cancheros, concebida por nuestro integrante Simon Ramos, una aplicacion que permitiera a los usuarios reservar canchas de futbol de manera rapida y sencilla
+            y a los dueños de canchas administrar sus canchas de manera eficiente y rapida.
+          </p>
           
-          <div className="grid md:grid-cols-2 gap-8">
-            <div className="space-y-4">
-              <h3 className="text-xl font-semibold text-green-700 flex items-center gap-2">
-                <Trophy className="w-6 h-6" /> Nuestro enfoque
-              </h3>
-              <p className="text-gray-600">
-                Combinamos tecnología innovadora con pasión deportiva para crear experiencias únicas
-              </p>
-            </div>
-            
-            <div className="space-y-4">
-              <h3 className="text-xl font-semibold text-green-700 flex items-center gap-2">
-                <Crosshair className="w-6 h-6" /> Objetivo principal
-              </h3>
-              <p className="text-gray-600">
-                Eliminar barreras logísticas en la organización de partidos
-              </p>
-            </div>
-          </div>
+          
         </div>
 
         
 
         {/* Sección de equipo */}
         <div className="text-center ">
-          <h2 className="text-3xl font-bold text-green-800 mb-2">Nuestro Equipo</h2>
+          <h2 className="text-4xl font-bold text-green-800 mb-2">Nuestro Equipo</h2>
           <p className="text-gray-600 mb-8 max-w-xl mx-auto">
             Apasionados por el fútbol y la tecnología trabajando para tu mejor experiencia
           </p>
