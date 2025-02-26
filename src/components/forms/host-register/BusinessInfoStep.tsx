@@ -32,11 +32,16 @@ export function BusinessInfoStep({
 
   return (
     <div className="space-y-4">
-      <h2 className="text-2xl font-bold mb-6">Información del Negocio</h2>
-      <Label>Continuamos con la información del negocio</Label>
+      <h2 className="text-xl md:text-2xl font-bold mb-6">
+        Información del Negocio
+      </h2>
+      <Label className="block text-sm md:text-base">
+        Continuamos con la información del negocio. Todos los campos son
+        requeridos.
+      </Label>
 
       <div className="space-y-2">
-        <Label htmlFor="nombreNegocio">Nombre del negocio</Label>
+        <Label htmlFor="nombreNegocio">Nombre del negocio*</Label>
         <Input
           id="nombreNegocio"
           {...register("nombreNegocio", {
@@ -49,7 +54,7 @@ export function BusinessInfoStep({
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="numeroCanchas">Número de canchas</Label>
+        <Label htmlFor="numeroCanchas">Número de canchas*</Label>
         <Input
           id="numeroCanchas"
           type="number"
@@ -64,14 +69,15 @@ export function BusinessInfoStep({
       </div>
 
       <div className="space-y-2">
-        <Label>Tipo de canchas</Label>
-        <div className="flex gap-2">
+        <Label>Tipo de canchas*</Label>
+        <div className="flex flex-wrap gap-2">
           {["Futbol 5", "Futbol 7", "Futbol 11"].map((tipo) => (
             <Button
               key={tipo}
               type="button"
               variant={selectedTypes.includes(tipo) ? "default" : "outline"}
               onClick={() => toggleTipoCanchas(tipo)}
+              className="flex-1 md:flex-none text-sm md:text-base"
             >
               {tipo}
             </Button>
@@ -80,7 +86,7 @@ export function BusinessInfoStep({
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="telefono">Teléfono</Label>
+        <Label htmlFor="telefono">Teléfono*</Label>
         <Input
           id="telefono"
           placeholder="+57 XXX XXX XXXX"
@@ -98,7 +104,7 @@ export function BusinessInfoStep({
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="rut">RUT en formato PDF</Label>
+        <Label htmlFor="rut">RUT en formato PDF*</Label>
         <Input
           type="file"
           id="rut"
