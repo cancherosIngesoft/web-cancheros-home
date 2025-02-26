@@ -15,6 +15,7 @@ const Navbar = () => {
     { href: "/faq", label: "FAQ" },
     { href: "/contact", label: "Contacto" },
     { href: "/terms", label: "Términos" },
+    { href: "/sobreNosotros", label: "Sobre Nosotros" },
   ];
   const handleSingUp = () => {
     signIn("auth0", {
