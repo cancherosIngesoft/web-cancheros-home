@@ -50,7 +50,7 @@ const SobreNosotros = () => {
   return (
     <div className="container mx-auto px-4 py-12 max-w-6xl">
       {/* Sección Hero con degradado */}
-      <div className="text-center mb-16">
+      <div className="text-center mb-8">
         <div className='flex flex-col items-center'>
             <h1 className="text-5xl font-bold mb-4 bg-gradient-to-t from-green-600 to-green-800 text-transparent bg-clip-text">
           Sobre Nosotros
