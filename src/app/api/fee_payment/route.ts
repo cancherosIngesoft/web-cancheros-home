@@ -23,7 +23,7 @@ export async function POST(request: Request) {
         items: [
           {
             id: id_user,
-            title: `Comisión de usuario ${id_user}`,
+            title: `Comision de usuario ${id_user}`,
             unit_price: parseFloat(amount),
             quantity: 1,
             currency_id: "COP",

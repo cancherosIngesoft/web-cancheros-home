@@ -60,14 +60,14 @@ export function LocationStep({
     });
   };
   return (
-    <form className="space-y-4">
-      <h2 className="text-2xl font-bold mb-6">Ubicación</h2>
-      <Label>
+    <form className="space-y-4 relative">
+      <h2 className="text-xl md:text-2xl font-bold mb-6">Ubicación</h2>
+      <Label className="block text-sm md:text-base">
         Finalizamos con la información de la ubicación. Completa la información
-        para continuar.
+        para continuar. Todos los campos son requeridos.
       </Label>
       <div className="space-y-2">
-        <Label htmlFor="direccion">Dirección</Label>
+        <Label htmlFor="direccion">Dirección*</Label>
         <Input
           id="direccion"
           {...register("direccion", {
@@ -80,7 +80,7 @@ export function LocationStep({
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="localidad">Localidad</Label>
+        <Label htmlFor="localidad">Localidad*</Label>
         <Select
           {...register("localidad", { required: "La localidad es requerida" })}
           onValueChange={(value) =>
@@ -122,8 +122,7 @@ export function LocationStep({
       </div>
 
       <div className="flex flex-col space-y-2">
-        <Label htmlFor="ciudad">Ciudad</Label>
-
+        <Label htmlFor="ciudad">Ciudad*</Label>
         <Input
           id="ciudad"
           defaultValue="Bogotá"
@@ -133,9 +132,9 @@ export function LocationStep({
         <Label className="text-xs text-gray-500">
           *Por el momento solo se aceptan canchas en <b>Bogotá</b>
         </Label>
-        <div className="flex flex-row gap-2">
+        <div className="flex flex-col md:flex-row gap-2">
           <Button
-            className="mb-10"
+            className="mb-10 w-full md:w-auto"
             type="button"
             onClick={async () => {
               const direccion_completa = `${form.watch("direccion")} ${
@@ -159,54 +158,56 @@ export function LocationStep({
           </Button>
         </div>
       </div>
-      <Label className="text-sm text-gray-500 pt-10">
-        Utiliza el mapa para confirmar la ubicación de tu establecimiento.
-      </Label>
-      <CustomMap
-        center={mapCenter}
-        zoom={15}
-        showInfoWindow={false}
-      ></CustomMap>
-
-      <div className="flex flex-col gap-2 mt-15">
-        <div className="flex flex-row gap-2 mb-2">
-          <Checkbox
-            id="acepto-terminos"
-            checked={form.watch("aceptoTerminos")}
-            onCheckedChange={() => handleCheckboxChange("aceptoTerminos")}
-            {...register("aceptoTerminos", {
-              required:
-                "Debes aceptar los términos y condiciones para continuar",
-            })}
-          />
-          <Label htmlFor="acepto-terminos">
-            Acepto los{" "}
-            <Link href="/terms" target="_blank" className="underline">
-              términos y condiciones
-            </Link>
-          </Label>
+      <div className="space-y-4">
+        <Label className="text-sm text-gray-500 block">
+          Utiliza el mapa para confirmar la ubicación de tu establecimiento.
+        </Label>
+        <div className="relative w-full h-[300px] md:h-[400px] bg-gray-100 rounded-lg overflow-hidden">
+          <div className="absolute inset-0">
+            <CustomMap center={mapCenter} zoom={15} showInfoWindow={false} />
+          </div>
+        </div>
+        <div className="space-y-4 mt-8">
+          <div className="flex items-start gap-2">
+            <Checkbox
+              id="acepto-terminos"
+              checked={form.watch("aceptoTerminos")}
+              onCheckedChange={() => handleCheckboxChange("aceptoTerminos")}
+              {...register("aceptoTerminos", {
+                required:
+                  "Debes aceptar los términos y condiciones para continuar",
+              })}
+            />
+            <Label htmlFor="acepto-terminos" className="text-sm">
+              Acepto los{" "}
+              <Link href="/terms" target="_blank" className="underline">
+                términos y condiciones
+              </Link>
+            </Label>
+          </div>
           {errors.aceptoTerminos && (
             <p className="text-sm text-red-500">
               *Debes aceptar los términos y condiciones para continuar.
             </p>
           )}
-        </div>
-        <div className="flex flex-row gap-2">
-          <Checkbox
-            id="acepto-privacidad"
-            checked={form.watch("aceptoPrivacidad")}
-            onCheckedChange={() => handleCheckboxChange("aceptoPrivacidad")}
-            {...register("aceptoPrivacidad", {
-              required:
-                "Debes aceptar la política de privacidad para continuar",
-            })}
-          />
-          <Label htmlFor="acepto-privacidad">
-            Acepto la{" "}
-            <Link href="/privacy" target="_blank" className="underline">
-              política de privacidad
-            </Link>
-          </Label>
+
+          <div className="flex items-start gap-2">
+            <Checkbox
+              id="acepto-privacidad"
+              checked={form.watch("aceptoPrivacidad")}
+              onCheckedChange={() => handleCheckboxChange("aceptoPrivacidad")}
+              {...register("aceptoPrivacidad", {
+                required:
+                  "Debes aceptar la política de privacidad para continuar",
+              })}
+            />
+            <Label htmlFor="acepto-privacidad" className="text-sm">
+              Acepto la{" "}
+              <Link href="/privacy" target="_blank" className="underline">
+                política de privacidad
+              </Link>
+            </Label>
+          </div>
           {errors.aceptoPrivacidad && (
             <p className="text-sm text-red-500">
               *Debes aceptar la política de privacidad para continuar.

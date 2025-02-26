@@ -125,8 +125,14 @@ export default function NotificationPage() {
     stars: number;
     comment: string;
   }) => {
+    if (!user.id) return;
     try {
-      await setCalification(selectedIdEstablecimiento, comment, stars);
+      await setCalification(
+        selectedIdEstablecimiento,
+        comment,
+        stars,
+        parseInt(user.id)
+      );
       toast({
         title: "Calificación enviada correctamente",
         description: "Tu reseña ha sido registrada con éxito",

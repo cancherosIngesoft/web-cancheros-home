@@ -44,13 +44,8 @@ const Footer = () => {
             </h3>
             <ul className="space-y-2">
               <li>
-                <Link href="/canchas" className="hover:text-[#1A6B51]">
-                  Buscar Canchas
-                </Link>
-              </li>
-              <li>
-                <Link href="/reservas" className="hover:text-[#1A6B51]">
-                  Mis Reservas
+                <Link href="/manual" className="hover:text-[#1A6B51]">
+                  Manual de usuario
                 </Link>
               </li>
               <li>

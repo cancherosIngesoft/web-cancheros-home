@@ -272,6 +272,13 @@ export async function cancelarReserva(
       }
 
       console.log("Reserva cancelada exitosamente");
+      await fetchWithRetry(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/reservation/reference/${paymentId}`,
+        {
+          method: "DELETE",
+        }
+      );
+      console.log("Reserva borrada de la base de datos");
     } catch (e) {
       console.error(e);
     }

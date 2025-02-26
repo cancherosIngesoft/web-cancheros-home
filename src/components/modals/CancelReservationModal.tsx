@@ -38,14 +38,11 @@ export function CancelReservationModal({
   const handleCancelReservation = async () => {
     setIsLoading(true);
     try {
-      const response = await cancelarReserva(
+      await cancelarReserva(
         reservationDetails.id,
         reservationDetails.id_referencia_pago ?? ""
       );
 
-      if (!response) {
-        throw new Error("Error al cancelar la reserva");
-      }
       toast({
         title: "Reserva cancelada",
         description: "La reserva ha sido cancelada exitosamente",

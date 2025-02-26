@@ -155,18 +155,24 @@ export async function setMarcador(id_reserva: number, marcador: number[]) {
 
 export async function setCalification(
   id_establecimiento: number,
-  descripcion: string,
-  calificacion: number
+  comentario: string,
+  calificacion: number,
+  id_autor: number
 ) {
   try {
     const response = await fetchWithRetry(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/califications/add`,
+      `${process.env.NEXT_PUBLIC_API_URL}/api/calification`,
       {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ id_establecimiento, descripcion, calificacion }),
+        body: JSON.stringify({
+          id_establecimiento,
+          comentario,
+          calificacion,
+          id_autor,
+        }),
       }
     );
     const data = await response.json();
