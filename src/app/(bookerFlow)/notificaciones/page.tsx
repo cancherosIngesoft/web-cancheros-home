@@ -125,8 +125,14 @@ export default function NotificationPage() {
     stars: number;
     comment: string;
   }) => {
+    if (!user.id) return;
     try {
-      await setCalification(selectedIdEstablecimiento, comment, stars);
+      await setCalification(
+        selectedIdEstablecimiento,
+        comment,
+        stars,
+        parseInt(user.id)
+      );
       toast({
         title: "Calificación enviada correctamente",
         description: "Tu reseña ha sido registrada con éxito",
@@ -151,9 +157,9 @@ export default function NotificationPage() {
   };
 
   return (
-    <div className="flex flex-col h-[calc(100vh-2rem)] w-full max-w-[90vw] mx-auto py-4 overflow-hidden">
+    <div className="flex flex-col h-[calc(100vh-2rem)] w-full max-w-[90vw]  overflow-hidden">
       {/* Header */}
-      <div className="space-y-2 border border-gray-200 rounded-md p-4 flex-shrink-0">
+      <div className="space-y-2 rounded-md p-4 flex-shrink-0">
         <div className="flex items-center gap-2">
           <Bell className="h-8 w-8 text-green-700" />
           <h1 className="text-3xl font-bold text-green-700">Notificaciones</h1>
@@ -169,16 +175,16 @@ export default function NotificationPage() {
         defaultValue="reservas"
         className="flex-1 flex flex-col mt-6 overflow-hidden"
       >
-        <TabsList className="grid w-full grid-cols-2 flex-shrink-0 gap-2 px-2">
+        <TabsList className="grid w-full grid-cols-2 h-12 flex-shrink-0 gap-2 px-2">
           <TabsTrigger
             value="reservas"
-            className="data-[state=active]:bg-green-100 data-[state=active]:text-green-700 text-xs sm:text-sm md:text-base py-2 sm:py-3"
+            className="data-[state=active]:bg-green-100 h-8 data-[state=active]:text-green-700 text-xs sm:text-sm md:text-base py-2 sm:py-3"
           >
             Notificaciones Reservas
           </TabsTrigger>
           <TabsTrigger
             value="partidos"
-            className="data-[state=active]:bg-green-100 data-[state=active]:text-green-700 text-xs sm:text-sm md:text-base py-2 sm:py-3"
+            className="data-[state=active]:bg-green-100 h-8 data-[state=active]:text-green-700 text-xs sm:text-sm md:text-base py-2 sm:py-3"
           >
             Notificaciones Partidos
           </TabsTrigger>

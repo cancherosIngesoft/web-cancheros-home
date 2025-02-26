@@ -1,12 +1,11 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useQuery, useMutation } from "@tanstack/react-query"
 import { format } from "date-fns"
 import { CalendarIcon } from "lucide-react"
 import * as z from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
-
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { Calendar } from "@/components/ui/calendar"
@@ -116,7 +115,7 @@ export function FiltersForm({ onSearchResults }: SearchFormProps) {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel className="font-semibold text-lg">Localidad</FormLabel>
-                      <Select onValueChange={field.onChange} defaultValue={field.value}>
+                      <Select onValueChange={field.onChange} defaultValue={field.value} value={form.watch("location")}>
                         <FormControl>
                           <SelectTrigger>
                             <SelectValue placeholder="Selecciona una localidad" />
@@ -124,11 +123,11 @@ export function FiltersForm({ onSearchResults }: SearchFormProps) {
                         </FormControl>
                         <SelectContent>
                           {localidades.map((localidad) => (
-                            <SelectItem className={`hover:bg-primary-90 hover:cursor-pointer ${field.value === localidad.value ? "bg-primary-90":""} `} key={localidad.label} value={localidad.value}>
+                            <SelectItem className={`hover:bg-primary-90 hover:cursor-pointer ${field.value === localidad.value ? "bg-primary-90" : ""} `} key={localidad.label} value={localidad.value}>
                               {localidad.label}
                             </SelectItem>
                           ))}
-                          
+
                         </SelectContent>
                       </Select>
                       <FormMessage />
@@ -145,16 +144,16 @@ export function FiltersForm({ onSearchResults }: SearchFormProps) {
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel className="font-semibold text-lg">Tipo de cancha</FormLabel>
-                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <Select onValueChange={field.onChange} defaultValue={field.value} value={form.watch("fieldType")}>
                       <FormControl>
                         <SelectTrigger>
                           <SelectValue placeholder="Selecciona tipo de cancha" />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        <SelectItem className={`hover:bg-primary-90 hover:cursor-pointer ${field.value === "5" ? "bg-primary-90":""} `}   value="5">Fútbol 5</SelectItem>
-                        <SelectItem className={`hover:bg-primary-90 hover:cursor-pointer ${field.value === "7" ? "bg-primary-90":""} `}   value="7">Fútbol 7</SelectItem>
-                        <SelectItem className={`hover:bg-primary-90 hover:cursor-pointer ${field.value === "11" ? "bg-primary-90":""} `}   value="11">Fútbol 11</SelectItem>
+                        <SelectItem className={`hover:bg-primary-90 hover:cursor-pointer ${field.value === "5" ? "bg-primary-90" : ""} `} value="5">Fútbol 5</SelectItem>
+                        <SelectItem className={`hover:bg-primary-90 hover:cursor-pointer ${field.value === "7" ? "bg-primary-90" : ""} `} value="7">Fútbol 7</SelectItem>
+                        <SelectItem className={`hover:bg-primary-90 hover:cursor-pointer ${field.value === "11" ? "bg-primary-90" : ""} `} value="11">Fútbol 11</SelectItem>
                       </SelectContent>
                     </Select>
                     <FormMessage />
@@ -167,56 +166,140 @@ export function FiltersForm({ onSearchResults }: SearchFormProps) {
               <h2 className="font-semibold text-xl text-primary-40 ">
                 Rango de precio <span className="text-gray-400 text-sm font-normal ">(por hora)</span>
               </h2>
-              <div className="flex flex-wrap items-start space-x-2">
-                <div className="flex-1 min-w-[120px]">
+              <div className="flex flex-wrap flex-col md:flex-row items-start gap-2">
+                <div className="flex-1 ">
                   <FormField
                     control={form.control}
                     name="minPrice"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel className="font-semibold text-lg">Minimo</FormLabel>
-                        <FormControl>
-                          <Input
-                            type="number"
-                            placeholder="Mínimo"
-                            {...field}
-                            onChange={(e) => field.onChange(e.target.value === "" ? undefined : Number.parseInt(e.target.value, 10))}
-                          />
-                        </FormControl>
-                        <FormMessage className="text-xs" />
-                      </FormItem>
-                    )}
+                    render={({ field: { onChange, onBlur, ref, value } }) => {
+                      const [displayValue, setDisplayValue] = useState(value ?? '');
+
+                      // Sincroniza el estado si el valor cambia desde afuera
+                      useEffect(() => {
+                        if (value === undefined || value === null) {
+                          setDisplayValue('');
+                        }
+                      }, [value]);
+
+                      const handleBlur = () => {
+                        // Convierte el valor a número y formatea como moneda
+                        const numericValue = Number.parseInt(String(displayValue).replace(/[^\d]/g, ''), 10);
+                        if (!isNaN(numericValue)) {
+                          const formatted = new Intl.NumberFormat('es-CO', {
+                            style: 'currency',
+                            currency: 'COP',
+                            maximumFractionDigits: 0,
+                          }).format(numericValue);
+                          setDisplayValue(formatted);
+                        }
+                        onBlur();
+                      };
+
+                      const handleFocus = () => {
+                        // Remueve el formato para facilitar la edición
+                        const numericValue = String(displayValue).replace(/[^\d]/g, '');
+                        setDisplayValue(numericValue);
+                      };
+
+                      return (
+                        <FormItem>
+                          <FormLabel className="font-semibold text-lg">Mínimo</FormLabel>
+                          <FormControl>
+                            <Input
+                              type="text" // Cambiamos a "text" para poder mostrar el formato
+                              placeholder="Mínimo"
+                              value={displayValue}
+                              onChange={(e) => {
+                                // Permite solo dígitos
+                                const inputVal = e.target.value.replace(/[^\d]/g, '');
+                                setDisplayValue(inputVal);
+                                onChange(inputVal === "" ? undefined : Number.parseInt(inputVal, 10));
+                              }}
+                              onBlur={handleBlur}
+                              onFocus={handleFocus}
+                              ref={ref}
+                            />
+                          </FormControl>
+                          <FormMessage className="text-xs" />
+                        </FormItem>
+                      );
+                    }}
                   />
                 </div>
 
-                <span className="mt-8">-</span>
+                <span className="mt-8 hidden md:block">-</span>
 
                 <div className="flex-1 min-w-[120px]">
-                  <FormField
+                <FormField
                     control={form.control}
                     name="maxPrice"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel className="font-semibold text-lg">Maximo</FormLabel>
-                        <FormControl>
-                          <Input
-                            type="number"
-                            placeholder="Máximo"
-                            {...field}
-                            onChange={(e) => field.onChange(e.target.value === "" ? undefined : Number.parseInt(e.target.value, 10))}
-                          />
-                        </FormControl>
-                        <FormMessage className="text-xs" />
-                      </FormItem>
-                    )}
+                    render={({ field: { onChange, onBlur, ref, value } }) => {
+                      const [displayValue, setDisplayValue] = useState(value ?? '');
+
+                      // Sincroniza el estado si el valor cambia desde afuera
+                      useEffect(() => {
+                        if (value === undefined || value === null) {
+                          setDisplayValue('');
+                        }
+                      }, [value]);
+
+                      const handleBlur = () => {
+                        // Convierte el valor a número y formatea como moneda
+                        const numericValue = Number.parseInt(String(displayValue).replace(/[^\d]/g, ''), 10);
+                        if (!isNaN(numericValue)) {
+                          const formatted = new Intl.NumberFormat('es-CO', {
+                            style: 'currency',
+                            currency: 'COP',
+                            maximumFractionDigits: 0,
+                          }).format(numericValue);
+                          setDisplayValue(formatted);
+                        }
+                        onBlur();
+                      };
+
+                      const handleFocus = () => {
+                        // Remueve el formato para facilitar la edición
+                        const numericValue = String(displayValue).replace(/[^\d]/g, '');
+                        setDisplayValue(numericValue);
+                      };
+
+                      return (
+                        <FormItem>
+                          <FormLabel className="font-semibold text-lg">Maximo</FormLabel>
+                          <FormControl>
+                            <Input
+                              type="text" // Cambiamos a "text" para poder mostrar el formato
+                              placeholder="Maximo"
+                              value={displayValue}
+                              onChange={(e) => {
+                                // Permite solo dígitos
+                                const inputVal = e.target.value.replace(/[^\d]/g, '');
+                                setDisplayValue(inputVal);
+                                onChange(inputVal === "" ? undefined : Number.parseInt(inputVal, 10));
+                              }}
+                              onBlur={handleBlur}
+                              onFocus={handleFocus}
+                              ref={ref}
+                            />
+                          </FormControl>
+                          <FormMessage className="text-xs" />
+                        </FormItem>
+                      );
+                    }}
                   />
+                
                 </div>
               </div>
             </div>
+            <div className="w-full flex flex-col md:flex-row item-start md:items-center gap-2">
+              <Button type="submit" className="md:w-1/2 font-bold" disabled={searchMutation.isPending}>
+                {searchMutation.isPending ? "Buscando..." : "Buscar canchas"}
+              </Button>
+              <Button type="reset" className="md:w-1/2  border-primary border-2 bg-transparent text-black" onClick={() => { form.reset({ location: "", fieldType: "", minPrice: undefined, maxPrice: undefined }) }}>
+                Limpiar filtros
+              </Button>
+            </div>
 
-            <Button type="submit" className="w-1/2 font-bold" disabled={searchMutation.isPending}>
-              {searchMutation.isPending ? "Buscando..." : "Buscar canchas"}
-            </Button>
           </form>
         </Form>
       </motion.div>

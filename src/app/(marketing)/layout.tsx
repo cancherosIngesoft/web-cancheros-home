@@ -1,6 +1,6 @@
 import Footer from "@/components/layout/footer";
 import Navbar from "@/components/layout/navbar";
-import type { Metadata } from "next";
+
 
 // Layout de marketing - Solo para rutas dentro de (marketing)
 export default function MarketingLayout({
@@ -9,10 +9,10 @@ export default function MarketingLayout({
   children: React.ReactNode;
 }) {
   return (
-    <>
+    <div className="h-full flex flex-col overflow-y-auto">
       <Navbar />
-      <div className="marketing-layout">{children}</div>
+      <div className="flex-1">{children}</div>
       <Footer />
-    </>
+    </div>
   );
 }

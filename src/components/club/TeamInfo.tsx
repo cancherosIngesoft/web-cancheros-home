@@ -39,7 +39,7 @@ export default function TeamInfo() {
             )}
         >
             <div className="w-full md:w-32 h-32 rounded-lg flex items-center justify-center">
-                {icon ? (
+                {icon?.includes("empty") ? (
                     <img src={icon} alt={teamName} className="w-full h-full object-contain" />
                 ) : (
                     <CustomShield className="w-full h-full text-primary" />

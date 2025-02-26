@@ -15,6 +15,7 @@ const Navbar = () => {
     { href: "/faq", label: "FAQ" },
     { href: "/contact", label: "Contacto" },
     { href: "/terms", label: "Términos" },
+    { href: "/sobreNosotros", label: "Sobre Nosotros" },
   ];
   const handleSingUp = () => {
     signIn("auth0", {
@@ -35,8 +36,8 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="bg-[#F0FFFA] border-b border-gray-200 relative">
-      <div className="max-w-7xl mx-auto px-6 lg:px-8">
+    <nav className="bg-[#F0FFFA] border-b border-gray-200 w-full mx-auto px-6 lg:px-8 ">
+      <div className="w-full">
         <div className="flex items-center justify-between h-20">
           {/* Logo */}
           <div className="flex-shrink-0">
