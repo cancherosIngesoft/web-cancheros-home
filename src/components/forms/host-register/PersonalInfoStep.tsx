@@ -23,14 +23,17 @@ export function PersonalInfoStep({
 }: PersonalInfoStepProps) {
   return (
     <div className="space-y-4">
-      <h2 className="text-2xl font-bold mb-6">Información Personal</h2>
-      <Label>
+      <h2 className="text-xl md:text-2xl font-bold mb-6">
+        Información Personal
+      </h2>
+      <Label className="block text-sm md:text-base">
         Cuentanos un poco sobre ti. Estos datos serán usados para la
-        verificación de tu cuenta y la facturación de tus reservas.
+        verificación de tu cuenta y la facturación de tus reservas. Todos los
+        campos son requeridos.
       </Label>
-      <div className="flex flex-row pt-5 space-between">
-        <div className="flex flex-col gap-2 w-1/3 pr-5">
-          <Label htmlFor="tipoDocumento">Tipo de documento</Label>
+      <div className="flex flex-col md:flex-row pt-5 gap-4 md:space-between">
+        <div className="flex flex-col gap-2 w-full md:w-1/3 md:pr-5">
+          <Label htmlFor="tipoDocumento">Tipo de documento*</Label>
           <Select
             {...register("tipoDocumento", {
               required: "El tipo de documento es requerido",
@@ -56,8 +59,8 @@ export function PersonalInfoStep({
             </p>
           )}
         </div>
-        <div className="flex flex-col gap-2 w-1/2 pr-5">
-          <Label htmlFor="documento">Documento</Label>
+        <div className="flex flex-col gap-2 w-full md:w-1/2 md:pr-5">
+          <Label htmlFor="documento">Documento*</Label>
           <Input
             id="documento"
             {...register("documento", {
@@ -68,8 +71,8 @@ export function PersonalInfoStep({
             <p className="text-sm text-red-500">{errors.documento.message}</p>
           )}
         </div>
-        <div className="flex flex-col gap-2 w-1/2 pr-5">
-          <Label htmlFor="fechaNacimiento">Fecha de nacimiento</Label>
+        <div className="flex flex-col gap-2 w-full md:w-1/2 md:pr-5">
+          <Label htmlFor="fechaNacimiento">Fecha de nacimiento*</Label>
           <Input
             id="fechaNacimiento"
             type="date"
@@ -99,9 +102,9 @@ export function PersonalInfoStep({
           )}
         </div>
       </div>
-      <div className="flex flex-row gap-10 pb-5 pt-5">
-        <div className="flex flex-col gap-2 w-1/3">
-          <Label htmlFor="nombre">Nombre</Label>
+      <div className="flex flex-col md:fle x-row gap-4 md:gap-10 pb-5 pt-5">
+        <div className="flex flex-col gap-2 w-full md:w-1/3">
+          <Label htmlFor="nombre">Nombre*</Label>
           <Input
             id="nombre"
             {...register("nombre", { required: "El nombre es requerido" })}
@@ -110,9 +113,8 @@ export function PersonalInfoStep({
             <p className="text-sm text-red-500">{errors.nombre.message}</p>
           )}
         </div>
-
-        <div className="flex flex-col gap-2 w-1/3">
-          <Label htmlFor="apellidos">Apellidos</Label>
+        <div className="flex flex-col gap-2 w-full md:w-1/3">
+          <Label htmlFor="apellidos">Apellidos*</Label>
           <Input
             id="apellidos"
             {...register("apellidos", {
@@ -124,9 +126,8 @@ export function PersonalInfoStep({
           )}
         </div>
       </div>
-
-      <div className="flex flex-col gap-2 w-1/3 pb-5">
-        <Label htmlFor="email">Correo electrónico</Label>
+      <div className="flex flex-col gap-2 w-full md:w-1/3 pb-5">
+        <Label htmlFor="email">Correo electrónico*</Label>
         <Input
           id="email"
           type="email"

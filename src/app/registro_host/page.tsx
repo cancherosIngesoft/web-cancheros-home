@@ -8,20 +8,23 @@ import { useRegistroHost } from "@/hooks/useRegistroHost";
 import { Button } from "@/components/ui/button";
 import { CongratulationsStep } from "@/components/forms/host-register/CongratulationsStep";
 import { WelcomeStep } from "@/components/forms/host-register/WelcomeStep";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Loader2 } from "lucide-react";
 
 export default function RegisterBusinessPage() {
   const { currentStep, form, nextStep, prevStep, onSubmit, getGeolocation } =
     useRegistroHost();
   const [isLoading, setIsLoading] = useState(false);
+  useEffect(() => {
+    console.log("errors", form.formState.errors);
+  }, [form.formState.errors]);
   return (
-    <div className=" py-10 m-10 border border-gray-200 rounded-lg   ">
+    <div className="py-5 md:py-10 m-2 md:m-10 border border-gray-200 rounded-lg">
       <StepIndicator currentStep={currentStep} />
 
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="max-w-2xl mx-auto "
+        className="max-w-2xl mx-auto px-4 md:px-0"
       >
         {currentStep === 0 && <WelcomeStep />}
         {/* Step 1 : Información personal */}
@@ -54,7 +57,7 @@ export default function RegisterBusinessPage() {
           />
         )}
 
-        <div className="flex justify-between mt-8">
+        <div className="flex flex-col md:flex-row justify-between mt-8 gap-4">
           {currentStep > 1 && currentStep < 4 && (
             <Button type="button" variant="outline" onClick={prevStep}>
               Anterior
@@ -62,7 +65,11 @@ export default function RegisterBusinessPage() {
           )}
 
           {currentStep < 3 ? (
-            <Button type="button" onClick={nextStep}>
+            <Button
+              type="button"
+              onClick={nextStep}
+              className="w-full md:w-auto"
+            >
               Siguiente
             </Button>
           ) : null}
@@ -74,9 +81,10 @@ export default function RegisterBusinessPage() {
                 setIsLoading(true);
                 form.handleSubmit(onSubmit);
               }}
+              className="w-full md:w-auto"
             >
               Enviar solicitud
-              {isLoading && <Loader2 className="w-4 h-4 animate-spin" />}
+              {isLoading && <Loader2 className="w-4 h-4 ml-2 animate-spin" />}
             </Button>
           ) : null}
           {currentStep === 4 && <CongratulationsStep />}
