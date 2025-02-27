@@ -5,47 +5,42 @@
         {
             "id": 1,
             "title": "1. Introducción",
-            "description": "Al acceder y utilizar este sitio web, usted acepta estar sujeto a los siguientes términos y condiciones de uso. Si no está de acuerdo con estos términos, por favor absténgase de usar nuestros servicios."
+            "description": "Los acuerdos legales expuestos a continuación rigen el uso que usted haga de Cancheros y de los servicios prestados por medio de su página web. Si usted no acepta los presentes términos y condiciones, debe abstenerse de acceder a este sitio, ya sea directa o indirectamente, y de utilizar cualquier información o servicio suministrado por el mismo. Cancheros no es parte de ningún acuerdo firmado entre los jugadores y los centros deportivos. El jugador, al llevar a cabo una reserva mediante la aplicación web Cancheros, acepta que ingresa en un contrato directamente con el centro deportivo. Es la responsabilidad del centro deportivo proveer los servicios adquiridos por el jugador a través de la aplicación web Cancheros."
         },
         {
             "id": 2,
-            "title": "2. Uso del Servicio",
-            "description": "Nuestros servicios están disponibles solo para personas que puedan celebrar contratos legalmente vinculantes. Los usuarios deben proporcionar información precisa y actualizada durante el registro. Nos reservamos el derecho de suspender o terminar cuentas que violen estos términos."
+            "title": "2. Funcionamiento de la Plataforma",
+            "description": "2.1 Reservas y Pagos: Los jugadores realizan reservas a través de la plataforma Cancheros, pagando un monto anticipado para garantizar la reserva. Cancheros retiene el pago de la reserva hasta 24 horas antes del horario reservado. Una vez transcurrido este período, el monto retenido será transferido a la cuenta bancaria del Centro Deportivo registrada en la plataforma. 2.2. Cancelaciones y Reembolsos: Si un Jugador cancela su reserva con más de 24 horas de anticipación, el pago anticipado será reembolsado íntegramente al Jugador. Si la cancelación ocurre dentro de las 24 horas previas a la reserva, el pago anticipado será transferido al Centro Deportivo. 2.3. Responsabilidad del Centro Deportivo: El Centro Deportivo se compromete a respetar las reservas confirmadas y proporcionar el servicio contratado en las condiciones acordadas."
         },
         {
             "id": 3,
-            "title": "3. Reservas y Pagos",
-            "description": "Al realizar una reserva, usted se compromete a pagar el monto total especificado. Los pagos se procesarán de manera segura a través de nuestras plataformas autorizadas. Las cancelaciones están sujetas a nuestra política de reembolso vigente."
+            "title": "3. Tarifas y Comisiones",
+            "description": "3.1. Comisión de Cancheros: Cancheros no cobra comisiones sobre cada transacción individual. El Centro Deportivo deberá cubrir un costo por cupo una vez que se alcance un número determinado de reservas en una cancha específica. 3.2. Pagos al Centro Deportivo: Los pagos serán transferidos a la cuenta bancaria proporcionada por el Centro Deportivo dentro de las 24 a 48 horas posteriores a la realización de la reserva, siempre y cuando no haya cancelaciones o incidencias reportadas."
         },
         {
             "id": 4,
-            "title": "4. Privacidad y Datos",
-            "description": "Protegemos su información personal según nuestra Política de Privacidad. Al usar nuestros servicios, usted acepta la recolección y uso de sus datos de acuerdo con esta política."
+            "title": "4. Obligaciones del Centro Deportivo",
+            "description": "4.1. Información Veraz: El Centro Deportivo debe proporcionar información precisa y actualizada. 4.2. Mantenimiento de la Cancha: Garantizar condiciones óptimas y estándares de seguridad. 4.3. Atención al Jugador: Brindar trato cordial y profesional. 4.4. Verificación de antecedentes: Aceptar verificaciones por parte de Cancheros. 4.5. Cumplimiento con los valores de la empresa: Empatía, Libertad, Fraternidad, Respeto y Comunidad, según los lineamientos establecidos por Cancheros."
         },
         {
             "id": 5,
-            "title": "5. Responsabilidades",
-            "description": "Los usuarios son responsables de mantener la confidencialidad de sus cuentas y de todas las actividades realizadas bajo las mismas. No nos hacemos responsables por pérdidas o daños derivados del mal uso de la plataforma."
+            "title": "5. Valores de Cancheros",
+            "description": "Empatía: Entendemos las necesidades de jugadores y propietarios, creando soluciones efectivas. Libertad: Permitimos decisiones flexibles sobre dónde y cuándo jugar. Fraternidad: Fomentamos la comunidad y amistad en el fútbol amateur. Respeto: Promovemos trato justo y honesto en todas las interacciones. Comunidad: Conectamos personas con una pasión común, fortaleciendo el fútbol amateur en Bogotá."
         },
         {
             "id": 6,
-            "title": "6. Modificaciones",
-            "description": "Nos reservamos el derecho de modificar estos términos en cualquier momento. Los cambios entrarán en vigor inmediatamente después de su publicación en el sitio web. El uso continuado de nuestros servicios implica la aceptación de dichos cambios."
+            "title": "6. Modificaciones y Suspensión",
+            "description": "Cancheros se reserva el derecho de modificar estos términos con notificación previa de 15 días. Podrá suspender temporal o permanentemente cuentas por incumplimiento o malas prácticas."
         },
         {
             "id": 7,
-            "title": "7. Propiedad Intelectual",
-            "description": "Todo el contenido presente en la plataforma está protegido por derechos de autor y otras leyes de propiedad intelectual. No está permitida la reproducción o distribución sin autorización expresa."
+            "title": "7. Limitación de Responsabilidad",
+            "description": "Cancheros actúa únicamente como intermediario entre Jugadores y Centros Deportivos. No será responsable por daños, pérdidas o perjuicios derivados del uso de las instalaciones o incumplimientos por parte de los Centros Deportivos."
         },
         {
             "id": 8,
-            "title": "8. Ley Aplicable",
-            "description": "Estos términos se rigen por las leyes de Colombia. Cualquier disputa será resuelta en los tribunales competentes de Bogotá, Colombia."
-        },
-        {
-            "id": 9,
-            "title": "9. Servicio Externo",
-            "description": "Un propietario de cancha puede registrar una reserva externa para un usuario que no es de Cancheros. Este servicio está sujeto a términos y condiciones de la política de cancelación y de comisiones de la plataforma. Es decir, al agregar una reserva externa, el propietario de cancha asume el pago de la reserva y por tanto  el pago de la comisión de la plataforma."
+            "title": "8. Aceptación de los Términos",
+            "description": "Al registrarse en Cancheros, el usuario reconoce haber leído, comprendido y aceptado estos términos y condiciones. El uso continuo de Cancheros implica la aceptación de cualquier actualización futura de estos términos."
         }
     ]
 }
