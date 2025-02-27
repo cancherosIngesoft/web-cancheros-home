@@ -164,7 +164,12 @@ export function LocationStep({
         </Label>
         <div className="relative w-full h-[300px] md:h-[400px] bg-gray-100 rounded-lg overflow-hidden">
           <div className="absolute inset-0">
-            <CustomMap center={mapCenter} zoom={15} showInfoWindow={false} />
+            <CustomMap
+              center={mapCenter}
+              zoom={15}
+              showInfoWindow={false}
+              gestureHandling="greedy"
+            />
           </div>
         </div>
         <div className="space-y-4 mt-8">

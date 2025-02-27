@@ -327,3 +327,19 @@ export async function reprogramationReservation(
     }
   }
 }
+
+export async function cancelReservationById(idReservation: string) {
+  try {
+    const res = await fetchWithRetry(
+      `${process.env.NEXT_PUBLIC_API_URL}/api/reservation/${idReservation}`,
+      {
+        method: "DELETE",
+      }
+    );
+    const data = await res.json();
+    return data;
+  } catch (e) {
+    console.error(e);
+    throw new Error("Error al borrar la reserva no pagada");
+  }
+}

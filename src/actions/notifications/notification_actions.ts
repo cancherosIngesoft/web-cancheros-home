@@ -142,7 +142,7 @@ export async function setMarcador(id_reserva: number, marcador: number[]) {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ id_reserva, score:marcador }),
+        body: JSON.stringify({ id_reserva, score: marcador }),
       }
     );
     const data = await response.json();
