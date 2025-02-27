@@ -152,6 +152,9 @@ export const getFieldsById = async (id: string): Promise<IExistingField[]> => {
     console.error("Error al obtener la cancha:", responseJson.error);
     return [];
   }
+  if (responseJson.length === 0) {
+    return [];
+  }
   return responseJson.courts.map((court: IExistingField) => ({
     ...court,
     field_schedule_: court.field_schedule?.map((schedule) => ({
