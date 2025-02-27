@@ -262,6 +262,9 @@ export function AddFieldModal({
             title: "Éxito",
             description: "Cancha guardada correctamente",
           });
+          if (window !== undefined) {
+            window.location.reload();
+          }
         }
       } else {
         toast({
