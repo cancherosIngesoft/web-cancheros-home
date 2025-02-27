@@ -28,6 +28,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useToast } from "@/hooks/use-toast";
 import ConfirmationModal from "../modals/ConfirmationModal";
 import { useMutation } from "@tanstack/react-query";
+import { useGlobalStore } from "@/store";
 
 interface CardReservationProps extends ReservationActiveReturn {
   currentUserId: string | undefined;
@@ -71,7 +72,7 @@ export default function CardReservation({
   const [isOpenConfirmationCancelModal, setIsOpenConfirmationCancelModal] =
     useState(false);
   const { toast } = useToast();
-
+  const idUser = useGlobalStore((state) => state.auth.id);
   const disabled = isLessThan24Hours();
   const tooltipMessage =
     "No es posible realizar cambios cuando quedan menos de 24 horas para la reserva";
@@ -146,7 +147,7 @@ export default function CardReservation({
               </div>
             </div>
 
-            {idBooker && isActive && (
+            {idBooker==idUser && isActive && (
               <div className="flex flex-col md:flex-row justify-center items-stretch md:items-center w-full md:flex-1 gap-2">
                 <div className="w-full">
                   <TooltipProvider>
