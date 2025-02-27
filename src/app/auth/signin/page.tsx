@@ -22,8 +22,17 @@ export default function SignIn() {
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
+  // Redirección segura cuando la sesión es válida
   useEffect(() => {
-    setSearchParams(new URLSearchParams(window.location.search));
+    if (status === "authenticated") {
+      router.push("/reservar_cancha");
+    }
+  }, [status, router]);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      setSearchParams(new URLSearchParams(window.location.search));
+    }
   }, []);
 
   useEffect(() => {
@@ -81,7 +90,6 @@ export default function SignIn() {
       handleError("Error de seguridad detectado. Intenta iniciar sesión nuevamente.");
     }
 
-    // Limpiar mensaje de error al desmontar
     return () => setErrorMessage(null);
   }, [searchParams, toast, pathname]);
 
@@ -127,11 +135,6 @@ export default function SignIn() {
     );
   }
 
-  if (session && status === "authenticated") {
-    router.push("/reservar_cancha");
-    return null;
-  }
-
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -147,6 +150,7 @@ export default function SignIn() {
             width={150} 
             height={150} 
             className="mx-auto"
+            priority
           />
           <p className="text-gray-600 mt-2">Tu portal para reservar canchas de fútbol</p>
           
@@ -172,7 +176,7 @@ export default function SignIn() {
           <div className="text-center text-sm text-gray-500">
             ¿Problemas para ingresar?{" "}
             <Link
-              href="/contacto"
+              href="/contact"
               className="text-green-600 hover:underline"
             >
               Contáctanos

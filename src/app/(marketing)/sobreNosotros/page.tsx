@@ -14,7 +14,7 @@ const miembrosEquipo: Miembro[] = [
     linkedinUrl: 'https://www.linkedin.com/in/juanperez',
   },
   {
-    imageUrl: '/JuanDa.JPG',
+    imageUrl: '/JuanMa.jpeg',
     nombre: 'Juan Manuel Cortes',
     funcion: 'Desarrollador Frontend',
     scrumMaster: 'Scrum Master 2',
@@ -24,7 +24,7 @@ const miembrosEquipo: Miembro[] = [
     linkedinUrl: 'https://www.linkedin.com/in/jcortesj/',
   },
   {
-    imageUrl: '/JuanDa.JPG',
+    imageUrl: '/Miguel.jpeg',
     nombre: 'Miguel Angel Parrado',
     funcion: 'Desarrollador Backend',
     scrumMaster: 'Scrum Master 3',
@@ -52,14 +52,14 @@ const SobreNosotros = () => {
       {/* Sección Hero con degradado */}
       <div className="text-center mb-8">
         <div className='flex flex-col items-center'>
-            <h1 className="text-5xl font-bold mb-4 bg-gradient-to-t from-green-600 to-green-800 text-transparent bg-clip-text">
-          Sobre Nosotros
-        </h1>
-        <Image src="/CANCHEROS.svg" alt="Cancheros" width={300} height={300} className="rounded-2xl" />
-        
+          <h1 className="text-5xl font-bold mb-4 bg-gradient-to-t from-green-600 to-green-800 text-transparent bg-clip-text">
+            Sobre Nosotros
+          </h1>
+          <Image src="/CANCHEROS.svg" alt="Cancheros" width={300} height={300} className="rounded-2xl" />
+
 
         </div>
-        
+
       </div>
 
       {/* Sección de propuesta de valor */}
@@ -72,19 +72,17 @@ const SobreNosotros = () => {
           </p>
           <h2 className="text-3xl font-bold text-green-800 mb-6">Historia.....</h2>
           <p className="text-lg text-gray-700 mb-6">
-            Nacimos como una aplicacion guiada por una pasion y un incorformismo en la forma en como se reservaban las canchas de futbol en Bogota. 
-            Entre nuestro grupo de amigos mas de una vez nos vimos enfrentados a la dificultad de reservar una cancha de futbol, ya sea por la falta 
-            de disponibilidad, la falta de informacion o la falta de un sistema de reservas que nos permitiera hacerlo de manera rapida y sencilla,
-            ademas de las demoras entre que los dueños de cancha respondian los mensajes para solo conocer la disponibilidad de la cancha.
+            Nacimos como una aplicación impulsada por la pasión y la inconformidad con la forma en que se reservaban las canchas de fútbol en Bogotá.
+            En nuestro grupo de amigos, más de una vez nos enfrentamos a la dificultad de reservar una cancha, ya fuera por la falta de disponibilidad, la escasez de información o la ausencia de un sistema de reservas que permitiera hacerlo de manera rápida y sencilla. Además, las demoras en la respuesta de los dueños de canchas para simplemente conocer la disponibilidad eran frustrantes.
             <br />
-            De ese problema es que nacio la idea Cancheros, concebida por nuestro integrante Simon Ramos, una aplicacion que permitiera a los usuarios reservar canchas de futbol de manera rapida y sencilla
-            y a los dueños de canchas administrar sus canchas de manera eficiente y rapida.
+            
+            A partir de esta problemática surgió Cancheros, una idea concebida por nuestro integrante Simón Ramos. Una aplicación diseñada para que los usuarios puedan reservar canchas de fútbol de forma ágil y práctica, al mismo tiempo que brinda a los propietarios de canchas una herramienta eficiente para administrar sus espacios de manera rápida y efectiva.
           </p>
-          
-          
+
+
         </div>
 
-        
+
 
         {/* Sección de equipo */}
         <div className="text-center ">
@@ -100,7 +98,7 @@ const SobreNosotros = () => {
         </div>
       </div>
 
-      
+
     </div>
   )
 }
