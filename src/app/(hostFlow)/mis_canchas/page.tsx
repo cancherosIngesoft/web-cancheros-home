@@ -31,7 +31,7 @@ export default function pageMisCanchas() {
         <div className="flex flex-row items-start gap-4 justify-between w-full">
           <div className="flex flex-row items-center gap-4">
             <Image
-              src="/icons/canchaGris.svg"
+              src="/icons/soccerField.svg"
               alt="Logo"
               width={50}
               height={50}
