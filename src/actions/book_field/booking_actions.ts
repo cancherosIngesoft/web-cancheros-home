@@ -1,5 +1,3 @@
-import { useGlobalStore, useShallow } from "@/store";
-import { is } from "date-fns/locale";
 export interface bussinessInfo {
   id: string;
   name: string;
@@ -309,8 +307,6 @@ export async function handleBookingAndPayment(
     isTeam: isTeam,
   };
   const booking = await createBooking(dataBooking);
-  const updateStore = useGlobalStore(useShallow((state) => state.updateStore));
-
   if (typeof window !== "undefined") {
     localStorage.setItem("bookingId", booking.id_reserva.toString());
   }
