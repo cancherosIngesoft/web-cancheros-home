@@ -311,10 +311,9 @@ export async function handleBookingAndPayment(
   const booking = await createBooking(dataBooking);
   const updateStore = useGlobalStore(useShallow((state) => state.updateStore));
 
-  updateStore("fieldCancel", {
-    fieldCancelId: booking.id_reserva.toString(),
-    fieldCancel: true,
-  });
+  if (typeof window !== "undefined") {
+    localStorage.setItem("bookingId", booking.id_reserva.toString());
+  }
   // 2. Iniciar el pago
   const paymentResult = await initiatePayment(
     {

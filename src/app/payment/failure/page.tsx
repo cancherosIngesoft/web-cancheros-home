@@ -44,9 +44,12 @@ function PaymentContent() {
   }, [searchParams]);
 
   const deleteReservation = async () => {
-    if (fieldCancel.fieldCancelId) {
-      const data = await cancelReservationById(fieldCancel.fieldCancelId);
-      console.log("Resultado de la operacion " + data);
+    if (typeof window !== "undefined") {
+      const bookingId = localStorage.getItem("bookingId");
+      if (bookingId) {
+        const data = await cancelReservationById(bookingId);
+        console.log("Resultado de la operacion " + data);
+      }
     }
   };
 
