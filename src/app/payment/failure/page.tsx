@@ -3,7 +3,8 @@
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState, Suspense } from "react";
 import Link from "next/link";
-import { useGlobalStore } from "@/store";
+import { useGlobalStore, useShallow } from "@/store";
+import { cancelReservationById } from "@/actions/reservation/reservation_action";
 interface PaymentInfo {
   collection_id: string;
   collection_status: string;
@@ -21,6 +22,7 @@ function PaymentContent() {
   const [paymentInfo, setPaymentInfo] = useState<PaymentInfo | null>(null);
   const auth = useGlobalStore((state) => state.auth);
   const [userRole, setUserRole] = useState<string | null>(null);
+  const fieldCancel = useGlobalStore(useShallow((state) => state.fieldCancel));
 
   useEffect(() => {
     if (auth.id) {
@@ -41,30 +43,10 @@ function PaymentContent() {
     setPaymentInfo(paymentData as PaymentInfo);
   }, [searchParams]);
 
-  const handleRetryPayment = async () => {
-    try {
-      const url =
-        userRole == "duenio" ? "/api/fee_payment" : "/api/payment_gateway";
-      // Crear nueva preferencia de pago usando la referencia original
-      const response = await fetch(url, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          external_reference: paymentInfo?.external_reference,
-          payment_id: paymentInfo?.payment_id,
-        }),
-      });
-
-      const data = await response.json();
-
-      // Redirigir al nuevo init_point
-      if (data.init_point) {
-        window.location.href = data.init_point;
-      }
-    } catch (error) {
-      console.error("Error retrying payment:", error);
+  const deleteReservation = async () => {
+    if (fieldCancel.fieldCancelId) {
+      const data = await cancelReservationById(fieldCancel.fieldCancelId);
+      console.log("Resultado de la operacion " + data);
     }
   };
 
@@ -116,19 +98,26 @@ function PaymentContent() {
                 Reintentar Pago
                 </button>
                 */}
-
-              <Link
-                href={
-                  userRole === "duenio"
-                    ? "/comisiones"
-                    : "/reservar_cancha"
-                }
-                className="inline-flex justify-center items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-black hover:bg-gray-800"
-              >
-                {userRole === "duenio"
-                  ? "Volver al panel de comisiones"
-                  : "Volver a reservar"}
-              </Link>
+              {userRole !== "duenio" ? (
+                <button
+                  onClick={deleteReservation}
+                  className="inline-flex justify-center items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-black hover:bg-gray-800"
+                >
+                  <Link
+                    href={"/reservar_cancha"}
+                    className="inline-flex justify-center items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-black hover:bg-gray-800"
+                  >
+                    Volver a reservar
+                  </Link>
+                </button>
+              ) : (
+                <Link
+                  href={"/comisiones"}
+                  className="inline-flex justify-center items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-black hover:bg-gray-800"
+                >
+                  Volver al panel de comisiones
+                </Link>
+              )}
 
               <Link
                 href="https://api.whatsapp.com/send/?phone=%2B573023242843"
