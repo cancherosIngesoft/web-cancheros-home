@@ -23,7 +23,7 @@ export default function CustomMap({
   zoom = 12,
   style = { width: "50vw", height: "50vh" },
   showInfoWindow = false,
-  gestureHandling = "none",
+  gestureHandling = "auto",
 }: {
   center?: { lat: number; lng: number }
   zoom?: number
