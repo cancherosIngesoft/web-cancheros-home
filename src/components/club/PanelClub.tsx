@@ -13,6 +13,7 @@ import { getClubs } from "@/actions/club_management/club"
 import { Skeleton } from "@/components/ui/skeleton"
 import CardClub from "./CardClub"
 import CreateTeamShield from "../icon/CreateTeamShield"
+import { useGlobalStore } from "@/store"
 
 interface Club {
   name: string
@@ -29,8 +30,7 @@ interface ClubsPanelProps {
 }
 
 export function PanelClub({ isOpen, onClose, navbarWidth,navbarHeight }: ClubsPanelProps) {
-  const { data: session } = useSession()
-  const userId = session?.user?.id ?? ""
+  const userId = useGlobalStore((state) => state.auth.id);
   const [isClient, setIsClient] = useState(false);
 
   const {
@@ -40,7 +40,7 @@ export function PanelClub({ isOpen, onClose, navbarWidth,navbarHeight }: ClubsPa
     failureReason,
   } = useQuery({
     queryKey: ["clubs", userId],
-    queryFn: () => getClubs(userId),
+    queryFn: () => getClubs(userId?? ""),
     enabled: !!userId,
     retry: 1,
   })
@@ -87,7 +87,7 @@ export function PanelClub({ isOpen, onClose, navbarWidth,navbarHeight }: ClubsPa
           <hr className="w-full border-gray-600 mb-2" />
 
           <p className="text-xs text-gray-600 mb-4">Estos son los clubes a los que perteneces actualmente</p>
-          <div className="flex flex-row p-2 py-4 h-full overflow-y-auto w-full">
+          <div className="flex flex-row p-2 py-4 h-full overflow-y-auto w-full ">
             {isLoading ? (
               <div className="space-y-3">
                 {[...Array(3)].map((_, index) => (
@@ -100,14 +100,14 @@ export function PanelClub({ isOpen, onClose, navbarWidth,navbarHeight }: ClubsPa
                 <p className="text-sm text-red-400 mt-2">Error: {failureReason?.message}</p>
               </div>
             ) : !clubs || clubs.length === 0 ? (
-              <div className="flex flex-col items-center justify-center h-full">
+              <div className="flex flex-col items-center justify-center w-full h-full">
                 <Shield className="w-20 h-20 text-gray-400" />
                 <p className="text-sm text-gray-400">No perteneces a ningún club</p>
               </div>
             ) : (
               <div className="space-y-3 w-full">
                 {clubs.map((club) => (
-                  <CardClub key={club.idTeam} club={club} idUser={userId} onClosePanel={onClose}/>
+                  <CardClub key={club.idTeam} club={club} idUser={userId??""} onClosePanel={onClose}/>
                 ))}
               </div>
             )}

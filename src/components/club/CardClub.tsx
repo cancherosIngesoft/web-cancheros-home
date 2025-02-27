@@ -35,7 +35,7 @@ const CardClub = ({ club,idUser , onClosePanel}:CardClubProps) => {
                     {!club.icon?.includes("empty") ? (
                         <img src={club.icon || "/placeholder.svg"} alt={club.teamName} className=" w-full h-full object-cover rounded-full " />
                     ) : (
-                        <CustomShield className="  w-12 h-12 text-[#4CAF50] justify-self-end" />
+                        <CustomShield className=" w-12 h-12 text-[#4CAF50] justify-self-end" />
                     )}
                 </div>
             </div>
