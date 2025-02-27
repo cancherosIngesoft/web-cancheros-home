@@ -16,7 +16,10 @@ export async function middleware(req: NextRequest) {
   }
 
   if (!token) {
-    return NextResponse.redirect(new URL("/auth/signin", req.url));
+    // Si no hay token, redirigir a signin con un parámetro de sesión expirada
+    const signInUrl = new URL("/auth/signin", req.url);
+    signInUrl.searchParams.set("sessionExpired", "true");
+    return NextResponse.redirect(signInUrl);
   }
 
   const userRole = token.role as string;

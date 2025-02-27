@@ -40,6 +40,10 @@ const initialState: IGlobalState = {
     reservas: [],
     canchas: [],
   },
+  fieldCancel: {
+    fieldCancel: false,
+    fieldCancelId: null,
+  },
 };
 
 export const useGlobalStore = create<TGlobalStoreData>()(
@@ -164,27 +168,22 @@ export const useReservationStore = create<ReservationData>()(
   )
 );
 
-
 const initialTeamData: TeamState = {
- 
-    idTeam: "",
-    idCaptain: "",
-    nameCapitan: "",
-    description: "",
-    numberPlayers: 0,
-    teamName: "",
-    icon: "",
-  
+  idTeam: "",
+  idCaptain: "",
+  nameCapitan: "",
+  description: "",
+  numberPlayers: 0,
+  teamName: "",
+  icon: "",
 };
 export const useTeamDataStore = create<TeamData>()(
   devtools(
     (set) => ({
       ...initialTeamData,
-      updateTeamData: ( payload) => {
+      updateTeamData: (payload) => {
         set(
-          (state) => (
-             { ...state, ...payload }
-          ),
+          (state) => ({ ...state, ...payload }),
           false,
           "UPDATE_TEAM_DATA_STORE" // Acción identificable en DevTools
         );
@@ -192,7 +191,7 @@ export const useTeamDataStore = create<TeamData>()(
       clearTeamData: () => {
         set(
           (state) => ({
-             ...initialTeamData,
+            ...initialTeamData,
           }),
           false,
           "CLEAR_TEAM_DATA_STORE" // Acción identificable en DevTools

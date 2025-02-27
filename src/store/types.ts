@@ -54,11 +54,17 @@ export interface IUserState {
   // Puedes agregar más propiedades aquí
 }
 
+export interface FieldCancelState {
+  fieldCancel: boolean;
+  fieldCancelId: string | null;
+}
+
 export interface IGlobalState {
   auth: IAuthState;
   user: IUserState;
   field: IFieldState;
   hostReservation: HostReservationState;
+  fieldCancel: FieldCancelState;
   // Puedes agregar más slices aquí. una slice es una parte del store.
 }
 //Funciones para actualizar y borrar el store
