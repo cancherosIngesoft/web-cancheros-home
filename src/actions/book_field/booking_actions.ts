@@ -1,3 +1,4 @@
+import { useGlobalStore, useShallow } from "@/store";
 import { is } from "date-fns/locale";
 export interface bussinessInfo {
   id: string;
@@ -292,11 +293,11 @@ export async function handleBookingAndPayment(
   reservaDetails: ReservaDetails,
   userId: number,
   isTeam: boolean,
-  idTeam: string,
+  idTeam: string
 ) {
   // 1. Crear la reserva
 
-  const dataBooking={
+  const dataBooking = {
     hora_inicio: `${
       new Date(reservaDetails.fecha).toISOString().split("T")[0]
     } ${reservaDetails.horaInicio}:00`,
@@ -306,9 +307,14 @@ export async function handleBookingAndPayment(
     id_cancha: Number(reservaDetails.cancha),
     id_reservante: isTeam ? Number(idTeam) : userId,
     isTeam: isTeam,
-  }
+  };
   const booking = await createBooking(dataBooking);
+  const updateStore = useGlobalStore(useShallow((state) => state.updateStore));
 
+  updateStore("fieldCancel", {
+    fieldCancelId: booking.id_reserva.toString(),
+    fieldCancel: true,
+  });
   // 2. Iniciar el pago
   const paymentResult = await initiatePayment(
     {
