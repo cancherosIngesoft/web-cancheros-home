@@ -85,14 +85,14 @@ function PaymentContent() {
                   href="/comisiones"
                   className="inline-flex justify-center items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-black hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
                 >
-                  Volver al panel de comisiones
+                  Volver a la página principal
                 </Link>
               ) : (
                 <Link
                   href="/mis_reservas"
                   className="inline-flex justify-center items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-black hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
                 >
-                  Ver Mis Reservas
+                  Volver a la página principal
                 </Link>
               )}
             </div>
