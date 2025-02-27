@@ -18,7 +18,7 @@ const PastMatchesPanel = ({ idTeam }: PastMatchesPanelProps) => {
         staleTime: 1000 * 60 *5,
     })
     return (
-        <div className="p-6">
+        <div className="p-6 pb-20 md:pb-6 h-full">
             <h2 className="text-3xl font-bold">Partidos <span className="text-primary">Pasados</span></h2>
             <p className="text-sm text-gray-600">Observa los partido que ha jugado tu equipo</p>
             <hr className="w-full border-2 border-gray-300 rounded-full my-2"/>
